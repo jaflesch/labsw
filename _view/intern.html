@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block main_intern %}
+	<section id="breadcrumb">
+		{% include '_breadcrumb.html' %}
+	</section>
+
+	<div id="main-intern-title">
+		<h1>{{ page_title }}</h1>
+	</div>
+	<div id="main-intern-body">
+		{% block main_intern_body %}
+		{% endblock %}
+	</div>
+{% endblock %}

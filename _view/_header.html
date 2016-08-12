@@ -1,0 +1,31 @@
+<section id="menu">
+	<nav class='navbar navbar-default navbar-skin'>
+		<div class="container-fluid">
+			<!-- Hamburguer Icon -->
+		    <div class="navbar-header">
+		      	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#toggle-menu" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+		      	</button>
+		      	
+		      	<a class="navbar-brand" href="{{ root }}/">
+		      		<img alt="Logo" src="{{ root }}/assets/img/header/">
+		      	</a>
+		    </div>
+
+		    <!-- Links -->
+		    <div class="collapse navbar-collapse pull-right" id="toggle-menu">
+      			<ul class="nav navbar-nav">
+        			<li class="{{ app.controller == 'home' ? 'active' : '' }}">
+						<a title="" href="{{ root }}/"> Home </a>
+					</li>
+					<li class="{{ app.controller == 'contato' ? 'active' : '' }}">
+						<a title="" href="{{ root }}/contato"> Contato </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</section>
