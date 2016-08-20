@@ -2,6 +2,7 @@
 Repositório para o trabalho final da disciplina
 
 **Sobre**
+
 O software que o grupo desenvolverá será um Gerenciador de Tarefas para analisar e melhorar o desempenho de funcionários da empresa MHAAS. A ideia é utilizar o sistema para ter um controle maior de como o tempo dos funcionários é utilizado em tarefas cotidianas. 
 
 Essa informação será usada posteriormente para extrair o tempo destinadado em uma tarefa e estabelecer um preço mais justo ao cliente na cobrança do serviço, evitando que um dos dois lados saia perdendo. 
