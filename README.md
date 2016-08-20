@@ -2,20 +2,30 @@
 Repositório para o trabalho final da disciplina
 
 **Sobre**
-Na disciplina da 5ª etapa do curso, Engenharia de Software, foi proposto que, no papel de clientes, solicitássemos uma aplicação real para outro grupo desenvolvê-la utilizando os conhecimentos aprendidos na cadeira. Na ocasião em questão, a aplicação que sugerimos foi um sistema de gerenciamento de estoque em uma _farmácia_. 
+O software que o grupo desenvolverá será um Gerenciador de Tarefas para analisar e melhorar o desempenho de funcionários da empresa MHAAS. A ideia é utilizar o sistema para ter um controle maior de como o tempo dos funcionários é utilizado em tarefas cotidianas. 
 
-Neste semestre, para o trabalho final, nossa proposta é fazer uma releitura da versão desenvolvida pelo outro grupo na disciplina de Engenharia. A ideia da releitura é justamente aperfeiçoar o sistema em pontos cruciais e torná-lo mais amplo, adicionando funcionalidades como e-commerce, por exemplo. Além disso, um fato interessante é que o grupo desenvolvedor da primeira versão era composto apenas por alunos de Engenharia da Computação, isto é, o contato deles tanto com teoria quanto prática de conceitos e tecnologias de banco de dados e interação humano-computador é baixa. A nova versão do software visa explorar melhor tais conceitos também de forma a aprimorar a experiência do usuário, ainda mais que o nicho será maior, dada a complexidade de um sistema e-commerce.
+Essa informação será usada posteriormente para extrair o tempo destinadado em uma tarefa e estabelecer um preço mais justo ao cliente na cobrança do serviço, evitando que um dos dois lados saia perdendo. 
+
+Além disso, o sistema contará com outras funcionalidades para aumentar o nível de organização do grupo de desenvolvedores, facilitando a comunicação e tornando o trabalho em equipe mais sistemático, corroborando para a ideia inicial de mensurar a eficiência das tarefas atribuídas. 
+
+**Cliente**
+
+- MHAAS - Inteligência em Desenvolvimento
+- http://mhaas.com.br/
 
 **Principais Funcionalidades**
 
 - Páginas Web dinâmicas
 - Sistema de Cadastro/Login
-- Catálogo de Produtos
-- Sistema de Busca
-- Sistema de Newsletter
-- Formulário de Contato
-- Carrinho
-- Painel de Administração
+- Gestão de Tarefas
+- Gestão de Equipes
+- Gestão de Projetos
+- Sistema de Lembretes
+- Time Tracker
+- Indicadores de Performance [tarefas: total, completas, atrasadas]
+- Notificações por E-mail [todas | filtrar ]
+- Relatórios [baseado nos indicadores]
+- Agenda
 
 **Painel de Administração**
 - CRUD de usuários da farmácia [administradores, funcionários]
@@ -40,4 +50,4 @@ Neste semestre, para o trabalho final, nossa proposta é fazer uma releitura da 
 - Métodos Ágeis
 - SCRUM
 - Controle de versionamento de código com GitHub
-- Gerenciamento de Backlog, sprints e tasks em gerais com Trello
+- Gerenciamento de Backlog, sprints e tasks em gerais com Trello [ https://trello.com/b/TqDlZ7pD/labsw ]
