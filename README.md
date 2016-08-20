@@ -28,16 +28,6 @@ Além disso, o sistema contará com outras funcionalidades para aumentar o níve
 - Relatórios [baseado nos indicadores]
 - Agenda
 
-**Painel de Administração**
-- CRUD de usuários da farmácia [administradores, funcionários]
-- CRUD categorias de produtos
-- CRUD produtos
-- Conteúdo das páginas dinâmicas [contato, empresa, ...]
-- Controle de estoque
-- Aviso de irregularidades no sistema
-- Leads para formulário de contato e newsletter
-- Exportar relatórios do sistema [número de visitas, compras, lucro, ...]
-
 **Tecnologias**
 - Aplicação Web
 - Desenvolvimento responsivo [Mobile, Tablet, Desktop]
