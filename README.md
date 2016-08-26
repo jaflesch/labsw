@@ -27,6 +27,7 @@ Além disso, o sistema contará com outras funcionalidades para aumentar o níve
 - Notificações por E-mail [todas | filtrar ]
 - Relatórios [baseado nos indicadores]
 - Agenda
+- Badges
 
 **Tecnologias**
 - Aplicação Web
