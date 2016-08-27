@@ -1,0 +1,65 @@
+/*
+=================
+	LOGIN
+=================
+*/
+.login-page .navbar-skin {
+	height: 80px;
+	background: #0eabbc;
+	color: #fff;
+	text-align: center;
+	font-weight: 300;
+	border: 0;
+	border-radius: 0;
+}
+.login-page .navbar-skin p { margin: 27px 0; }
+
+#login-box {
+	background: #fff;
+	border: 1px solid #E0E3E4;
+	border-top: 2px solid #0eabbc;
+	border-bottom: 0;
+	margin-top: 60px;
+	padding: 20px 15px 0;
+}
+#login-box label {
+	text-transform: uppercase;
+	color: #aaa;
+	font-family: 'Montserrat';
+	font-weight: lighter;
+	font-size: 12px;
+}
+#login-box .form-control {
+	margin-bottom: 30px;
+}
+#login .login-submit {
+	background: #f7f8f9;
+	border-top: 1px solid #e4e4e4;
+	border-bottom: 1px solid #ddd;
+	margin: 0 -15px;
+	padding: 15px;
+}
+#login-box input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #7c8a94 !important;
+}
+
+.inner-addon { 
+    position: relative; 
+}
+
+/* style icon */
+#login-box .inner-addon .fa {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+  top: 27px;
+}
+
+/* align icon */
+#login-box .left-addon .fa  { left:  0px;}
+#login-box .right-addon .fa { right: 0px;}
+
+/* add padding  */
+#login-box .left-addon input  { padding-left:  30px; }
+#login-box .right-addon input { padding-right: 30px; }

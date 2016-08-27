@@ -2,11 +2,12 @@
 class Home extends Controller {
 
 	public static function index() {
-		static::auth();
-
+		//$_SESSION['user'] = "abc";
+		
 		$bag = array();
 
-		echo self::render("home/index.html", $bag);
+		if(isset($_SESSION['user']))
+			echo self::render("login/index.html", $bag);
 	}
 
 	public static function render($tpl, $vars=array()) {
