@@ -7,13 +7,10 @@ class Home extends Controller {
 		if(Auth::user()) {
 			// debug
 			//print_r(Auth::getUser());
-		 	echo self::render("home/index.html", $bag);
+			$bag["user"] = Auth::getUser();
+			echo self::render("home/index.html", $bag);
 		}
 		else echo self::render("login/index.html", $bag);
-	}
-
-	public static function render($tpl, $vars=array()) {
-		return parent::render($tpl,$vars);
 	}
 
 	public static function login() {
@@ -44,10 +41,9 @@ class Home extends Controller {
 
 		die(json_encode($json));
 	}
-
-	public static function logout() {
-		Auth::logout();
-		self::redirect("");
+	
+	public static function render($tpl, $vars=array()) {
+		return parent::render($tpl,$vars);
 	}
 }
 

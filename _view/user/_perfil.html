@@ -1,0 +1,94 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-user mgr10"></i> Perfil de Usuário </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="intern"> Informações da Conta </h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Nome de usuário </label>
+				</div>
+				<div class="col-sm-6 value">
+					<span> {{ user.login }} </span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Nome real </label>
+				</div>
+				<div class="col-sm-6 value">
+					<span> {{ user.nome }} </span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Endereço de e-mail </label>
+				</div>
+				<div class="col-sm-6 value">
+					<span> {{ user.email }} </span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Função </label>
+				</div>
+				<div class="col-sm-6 value">
+					<span> {{ user.funcao }} </span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Tarefas Concluídas </label>
+				</div>
+				<div class="col-sm-6 value">
+					<span> {{ user.tarefas_completas == 0 ? 'Nenhuma' : user.tarefas_completas }} </span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div id="trophy-box">
+						<p class="text-center"><label class="value"> Troféus </label></p>
+
+						<fieldset class="trophies">
+							<div class="col-xs-2 col-xs-offset-2 text-center" style="color: #729ab3;">
+								<i class="fa fa-trophy"></i>
+								<p> 0 </p>
+							</div>
+							<div class="col-xs-2 text-center" style="color: #e7c025;">
+								<i class="fa fa-trophy"></i>
+								<p> 0 </p>
+							</div>
+							<div class="col-xs-2 text-center" style="color: #b3bbbf;">
+								<i class="fa fa-trophy"></i>
+								<p> 0 </p>
+							</div>
+							<div class="col-xs-2 text-center" style="color: #bb7648;">
+								<i class="fa fa-trophy"></i>	
+								<p> 1 </p>
+							</div>
+						</fieldset>
+
+						<p class="text-center"><a href=""> [ Ver lista completa ] </a></p>
+					</div>
+				</div>					
+			</div>
+
+			<div class="row">
+				<div class="col-md-12"> <hr class="trophies" /> </div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<button class="btn btn-primary" id="btnEditarPerfil"> Editar </button>
+		</div>
+	</div>
+</div>

@@ -5,10 +5,6 @@ class Controller {
 	public static $config;
 	public static $dbConn;
 
-	public static function auth() {
-		
-	}
-
 	public static function redirect($url) {
 		$base_url = static::$app->base_url;
 

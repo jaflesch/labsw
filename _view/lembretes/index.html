@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% set page_title = 'MHAAS Task Manager - Lembretes' %}
+
+{% block main %}
+	<h1> Lembretes </h1>
+	{% for lembrete in lembretes %}
+		<p class="text-center">{{ lembrete.descricao|raw }} </p>
+	{% endfor %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
