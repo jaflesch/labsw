@@ -6,7 +6,7 @@ $config->db = new stdclass();
 $config->db->host = "localhost";
 $config->db->user = "root";
 $config->db->pass = "";
-$config->db->name = "";
+$config->db->name = "mhaas_task";
 
 $config->news = new stdclass();
 $config->news->rows = 10;

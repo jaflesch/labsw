@@ -1,7 +1,8 @@
 <?php
 require_once('config.php');
 
-//ini_set("display_errors", $config->debug);
+ini_set("display_errors", "1");
+error_reporting(E_ALL);
 
 class Handlers {
     public static $instance = null;
@@ -63,13 +64,13 @@ try {
 	require_once('_lib/recaptchalib.php');
 	require_once('_lib/Twig/Autoloader.php');
 	require_once("_lib/Traducao.php");
+	require_once("_lib/authentication.php");
 
 	//Initiate Template
 	Twig_Autoloader::register();
 
 	//Initiate the database
-	$dbConn = @mysqli_connect($config->db->host, $config->db->user, $config->db->pass);
-	@mysql_select_db($config->db->name, $dbConn);
+	$dbConn = @mysqli_connect($config->db->host, $config->db->user, $config->db->pass, $config->db->name);
 
 	//Initiate session
 	session_name($config->session_name);
@@ -115,6 +116,7 @@ try {
 	$app->parametros = $parametros;
 	$app->base_url = $base_url;
 	$app->config = $config;
+	$app->dbConn = $dbConn;
 	$app->idioma = $idioma;
 	$app->request_uri = $_SERVER["REQUEST_URI"];
 	

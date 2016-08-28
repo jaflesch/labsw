@@ -1,0 +1,25 @@
+<section id="menu">
+	<div class="container">
+		    <!-- Links Desktop -->
+		<div class="row">
+		    <div class="collapse navbar-collapse" id="toggle-menu">
+      			<ul class="nav navbar-nav">
+        			<li class="{{ app.controller == 'home' ? 'active' : '' }}">
+						<a title="" href="{{ root }}/"> Home </a>
+					</li>
+					<li class="{{ app.controller == 'contato' ? 'active' : '' }}">
+						<a title="" href="{{ root }}/contato"> Contato </a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav pull-right">
+					<li class="logout">
+						<a title="" href="{{ root }}/user/"> Perfil </a>
+					</li>
+					<li class="logout">
+						<a title="" href="{{ root }}/home/logout"> Logout </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>

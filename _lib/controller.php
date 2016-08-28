@@ -3,6 +3,7 @@
 class Controller {
 	public static $app;
 	public static $config;
+	public static $dbConn;
 
 	public static function auth() {
 		
@@ -18,6 +19,8 @@ class Controller {
 	public static function exec($app) {
 		static::$app = $app;
 		static::$config = $app->config;
+		static::$dbConn = $app->dbConn;
+		
 		if ($app->action=='') $app->action = $app->default_action;		
 
 		$action = $app->action;

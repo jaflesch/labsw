@@ -63,3 +63,12 @@
 /* add padding  */
 #login-box .left-addon input  { padding-left:  30px; }
 #login-box .right-addon input { padding-right: 30px; }
+/*
+=================
+	DASHBOARD
+=================
+*/
+#menu {
+	background: #ccc;
+	padding: 0;
+}
