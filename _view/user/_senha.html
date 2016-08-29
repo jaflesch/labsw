@@ -1,0 +1,55 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-user mgr10"></i> Perfil de Usuário </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="intern"> Alterar Senha </h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Nova senha </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span> {{ user.login }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Confirmar nova senha </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span> {{ user.nome }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Senha atual </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span> {{ user.email }} </span></div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6">
+				<p class="text-danger" style="display:none;"></p>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12"> <hr/> </div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<button class="btn btn-primary" id="btnAlterarSenha"> Confirmar </button>
+		</div>
+	</div>
+</div>

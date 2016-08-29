@@ -96,7 +96,7 @@
 	SECTIONS
 =================
 */
-#perfil>div { 
+#perfil>div.container { 
 	background: #fff; 
 	padding: 30px 15px;
 	border-radius: 4px;
@@ -138,21 +138,27 @@
 	margin-bottom: 5px;	
 	color: #555;
 }
-#perfil .value:nth-child(even) {
+#perfil div.value {
 	background: #eee;
 	padding-left: 15px;
 	color: #333;
 }
+#perfil input.value  { 
+	background: transparent;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	width: 100%;	
+}
+#perfil input.value:focus {
+	border: 0;
+	box-shadow: none;
+	outline: 0;
+}
 #perfil #trophy-box { 
 	margin-top: 30px;
 	border: 1px solid #ddd; 
-	margin-right: -15px;
 }
 #perfil #trophy-box .value { margin-bottom: 0; }
 #perfil .trophies i { font-size: 28px; }
 #perfil .trophies p { font-size: 20px; }
-#perfil hr.trophies { margin-right: -15px; }
-
-@media(max-width: 767px) {
-	#perfil #trophy-box, hr.trophies { margin-right: 0 !important; }
-}

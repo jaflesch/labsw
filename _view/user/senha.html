@@ -4,8 +4,7 @@
 
 {% block main %}
 	<section id="perfil">
-		{% include 'user/_perfil.html' %}
-		{% include 'user/_modal_perfil.html' %}
+		{% include 'user/_senha.html' %}
 	</section>
 {% endblock %}
 
@@ -15,8 +14,8 @@
 {% block scripts %}
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#btnEditarPerfil").click(function(){
-			$("#editPerfilModal").modal("show");
+		$("#btnAlterarSenha").click(function(){
+			// ajax call
 		})
 	})
 </script>

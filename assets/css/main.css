@@ -36,11 +36,11 @@ section { padding: 30px 0; }
 	Texts
 =================
 */
-.text-primary,a.text-primary { color: #f00; }
+.text-primary,a.text-primary { color: #0eabbc; }
 a.text-primary:hover, 
 a.text-primary:focus{
-	color: #f0f;
-	text-decoration: none;
+	color: #067384;
+	text-decoration: underline;
 }
 
 .text-secondary, a.text-secondary {	color: #00f; }
