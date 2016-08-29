@@ -22,6 +22,59 @@ class Home extends Controller {
 		else echo self::redirect("");
 	}
 
+	public static function update_perfil() {
+		
+		$json = new stdclass();
+		print_r($_POST);
+		
+		$id = Auth::id();
+		// Se existe um usuário com o login fornecido e de id != do usuário solicitando alteração
+		$query = "
+			SELECT *
+			FROM usuario
+			WHERE id != {$id} AND login = '{$_POST['login']}'
+		";
+		if(mysqli_query(static::$dbConn, $query)) {
+			$json->success = false;
+			$json->msg = "Já existe um usuário com o login solicitado!";
+			die(json_encode($json));
+		}
+		
+		// Se existe um usuário com o e-mail fornecido e de id != do usuário solicitando alteração
+		$query = "
+			SELECT *
+			FROM usuario
+			WHERE id != {$id} AND email = '{$_POST['email']}'
+		";
+		if(mysqli_query(static::$dbConn, $query)) {
+			$json->success = false;
+			$json->msg = "Já existe um usuário com o e-mail solicitado!";
+			die(json_encode($json));
+		}
+		
+		// Se não existe um usuário com login e e-mail fornecidos e de id != do usuário solicitando alteração
+		$query = "
+			UPDATE usuario
+			SET (
+				nome = '{$_POST['nome']}',
+				login = '{$_POST['login']}',
+				email = '{$_POST['email']}'
+			)
+			WHERE id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		if($result) {
+			$json->success = true;
+			$json->msg = "Dados alterados com sucesso!";
+			die(json_encode($json));
+		}
+		else {
+			$json->success = false;
+			$json->msg = "Erro na execução do script.";
+			die(json_encode($json));
+		}
+	}
+	
 	public static function senha() {
 		if(Auth::user()) {
 			$bag = array(
@@ -32,6 +85,51 @@ class Home extends Controller {
 		else echo self::redirect("");
 	}
 
+	public static function update_senha() {
+		
+		$json = new stdclass();
+		print_r($_POST);
+		
+		if($_POST['senha'] != $_POST['senha2']) {
+			$json->success = false;
+			$json->msg = "As senhas estão diferentes!";
+			die(json_encode($json));
+		}
+		
+		$id = Auth::id();
+		$query = "
+			SELECT senha
+			FROM usuario
+			WHERE id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		$fetch = mysqli_fetch_object($result);
+		
+		if($fetch->senha != md5($_POST['senha_antiga'])) {
+			$json->success = false;
+			$json->msg = "As senha antiga está incorreta!";
+			die(json_encode($json));
+		}
+		
+		$senha = md5($_POST['senha']);
+		$query = "
+			UPDATE usuario
+			SET senha = '{$senha}'
+			WHERE id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		if($result) {
+			$json->success = true;
+			$json->msg = "Senha alterada com sucesso!";
+			die(json_encode($json));
+		}
+		else {
+			$json->success = false;
+			$json->msg = "Erro na execução do script.";
+			die(json_encode($json));
+		}		
+	}
+	
 	public static function logout() {
 		Auth::logout();
 		self::redirect("");
