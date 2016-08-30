@@ -17,7 +17,31 @@
 	$(document).ready(function(){
 		$("#btnEditarPerfil").click(function(){
 			$("#editPerfilModal").modal("show");
-		})
-	})
+		});
+
+		$("#formEditPerfil").unbind("submit").bind("submit", function(e){
+			var form = $(this);
+			e.preventDefault();
+			
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function() {
+					$('.help-success').show();
+
+					$("#nome").text($('[name="nome"]').val());
+					$("#login").text($('[name="login"]').val());
+					$("#email").text($('[name="email"]').val());
+
+					$("#editPerfilModal").modal("hide");
+				},
+				error: function() {
+					alert("Erro na requisição AJAX!");
+				}
+			});
+		});
+	});
 </script>
 {% endblock %}

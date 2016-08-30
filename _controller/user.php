@@ -4,7 +4,7 @@ class Home extends Controller {
 	public static function index() {
 		if(Auth::user()) {
 			$bag = array(
-				"user" => Auth::getUser()
+				"user" => self::getUserById(Auth::id() )
 			);
 			echo self::render("user/index.html", $bag);
 		}
@@ -14,7 +14,7 @@ class Home extends Controller {
 	public static function perfil() {
 		if(Auth::user()) {
 			$bag = array(
-				"user" => Auth::getUser(),
+				"user" => self::getUserById(Auth::id() ),
 				"trofeu" => self::getTrophyCountFromUser(Auth::id())
 			);
 			echo self::render("user/index.html", $bag);
@@ -25,16 +25,15 @@ class Home extends Controller {
 	public static function update_perfil() {
 		
 		$json = new stdclass();
-		print_r($_POST);
-		
 		$id = Auth::id();
+
 		// Se existe um usuário com o login fornecido e de id != do usuário solicitando alteração
 		$query = "
 			SELECT *
 			FROM usuario
 			WHERE id != {$id} AND login = '{$_POST['login']}'
 		";
-		if(mysqli_query(static::$dbConn, $query)) {
+		if(!mysqli_query(static::$dbConn, $query)) {
 			$json->success = false;
 			$json->msg = "Já existe um usuário com o login solicitado!";
 			die(json_encode($json));
@@ -46,7 +45,7 @@ class Home extends Controller {
 			FROM usuario
 			WHERE id != {$id} AND email = '{$_POST['email']}'
 		";
-		if(mysqli_query(static::$dbConn, $query)) {
+		if(!mysqli_query(static::$dbConn, $query)) {
 			$json->success = false;
 			$json->msg = "Já existe um usuário com o e-mail solicitado!";
 			die(json_encode($json));
@@ -55,14 +54,14 @@ class Home extends Controller {
 		// Se não existe um usuário com login e e-mail fornecidos e de id != do usuário solicitando alteração
 		$query = "
 			UPDATE usuario
-			SET (
+			SET 
 				nome = '{$_POST['nome']}',
 				login = '{$_POST['login']}',
 				email = '{$_POST['email']}'
-			)
+			
 			WHERE id = {$id}
 		";
-		$result = mysqli_query(static::$dbConn, $query);
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		if($result) {
 			$json->success = true;
 			$json->msg = "Dados alterados com sucesso!";
@@ -139,6 +138,22 @@ class Home extends Controller {
 		return parent::render($tpl,$vars);
 	}
 
+	private static function getUserById($id) {
+
+		$query = "
+			SELECT *
+			FROM usuario
+			WHERE id= {$id}
+		";
+
+		$result = mysqli_query(static::$dbConn, $query);
+		$fetch = mysqli_fetch_object($result);
+		$fetch->funcao = self::getFuncao($fetch->funcao);
+		unset($fetch->senha);
+
+		return toUTF($fetch);
+	}
+
 	private static function getTrophyCountFromUser($id) {
 		$trophies = array();
 
@@ -179,6 +194,14 @@ class Home extends Controller {
 		$trophies['platina'] = mysqli_fetch_object($result);
 
 		return $trophies;
+	}
+
+	private static function getFuncao($nivel) {
+		switch($nivel) {
+			case 0: return "Administrador";
+			case 1: return "Usuário";
+			case 2: return "Visitante";
+		}
 	}
 }
 

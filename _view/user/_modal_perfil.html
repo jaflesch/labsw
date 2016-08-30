@@ -1,4 +1,5 @@
 <div id="editPerfilModal" class="modal fade" role="dialog">
+	<form id="formEditPerfil" action="{{ root }}/user/update_perfil" method="POST">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -11,7 +12,7 @@
 						<label class="value"> Nome de usuário </label>
 					</div>
 					<div class="col-sm-6">
-						<div class="value"><input class="value" value="{{ user.login }}"></div>
+						<div class="value"><input class="value" name="login" value="{{ user.login }}"></div>
 					</div>
 				</div>
 				<div class="row">
@@ -19,7 +20,7 @@
 						<label class="value"> Nome real </label>
 					</div>
 					<div class="col-sm-6">
-						<div class="value"><input class="value" value="{{ user.nome }}"></div>
+						<div class="value"><input class="value" name="nome" value="{{ user.nome }}"></div>
 					</div>
 				</div>
 				<div class="row">
@@ -27,7 +28,7 @@
 						<label class="value"> Endereço de e-mail </label>
 					</div>
 					<div class="col-sm-6">
-						<div class="value"><input class="value" value="{{ user.email }}"></div>
+						<div class="value"><input class="value" name="email" value="{{ user.email }}"></div>
 					</div>
 				</div>
 				<!-- <div class="row">
@@ -48,8 +49,9 @@
 				</div> -->
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal"> Confirmar </button>
+				<input type="submit" class="btn btn-success" value="Confirmar">
 			</div>
 		</div>
 	</div>
+	</form>
 </div>
