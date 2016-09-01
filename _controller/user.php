@@ -87,11 +87,11 @@ class Home extends Controller {
 	public static function update_senha() {
 		
 		$json = new stdclass();
-		print_r($_POST);
 		
 		if($_POST['senha'] != $_POST['senha2']) {
 			$json->success = false;
 			$json->msg = "As senhas estão diferentes!";
+			$json->error = 1;
 			die(json_encode($json));
 		}
 		
@@ -106,7 +106,8 @@ class Home extends Controller {
 		
 		if($fetch->senha != md5($_POST['senha_antiga'])) {
 			$json->success = false;
-			$json->msg = "As senha antiga está incorreta!";
+			$json->msg = "A senha antiga está incorreta!";
+			$json->error = 2;
 			die(json_encode($json));
 		}
 		
@@ -120,11 +121,13 @@ class Home extends Controller {
 		if($result) {
 			$json->success = true;
 			$json->msg = "Senha alterada com sucesso!";
+			$json->error = 0;
 			die(json_encode($json));
 		}
 		else {
 			$json->success = false;
 			$json->msg = "Erro na execução do script.";
+			$json->error = -1;
 			die(json_encode($json));
 		}		
 	}

@@ -144,16 +144,24 @@
 	color: #333;
 }
 #perfil input.value  { 
-	background: transparent;
+	background: #eee;
 	border: 0;
-	padding: 0;
+	padding: 7px 15px;
+	color: #333;
 	margin: 0;
 	width: 100%;	
+	border: 1px solid #ddd;
 }
 #perfil input.value:focus {
-	border: 0;
+	border: 1px solid #0eabbc;
 	box-shadow: none;
 	outline: 0;
+	background: #fdfdfd;
+}
+#perfil input.value.alert-danger {
+	background: #f2dede;
+	color: #a94442;
+	border-color: #ebccd1;
 }
 #perfil #trophy-box { 
 	margin-top: 30px;
