@@ -3,10 +3,9 @@
 {% set page_title = 'MHAAS Task Manager - Lembretes' %}
 
 {% block main %}
-	<h1> Lembretes </h1>
-	{% for lembrete in lembretes %}
-		<p class="text-center">{{ lembrete.descricao|raw }} </p>
-	{% endfor %}
+	<section id="lembretes">
+		{% include 'lembretes/_lista.html' %}
+	</section>
 {% endblock %}
 
 {% block styles %}

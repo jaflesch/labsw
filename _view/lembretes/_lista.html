@@ -1,0 +1,37 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-user mgr10"></i> Lembretes </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="intern"> Subtítulo </h3>
+		</div>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<td> Título </td>
+				<td class="text-center"> Prioridade </td>
+				<td class="text-center"> Data Entrega </td>
+				<td class="text-center"> Status </td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+		{% for lembrete in lembretes %}
+			<tr>
+				<td> {{ lembrete.titulo }} </td>	
+				<td class="text-center"> {{ lembrete.prioridade }} </td>	
+				<td class="text-center"> {{ lembrete.data }} </td>	
+				<td class="text-center"> {{ lembrete.status }} </td>
+				<td><button class="btn btn-default text-center"><i class="fa fa-pencil"></button></td>	
+			</tr>
+		{% endfor %}
+		</tbody>
+			
+		</tr>
+	</table>
+	
+</div>
