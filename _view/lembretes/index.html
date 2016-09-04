@@ -31,8 +31,12 @@
 			format: 'dd/mm/yyyy'
 		});
 
-		$('[name="search_titulo"]').on("keyup", function(){
-			//console.log($(this).val());
+		$("#turnOnModal").click(function(e){
+			e.preventDefault();
+			$('#createLembreteModal').modal('show');
+		});
+
+		$('[name="search_titulo"],[name="sort_type"]').on("change keyup", function(){
 			var form = $('#formFiltroLembrete');
 
 			$.ajax({
@@ -40,8 +44,27 @@
 				method: 'POST',
 				dataType: 'html',
 				data: form.serializeArray(),
-				success: function() {
+				success: function(json) {
+					$('table tbody tr').remove();
+					$('table tbody').append(json);
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		});
 
+		$('#formCreateLembrete').unbind("submit").bind("submit", function(e){
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function() {
+					window.location.reload(true);
 				},
 				error: function() {
 					alert('Erro na requisição AJAX!');

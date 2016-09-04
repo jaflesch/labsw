@@ -19,28 +19,85 @@ class Lembretes extends Controller {
 		return parent::render($tpl,$vars);
 	}
 
+	// AJAX Calls::
+
+	public static function create() {
+		$id = Auth::id();
+		$post = static::$app->post;
+		$data = Data::str2date($post['data']);
+		$prioridade = $post['prioridade'] - 1;
+
+		$json = new stdclass();
+
+		$query = "
+			INSERT INTO lembrete (
+				id_usuario,
+				titulo, 
+				descricao,
+				prioridade,
+				data
+			)
+			VALUES (
+				{$id},
+				'{$post['titulo']}',
+				'{$post['descricao']}',
+				{$prioridade},
+				'{$data}'
+			)
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		$json->success = ($result)? true : false;		
+
+		die(json_encode($json));
+	}
+
 	public static function getlist() {
 		$post = static::$app->post;
 		$id = Auth::id();
-		
+		$ORDER = self::getOrder($post['sort_type']);
+
 		$query = "
 			SELECT *
 			FROM lembrete 
 			WHERE id_usuario = {$id} AND titulo LIKE '%{$post['search_titulo']}%'
+			{$ORDER}
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		$lembretes = array();
 		if($result && mysqli_num_rows($result) > 0) {
 			while ($fetch = mysqli_fetch_object($result)) {
-				$lembretes[] = $fetch;
+				$fetch->descricao = nl2br($fetch->descricao);
+				$fetch->status = self::getStatus($fetch->status, $fetch->data);
+				$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
+				$fetch->prioridade = self::getPrioridade($fetch->prioridade);
+				$fetch->data = Data::datetime2str($fetch->data);
+				echo "
+					<tr>
+						<td> {$fetch->titulo } </td>	
+						<td class='text-center'><span class='prioridade-label {$fetch->prioridade_label}'> {$fetch->prioridade} </span></td>	
+						<td class='text-center'> {$fetch->data} </td>	
+						<td class='text-center'> {$fetch->status} </td>
+						<td>
+							<button class='btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
+							<button class='btn btn-default text-center pull-right btn-success' style='margin-right: 1px;'><i class='fa fa-check'></i></button>
+							<button class='btn btn-default text-center pull-right' style='margin-right: 1px;'><i class='fa fa-pencil'></i></button>
+						</td>	
+					</tr>
+				";
 			}
 		}
-
-		print_r($lembretes);
-
-		return toUTF($lembretes);
+		else echo "
+			<tr style='height: 51px;'>
+				<td class='text-danger'><i class='fa fa-exclamation-triangle' style='margin-right: 5px;'></i> Nenhum resultado encontrado!</td>
+				<td></td>
+				<td></td>	
+				<td></td>
+				<td></td>	
+			</tr>
+		";
 	}
 
+	// Helpers::
 	private static function getAllLembretesByUserId($id) {
 		$lembretes = array();
 
@@ -54,9 +111,9 @@ class Lembretes extends Controller {
 		while($fetch = mysqli_fetch_object($result)) {
 			$fetch->descricao = nl2br($fetch->descricao);
 			$fetch->status = self::getStatus($fetch->status, $fetch->data);
+			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
 			$fetch->prioridade = self::getPrioridade($fetch->prioridade);
 			$fetch->data = Data::datetime2str($fetch->data);
-			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
 
 			$lembretes[] = $fetch;
 		}
@@ -93,11 +150,24 @@ class Lembretes extends Controller {
 
 	private static function getPriorityLabel($prioridade) {
 		switch ($prioridade) {
-			case 0:	return "";
-			case 1: return "alert-info";
-			case 2: return "alert-warning";
-			case 3: return "alert-danger";
+			case 0:	return "alert-low";
+			case 1: return "alert-normal";
+			case 2: return "alert-danger";
+			case 3: return "alert-critical";
 			default: return "Prioridade: ".$prioridade;
+		}
+	}
+
+	private static function getOrder($int) {
+		switch ($int) {
+			case 1:	return "ORDER BY prioridade DESC";
+			case 2: return "ORDER BY prioridade ASC";
+			case 3: return "ORDER BY titulo ASC";
+			case 4: return "ORDER BY titulo DESC";
+			case 5:	return "ORDER BY data DESC";
+			case 6: return "ORDER BY data ASC";
+
+			default: return "";
 		}
 	}
 }

@@ -6,7 +6,7 @@ class Data {
 	}
 
 	public static function str2date($string) {
-		$piece = explode("/", $data);
+		$piece = explode("/", $string);
 		return $piece[2]."-".$piece[1]."-".$piece[0];
 	}
 
