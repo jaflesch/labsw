@@ -48,7 +48,7 @@ INSERT INTO `lembrete` (`id`, `id_usuario`, `titulo`, `descricao`, `prioridade`,
 (3, 1, 'teste2', 'a\r\nb\r\n\r\n\r\nc\r\nas', 3, '2016-09-04 00:00:00', 0),
 (4, 1, 'Lembrete novo', 'a\r\nk\r\nl\r\noo', 2, '2016-09-02 00:00:00', 0),
 (5, 1, 'Com reload agora', 'penis', 0, '2016-09-29 00:00:00', 0),
-(6, 1, 'Mais um teste agora vai', 'abc', 1, '2016-09-05 00:00:00', 0);
+(6, 1, 'Mais um teste agora vai  ', 'abc', 1, '2016-09-05 00:00:00', 0);
 
 -- --------------------------------------------------------
 
