@@ -19,6 +19,28 @@ class Lembretes extends Controller {
 		return parent::render($tpl,$vars);
 	}
 
+	public static function getlist() {
+		$post = static::$app->post;
+		$id = Auth::id();
+		
+		$query = "
+			SELECT *
+			FROM lembrete 
+			WHERE id_usuario = {$id} AND titulo LIKE '%{$post['search_titulo']}%'
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		$lembretes = array();
+		if($result && mysqli_num_rows($result) > 0) {
+			while ($fetch = mysqli_fetch_object($result)) {
+				$lembretes[] = $fetch;
+			}
+		}
+
+		print_r($lembretes);
+
+		return toUTF($lembretes);
+	}
+
 	private static function getAllLembretesByUserId($id) {
 		$lembretes = array();
 
@@ -34,6 +56,7 @@ class Lembretes extends Controller {
 			$fetch->status = self::getStatus($fetch->status, $fetch->data);
 			$fetch->prioridade = self::getPrioridade($fetch->prioridade);
 			$fetch->data = Data::datetime2str($fetch->data);
+			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
 
 			$lembretes[] = $fetch;
 		}
@@ -64,6 +87,16 @@ class Lembretes extends Controller {
 			case 1: return "Normal";
 			case 2: return "Alta";
 			case 3: return "Crítica";
+			default: return "Prioridade: ".$prioridade;
+		}
+	}
+
+	private static function getPriorityLabel($prioridade) {
+		switch ($prioridade) {
+			case 0:	return "";
+			case 1: return "alert-info";
+			case 2: return "alert-warning";
+			case 3: return "alert-danger";
 			default: return "Prioridade: ".$prioridade;
 		}
 	}

@@ -6,10 +6,48 @@
 	<section id="lembretes">
 		{% include 'lembretes/_lista.html' %}
 	</section>
+	<section id="modals">
+		{% include 'lembretes/_modal_create.html' %}
+		{% include 'lembretes/_modal_edit.html' %}
+		{% include 'lembretes/_modal_delete.html' %}
+	</scetion>
 {% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ root }}/assets/css/plugins/datepicker.css">
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="{{ root }}/assets/js/plugins/datepicker.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('[name="sort_type"]').on("change", function(){
+			var sort = $(this).find(":selected").attr("data-sort");
+			$("#icon-sort").removeClass().addClass(sort);
+		});
+
+		$('.datepick').datepicker({
+			format: 'dd/mm/yyyy'
+		});
+
+		$('[name="search_titulo"]').on("keyup", function(){
+			//console.log($(this).val());
+			var form = $('#formFiltroLembrete');
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'html',
+				data: form.serializeArray(),
+				success: function() {
+
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		});
+	});
+</script>
 {% endblock %}
