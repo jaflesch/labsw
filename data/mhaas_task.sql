@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 29-Ago-2016 às 02:44
+-- Generation Time: 04-Set-2016 às 21:36
 -- Versão do servidor: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -36,15 +36,19 @@ CREATE TABLE IF NOT EXISTS `lembrete` (
   `prioridade` int(11) NOT NULL,
   `data` datetime NOT NULL,
   `status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `lembrete`
 --
 
 INSERT INTO `lembrete` (`id`, `id_usuario`, `titulo`, `descricao`, `prioridade`, `data`, `status`) VALUES
-(1, 1, 'Teste Lembrete', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 0, '2016-08-28 14:04:00', 0),
-(2, 2, 'Teste Lembrete 2', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 3, '2016-08-28 00:00:00', 1);
+(1, 1, 'Teste Lembrete', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 1, '2016-08-28 14:04:00', 0),
+(2, 2, 'Teste Lembrete 2', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 3, '2016-08-28 00:00:00', 1),
+(3, 1, 'teste2', 'a\r\nb\r\n\r\n\r\nc\r\nas', 3, '2016-09-04 00:00:00', 0),
+(4, 1, 'Lembrete novo', 'a\r\nk\r\nl\r\noo', 2, '2016-09-02 00:00:00', 0),
+(5, 1, 'Com reload agora', 'penis', 0, '2016-09-29 00:00:00', 0),
+(6, 1, 'Mais um teste agora vai', 'abc', 1, '2016-09-05 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -144,7 +148,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT for table `lembrete`
 --
 ALTER TABLE `lembrete`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `trofeu`
 --
