@@ -51,6 +51,74 @@ class Lembretes extends Controller {
 		die(json_encode($json));
 	}
 
+	public static function edit() {
+		$id_user = Auth::id();
+		
+		$post = static::$app->post;
+		$id = (int)$post['id'];
+		$data = Data::str2date($post['data'])." 00:00:00";
+		$prioridade = $post['prioridade'] - 1;
+
+		$json = new stdclass();
+
+		$query = "
+			UPDATE lembrete 
+			SET 
+				titulo = '{$post['titulo']}',
+				prioridade = {$prioridade},
+				descricao = '{$post['descricao']}',
+				data = '{$data}'
+			WHERE id = {$id} AND id_usuario = {$id_user}
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		$json->success = ($result)? true : false;
+
+		die(json_encode($json));
+	}
+
+	public static function get() {
+		$id_user = Auth::id();
+		$id = (int) static::$app->post['id'];
+
+		$json = new stdclass();
+
+		$query = "
+			SELECT *
+			FROM lembrete
+			WHERE id_usuario = {$id_user} AND id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		if($result && mysqli_num_rows($result) == 1 ) {
+			$fetch = mysqli_fetch_object($result);
+			
+			// correct display on HTML <select>
+			$fetch->prioridade++;
+			$fetch->data = Data::datetime2str($fetch->data);
+
+			$json->success = true;
+			$json->lembrete = toUTF($fetch);
+		}
+		else $json->success = false;
+		
+		die(json_encode($json));
+	}
+
+	public static function delete() {
+		$id_user = Auth::id();
+		$id = (int) static::$app->post['id'];
+
+		$json = new stdclass();
+
+		$query = "
+			DELETE FROM lembrete
+			WHERE id_usuario = {$id_user} AND id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);		
+		$json->success = ($result)? true : false;
+		
+		die(json_encode($json));
+	}
+
 	public static function getlist() {
 		$post = static::$app->post;
 		$id = Auth::id();
@@ -72,15 +140,15 @@ class Lembretes extends Controller {
 				$fetch->prioridade = self::getPrioridade($fetch->prioridade);
 				$fetch->data = Data::datetime2str($fetch->data);
 				echo "
-					<tr>
+					<tr data-id='{$fetch->id}'>
 						<td> {$fetch->titulo } </td>	
 						<td class='text-center'><span class='prioridade-label {$fetch->prioridade_label}'> {$fetch->prioridade} </span></td>	
 						<td class='text-center'> {$fetch->data} </td>	
 						<td class='text-center'> {$fetch->status} </td>
 						<td>
-							<button class='btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
-							<button class='btn btn-default text-center pull-right btn-success' style='margin-right: 1px;'><i class='fa fa-check'></i></button>
-							<button class='btn btn-default text-center pull-right' style='margin-right: 1px;'><i class='fa fa-pencil'></i></button>
+							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
+							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 1px;'><i class='fa fa-check'></i></button>
+							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 1px;'><i class='fa fa-pencil'></i></button>
 						</td>	
 					</tr>
 				";
@@ -105,6 +173,7 @@ class Lembretes extends Controller {
 			SELECT *
 			FROM lembrete 
 			WHERE id_usuario = {$id}
+			ORDER BY data ASC, prioridade DESC
 		";
 
 		$result = mysqli_query(static::$dbConn, $query);
@@ -130,8 +199,7 @@ class Lembretes extends Controller {
 				
 				// (string) [+/-]days
 				$days = $diff->format("%R%a");
-
-				return ($days[0] == '-' && (int)$days[1] > 0) ? "Atrasado" : "Em andamento";
+				return ($days[0] == '+' && (int)$days[1] > 0) ? "Atrasado" : "Em andamento";
 
 			case 1: return "Completo";
 			default: return "Status: ".$status;

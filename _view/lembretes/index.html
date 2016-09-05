@@ -36,23 +36,7 @@
 			$('#createLembreteModal').modal('show');
 		});
 
-		$('[name="search_titulo"],[name="sort_type"]').on("change keyup", function(){
-			var form = $('#formFiltroLembrete');
-
-			$.ajax({
-				url: form.attr("action"),
-				method: 'POST',
-				dataType: 'html',
-				data: form.serializeArray(),
-				success: function(json) {
-					$('table tbody tr').remove();
-					$('table tbody').append(json);
-				},
-				error: function() {
-					alert('Erro na requisição AJAX!');
-				}
-			});
-		});
+		$('[name="search_titulo"],[name="sort_type"]').on("change keyup", loadAll);
 
 		$('#formCreateLembrete').unbind("submit").bind("submit", function(e){
 			e.preventDefault();
@@ -71,6 +55,110 @@
 				}
 			});
 		});
+
+
+		$('body').on("click", ".btn-edit, .btn-remove", function() {
+			var id = $(this).parent().parent().attr("data-id");
+			$('.help-edit').hide();
+
+			$.ajax({
+				url: 'lembretes/get',
+				method: 'POST',
+				dataType: 'json',
+				data: {id: id},
+				success: function(json) {
+					$('#formEditLembrete [name="id"]').val(json.lembrete.id);
+					$('#formEditLembrete [name="titulo"]').val(json.lembrete.titulo);
+					$('#formEditLembrete [name="prioridade"]').val(json.lembrete.prioridade);
+					$('#formEditLembrete [name="descricao"]').val(json.lembrete.descricao);
+					$('#formEditLembrete [name="data"]').val(json.lembrete.data);
+					$("#editLembreteModal").modal("show");
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			})
+		});
+
+		$('body').on("click", ".btn-delete", function() {
+			var id = $(this).parent().parent().attr("data-id");
+			$('.help-edit').hide();
+			$('.help-remove').hide();
+
+			$.ajax({
+				url: 'lembretes/get',
+				method: 'POST',
+				dataType: 'json',
+				data: {id: id},
+				success: function(json) {
+					$('#formRemoveLembrete [name="id"]').val(json.lembrete.id);
+					$('#formRemoveLembrete [name="titulo"]').val(json.lembrete.titulo);
+					$('#formRemoveLembrete [name="prioridade"]').val(json.lembrete.prioridade);
+					$('#formRemoveLembrete [name="descricao"]').val(json.lembrete.descricao);
+					$('#formRemoveLembrete [name="data"]').val(json.lembrete.data);
+					$("#removeLembreteModal").modal("show");
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			})
+		});
+
+		$('#formEditLembrete').unbind("submit").bind("submit", function(e){
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function() {
+					$('.help-edit').show();
+					loadAll();
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		});
+
+		$('#formRemoveLembrete').unbind("submit").bind("submit", function(e){
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function() {
+					$('.help-remove').show();
+					loadAll();
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		});
+
+		function loadAll() {
+			var form = $('#formFiltroLembrete');
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'html',
+				data: form.serializeArray(),
+				success: function(json) {
+					$('table tbody tr').remove();
+					$('table tbody').append(json);
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		}
 	});
 </script>
 {% endblock %}

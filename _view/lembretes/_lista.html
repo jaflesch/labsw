@@ -45,15 +45,15 @@
 		</thead>
 		<tbody>
 		{% for lembrete in lembretes %}
-			<tr>
+			<tr data-id="{{ lembrete.id }}">
 				<td> {{ lembrete.titulo }} </td>	
 				<td class="text-center"><span class="prioridade-label {{ lembrete.prioridade_label }}"> {{ lembrete.prioridade }} </span></td>	
 				<td class="text-center"> {{ lembrete.data }} </td>	
 				<td class="text-center"> {{ lembrete.status }} </td>
 				<td>
-					<button class="btn btn-default text-center pull-right btn-danger"><i class="fa fa-times"></i></button>
-					<button class="btn btn-default text-center pull-right btn-success" style="margin-right: 1px;"><i class="fa fa-check "></i></button>
-					<button class="btn btn-default text-center pull-right" style="margin-right: 1px;"><i class="fa fa-pencil"></i></button>
+					<button class="btn-delete btn btn-default text-center pull-right btn-danger"><i class="fa fa-times"></i></button>
+					<button class="btn-check btn btn-default text-center pull-right btn-success" style="margin-right: 1px;"><i class="fa fa-check "></i></button>
+					<button class="btn-edit btn btn-default text-center pull-right" style="margin-right: 1px;"><i class="fa fa-pencil"></i></button>
 				</td>	
 			</tr>
 		{% endfor %}
