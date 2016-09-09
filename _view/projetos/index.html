@@ -1,24 +1,22 @@
 {% extends "layout.html" %}
 
-{% set page_title = 'Lembretes' %}
+{% set page_title = 'Projetos' %}
 
 {% block main %}
-	<section id="lembretes">
-		{% include 'lembretes/_lista.html' %}
+	<section id="projetos">
+		{% include 'projetos/_lista.html' %}
 	</section>
 	<section id="modals">
-		{% include 'lembretes/_modal_create.html' %}
-		{% include 'lembretes/_modal_edit.html' %}
-		{% include 'lembretes/_modal_delete.html' %}
+		{% include 'projetos/_modal_create.html' %}
+		{% include 'projetos/_modal_edit.html' %}
+		{% include 'projetos/_modal_delete.html' %}
 	</scetion>
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{{ root }}/assets/css/plugins/datepicker.css">
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{ root }}/assets/js/plugins/datepicker.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 

@@ -1,0 +1,42 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-group mgr10"></i> Projetos </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mgb60"></div>
+	</div>
+	
+	<div class="row projeto-lista">
+	{% if projetos is not empty %}
+		{% set i = 0 %}
+		{% for projeto in projetos %}
+				<div class="col-sm-3 mgb15">
+					<a href="projetos/sobre/{{ projeto.id }}">
+						<div class="projeto-box animated" style="background: {{ projeto.identidade_visual }}">
+							<p> {{ projeto.nome }} </p>
+						</div>
+					</a>
+				</div>
+			{% set i = i + 1 %}
+
+			{% if (i % 4 == 0) %}
+				</div>
+				<div class="row projeto-lista">
+			{% elseif i == projetos|length %}
+				</div>
+			{% endif %}
+		{% endfor %}
+	
+	{% else %}
+		<div class="col-md-12"> 
+			<p> Você não está vinculado a nenhum projeto ainda! </p>
+		</div>
+	</div>
+	{% endif %}
+
+</div>
+
+<!-- Notification -->
+<!-- <p class="task-completed-notification" style="display: none;"> Lembrete concluído com sucesso! </p> -->

@@ -1,0 +1,44 @@
+<div class="col-md-12">
+	<h3 class="intern"> Equipe </h3>
+
+	<div class="equipe-box">
+	{% for membro in equipe %}
+		<a href="usuarios/sobre/{{ membro.id }}" data-toggle="tooltip" title="{{ membro.usuario }}">
+			<span class="equipe-circle animated"> {{ membro.inicial }} </span>
+		</a>
+	{% endfor %}
+	</div>
+
+	<br>
+	<h3 class="intern"> Sobre mim </h3>
+	<div class="col-md-12 about-me">
+		<table class="sobre mgb40">
+			<tbody>
+				<tr>
+					<td> Tarefas atribuídas a mim:</td>
+					<td class="text-right"><strong>{{ sobre.tarefas }} 10</strong></td>
+				</tr>
+				<tr>
+					<td> Tarefas completadas: </td>
+					<td class="text-right"><strong>{{ sobre.completadas }} 7</strong></td>
+				</tr>
+				<tr>
+					<td> Tarefas em andamento: </td>
+					<td class="text-right"><strong>{{ sobre.andamento }} 1</strong></td>
+				</tr>
+				<tr>
+					<td> Tarefas atrasadas: </td>
+					<td class="text-right"><strong>{{ sobre.atrasadas }} 2</strong></td>
+				</tr>				
+				<tr>
+					<td colspan="2" class="alert alert-success {{ sobre.aproveitamento_label }}"> 
+						Seu aproveitamento é de <strong>{{ sobre.aproveitamento }} 70.00%</strong>
+					</td>
+				</tr>				
+			</tbody>
+		</table>
+		
+		<p> Atualmente você ocupa a posição de --- no projeto. </p>
+	</div>
+	
+</div>
