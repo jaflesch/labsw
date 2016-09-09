@@ -147,8 +147,8 @@ class Lembretes extends Controller {
 						<td class='text-center'> {$fetch->status} </td>
 						<td>
 							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
-							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 1px;'><i class='fa fa-check'></i></button>
-							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 1px;'><i class='fa fa-pencil'></i></button>
+							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 2px;'><i class='fa fa-check'></i></button>
+							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
 						</td>	
 					</tr>
 				";
@@ -173,7 +173,7 @@ class Lembretes extends Controller {
 			SELECT *
 			FROM lembrete 
 			WHERE id_usuario = {$id}
-			ORDER BY data ASC, prioridade DESC
+			ORDER BY prioridade DESC, data ASC
 		";
 
 		$result = mysqli_query(static::$dbConn, $query);
