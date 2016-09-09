@@ -157,6 +157,13 @@
 			}
 		});
 
+		$('body').on("click", '.btn-check', function(){
+			$('.task-completed-notification').fadeIn('fast');
+			setTimeout(function(){
+				$('.task-completed-notification').fadeOut('fast');
+			}, 2000);
+		});
+
 		function loadAll() {
 			var form = $('#formFiltroLembrete');
 
