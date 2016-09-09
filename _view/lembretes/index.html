@@ -142,6 +142,21 @@
 			});
 		});
 
+		$('.material-switch input').click(function() {
+			var text = $('#help-text-toggle').text();
+			
+			if(text == "Em andamento:") {
+				$('#help-text-toggle').fadeOut('fast', function(){
+					$(this).text("Todos:");
+				}).fadeIn();
+			}
+			else {
+				$('#help-text-toggle').fadeOut('fast', function(){
+					$(this).text("Em andamento:");
+				}).fadeIn();
+			}
+		});
+
 		function loadAll() {
 			var form = $('#formFiltroLembrete');
 

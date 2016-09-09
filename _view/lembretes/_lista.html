@@ -11,6 +11,12 @@
 		<form id="formFiltroLembrete" method="POST" action="{{ root }}/lembretes/getlist">
 			<div class="col-sm-4 mgb15">
 				<button class="btn btn-primary" id="turnOnModal"><i class="fa fa-plus-circle"></i> Novo </button>
+
+				<div class="material-switch pull-right" style="position: relative; top: 7px">
+					<span id="help-text-toggle">Em andamento:</span> &nbsp;
+                    <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox" checked="" />
+                    <label for="someSwitchOptionDefault" class="label-primary"></label>
+                </div>
 			</div>
 			<div class="col-sm-4 mgb15">
 				<div class="input-group">
@@ -52,8 +58,8 @@
 				<td class="text-center"> {{ lembrete.status }} </td>
 				<td>
 					<button class="btn-delete btn btn-default text-center pull-right btn-danger"><i class="fa fa-times"></i></button>
-					<button class="btn-check btn btn-default text-center pull-right btn-success" style="margin-right: 1px;"><i class="fa fa-check "></i></button>
-					<button class="btn-edit btn btn-default text-center pull-right" style="margin-right: 1px;"><i class="fa fa-pencil"></i></button>
+					<button class="btn-check btn btn-default text-center pull-right btn-success" style="margin-right: 2px;"><i class="fa fa-check "></i></button>
+					<button class="btn-edit btn btn-default text-center pull-right" style="margin-right: 2px;"><i class="fa fa-pencil"></i></button>
 				</td>	
 			</tr>
 		{% endfor %}
