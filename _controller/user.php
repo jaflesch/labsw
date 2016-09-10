@@ -33,9 +33,10 @@ class Home extends Controller {
 			FROM usuario
 			WHERE id != {$id} AND login = '{$_POST['login']}'
 		";
-		if(!mysqli_query(static::$dbConn, $query)) {
+		if(mysqli_num_rows(mysqli_query(static::$dbConn, $query)) > 0) {
 			$json->success = false;
 			$json->msg = "Já existe um usuário com o login solicitado!";
+			$json->error = 1;
 			die(json_encode($json));
 		}
 		
@@ -45,9 +46,10 @@ class Home extends Controller {
 			FROM usuario
 			WHERE id != {$id} AND email = '{$_POST['email']}'
 		";
-		if(!mysqli_query(static::$dbConn, $query)) {
+		if(mysqli_num_rows(mysqli_query(static::$dbConn, $query)) > 0) {
 			$json->success = false;
 			$json->msg = "Já existe um usuário com o e-mail solicitado!";
+			$json->error = 1;
 			die(json_encode($json));
 		}
 		
