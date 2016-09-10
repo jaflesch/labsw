@@ -25,7 +25,7 @@ class Projetos extends Controller {
 				"equipe" => self::getTeamByProjetoId($id),
 				"informacoes" => self::getInfoByProjetoId($id)
 			);
-			print_r($bag);
+			
 			echo self::render("projetos/sobre.html", $bag);
 		}
 		else self::redirect("home");
@@ -214,7 +214,7 @@ class Projetos extends Controller {
 			FROM projeto p 
 			INNER JOIN equipe e ON e.id_projeto = p.id
 			INNER JOIN usuario u ON u.id = e.id_usuario
-			WHERE p.id = {$id_project} AND u.id = {$id_user} AND e.lider = 1
+			WHERE p.id = {$id_project} AND u.id = {$id_user} AND e.admin = 1
 		";
 
 		return mysqli_query(static::$dbConn, $query);
@@ -261,6 +261,7 @@ class Projetos extends Controller {
 	private static function getInfoByProjetoId($id) {
 		$informacoes = array();
 		$membros = array();
+		
 		// Obtém dados gerais do projeto::
 		$query = "
 			SELECT 
@@ -294,10 +295,12 @@ class Projetos extends Controller {
 		$result = mysqli_query(static::$dbConn, $query);
 		$fetch = mysqli_fetch_object($result);
 		
+		$is_admin = (self::isAdmin(Auth::id(), $id))? true : false;
+
 		$informacoes["funcao"] = $fetch->funcao;
 		$informacoes["total_equipe"] = count($membros);
 		$informacoes["geral"] = $membros[0];
-		$informacoes["admin"] = self::isAdmin(Auth::id(), $id);
+		$informacoes["admin"] = $is_admin;
 		
 		return toUTF($informacoes);
 	}
