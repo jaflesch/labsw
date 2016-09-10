@@ -18,7 +18,7 @@ class Projetos extends Controller {
 	public static function sobre() {
 		$id = static::$app->parametros[2];
 
-		if(Auth::user() && self::isUserOnProject(Auth::id(), $id)) {
+		if(Auth::user() && self::isUserOnProject(Auth::id(), $id) || self::isProjectPublic($id) ) {
 			$bag = array(
 				"user" => Auth::getUser(),
 				"projeto" => self::getProjetoById($id),
@@ -28,7 +28,7 @@ class Projetos extends Controller {
 			
 			echo self::render("projetos/sobre.html", $bag);
 		}
-		else self::redirect("home");
+		else self::redirect("projetos");
 	}
 
 	public static function render($tpl, $vars=array()) {
@@ -205,7 +205,9 @@ class Projetos extends Controller {
 			WHERE e.id_usuario = {$id_user} AND p.id = {$id_project}
 		";
 
-		return mysqli_query(static::$dbConn, $query);
+		$result = mysqli_query(static::$dbConn, $query);
+
+		return mysqli_num_rows($result);
 	}
 
 	private static function isAdmin($id_user, $id_project) {
@@ -217,7 +219,14 @@ class Projetos extends Controller {
 			WHERE p.id = {$id_project} AND u.id = {$id_user} AND e.admin = 1
 		";
 
+		// may be useful::
+		//$result = mysqli_query(static::$dbConn, $query)
 		return mysqli_query(static::$dbConn, $query);
+	}
+
+	private static function isProjectPublic($id) {
+		// to do query
+		return false;
 	}
 
 	private static function getProjetoById($id) {
