@@ -72,6 +72,7 @@
 					$('#formEditProjeto [name="id"]').val(json.projeto.id);
 					$('#formEditProjeto [name="nome"]').val(json.projeto.nome);
 					$('#formEditProjeto [name="identidade_visual"]').val(json.projeto.identidade_visual);
+					$('#color-help span').css("background", json.projeto.identidade_visual);
 					$('#formEditProjeto [name="url"]').val(json.projeto.url);
 					$('#formEditProjeto [name="privacidade"]').val(json.projeto.privacidade);
 					
