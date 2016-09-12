@@ -112,8 +112,8 @@ class Projetos extends Controller {
 
 		$query = "
 			SELECT *
-			FROM lembrete
-			WHERE id_usuario = {$id_user} AND id = {$id}
+			FROM projeto
+			WHERE id = {$id}
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		if($result && mysqli_num_rows($result) == 1 ) {
@@ -124,7 +124,7 @@ class Projetos extends Controller {
 			$fetch->data = Data::datetime2str($fetch->data);
 
 			$json->success = true;
-			$json->lembrete = toUTF($fetch);
+			$json->projeto = toUTF($fetch);
 		}
 		else $json->success = false;
 		
@@ -181,7 +181,6 @@ class Projetos extends Controller {
 						<td class='text-center'> {$fetch->privacidade} </td>
 						<td>
 							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
-							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 2px;'><i class='fa fa-check'></i></button>
 							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
 						</td>	
 					</tr>

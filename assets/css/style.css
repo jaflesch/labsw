@@ -345,6 +345,21 @@ table tbody td { vertical-align: middle !important; }
 	display: block;
 	margin: 0 auto;
 }
+
+#color-help {
+	position: relative;
+	top: -36px;
+	width: 50px;
+	height: 35px;
+	float: right;
+	border-left: 1px solid #ddd;
+}
+#color-help span {
+	height: 26px;
+	width: 40px;
+	display: block;
+	margin: 4px;
+}
 /*
 =================
 	USER

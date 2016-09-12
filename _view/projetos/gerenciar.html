@@ -35,6 +35,10 @@
 			$('#createLembreteModal').modal('show');
 		});
 
+		$('body').on("keyup", '[name="identidade_visual"]', function(){
+			$('#color-help span').css("background", $(this).val());
+		});
+
 		$('[name="search_titulo"],[name="sort_type"],[name="sort_privacidade"]').on("change keyup", loadAll);
 
 		$('#formCreateLembrete').unbind("submit").bind("submit", function(e){
@@ -55,23 +59,23 @@
 			});
 		});
 
-
 		$('body').on("click", ".btn-edit, .btn-remove", function() {
 			var id = $(this).parent().parent().attr("data-id");
 			$('.help-edit').hide();
 
 			$.ajax({
-				url: 'lembretes/get',
+				url: '../projetos/get',
 				method: 'POST',
 				dataType: 'json',
 				data: {id: id},
 				success: function(json) {
-					$('#formEditLembrete [name="id"]').val(json.lembrete.id);
-					$('#formEditLembrete [name="titulo"]').val(json.lembrete.titulo);
-					$('#formEditLembrete [name="prioridade"]').val(json.lembrete.prioridade);
-					$('#formEditLembrete [name="descricao"]').val(json.lembrete.descricao);
-					$('#formEditLembrete [name="data"]').val(json.lembrete.data);
-					$("#editLembreteModal").modal("show");
+					$('#formEditProjeto [name="id"]').val(json.projeto.id);
+					$('#formEditProjeto [name="nome"]').val(json.projeto.nome);
+					$('#formEditProjeto [name="identidade_visual"]').val(json.projeto.identidade_visual);
+					$('#formEditProjeto [name="url"]').val(json.projeto.url);
+					$('#formEditProjeto [name="privacidade"]').val(json.projeto.privacidade);
+					
+					$("#editProjetoModal").modal("show");
 				},
 				error: function() {
 					alert('Erro na requisição AJAX!');
@@ -103,7 +107,7 @@
 			})
 		});
 
-		$('#formEditLembrete').unbind("submit").bind("submit", function(e){
+		$('#formEditProjeto').unbind("submit").bind("submit", function(e){
 			e.preventDefault();
 			var form = $(this);
 
@@ -139,21 +143,6 @@
 					alert('Erro na requisição AJAX!');
 				}
 			});
-		});
-
-		$('.material-switch input').click(function() {
-			var text = $('#help-text-toggle').text();
-			
-			if(text == "Em andamento:") {
-				$('#help-text-toggle').fadeOut('fast', function(){
-					$(this).text("Todos:");
-				}).fadeIn();
-			}
-			else {
-				$('#help-text-toggle').fadeOut('fast', function(){
-					$(this).text("Em andamento:");
-				}).fadeIn();
-			}
 		});
 
 		$('body').on("click", '.btn-check', function(){
