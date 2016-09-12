@@ -123,11 +123,13 @@ class Lembretes extends Controller {
 		$post = static::$app->post;
 		$id = Auth::id();
 		$ORDER = self::getOrder($post['sort_type']);
+		$value = isset($post['status'])? "0" : "1";
+		$STATUS = " AND status = ". $value;
 
 		$query = "
 			SELECT *
 			FROM lembrete 
-			WHERE id_usuario = {$id} AND titulo LIKE '%{$post['search_titulo']}%'
+			WHERE id_usuario = {$id} AND titulo LIKE '%{$post['search_titulo']}%' {$STATUS}
 			{$ORDER}
 		";
 		$result = mysqli_query(static::$dbConn, $query);
@@ -147,7 +149,13 @@ class Lembretes extends Controller {
 						<td class='text-center'> {$fetch->status} </td>
 						<td>
 							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
+				";
+				if($fetch->status != "Completo") {
+					echo "
 							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 2px;'><i class='fa fa-check'></i></button>
+					";
+				}
+				echo "
 							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
 						</td>	
 					</tr>
@@ -165,6 +173,23 @@ class Lembretes extends Controller {
 		";
 	}
 
+	public static function complete() {
+		$id_user = Auth::id();
+		$id = (int) static::$app->post['id'];
+
+		$json = new stdclass();
+
+		$query = "
+			UPDATE lembrete
+			SET status = 1
+			WHERE id_usuario = {$id_user} AND id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);		
+		$json->success = ($result)? true : false;
+		
+		die(json_encode($json));
+	}
+
 	// Helpers::
 	private static function getAllLembretesByUserId($id) {
 		$lembretes = array();
@@ -172,7 +197,7 @@ class Lembretes extends Controller {
 		$query = "
 			SELECT *
 			FROM lembrete 
-			WHERE id_usuario = {$id}
+			WHERE id_usuario = {$id} AND status = 0
 			ORDER BY prioridade DESC, data ASC
 		";
 

@@ -145,23 +145,42 @@
 		$('.material-switch input').click(function() {
 			var text = $('#help-text-toggle').text();
 			
-			if(text == "Em andamento:") {
+			if(text == "Ativo:") {
 				$('#help-text-toggle').fadeOut('fast', function(){
 					$(this).text("Todos:");
 				}).fadeIn();
 			}
 			else {
 				$('#help-text-toggle').fadeOut('fast', function(){
-					$(this).text("Em andamento:");
+					$(this).text("Ativo:");
 				}).fadeIn();
 			}
+
+			loadAll();
 		});
 
 		$('body').on("click", '.btn-check', function(){
-			$('.task-completed-notification').fadeIn('fast');
-			setTimeout(function(){
-				$('.task-completed-notification').fadeOut('fast');
-			}, 2000);
+			var id = $(this).parent().parent().attr("data-id");
+			
+			$.ajax({
+				url: 'lembretes/complete',
+				method: 'POST',
+				dataType: 'json',
+				data: { id: id },
+				success: function(json) {
+					if(json.success) {
+						$('.task-completed-notification').fadeIn('fast');
+						setTimeout(function(){
+							$('.task-completed-notification').fadeOut('fast');
+						}, 2000);
+
+						loadAll();
+					}
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
 		});
 
 		function loadAll() {
