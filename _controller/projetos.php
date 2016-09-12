@@ -18,7 +18,7 @@ class Projetos extends Controller {
 	public static function sobre() {
 		$id = static::$app->parametros[2];
 
-		if(Auth::user() && self::isUserOnProject(Auth::id(), $id) || self::isProjectPublic($id) ) {
+		if(Auth::user() && (self::isUserOnProject(Auth::id(), $id) || self::isProjectPublic($id)) ) {
 			$bag = array(
 				"user" => Auth::getUser(),
 				"projeto" => self::getProjetoById($id),
@@ -218,15 +218,20 @@ class Projetos extends Controller {
 			INNER JOIN usuario u ON u.id = e.id_usuario
 			WHERE p.id = {$id_project} AND u.id = {$id_user} AND e.admin = 1
 		";
-
-		// may be useful::
-		//$result = mysqli_query(static::$dbConn, $query)
-		return mysqli_query(static::$dbConn, $query);
+		$result = mysqli_query(static::$dbConn, $query);
+		
+		return (mysqli_num_rows($result))? 1 : 0;
 	}
 
 	private static function isProjectPublic($id) {
-		// to do query
-		return false;
+		$query = "
+			SELECT id
+			FROM projeto 
+			WHERE id = {$id} AND privacidade = 0
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		var_dump(mysqli_num_rows($result));
+		return mysqli_num_rows($result);
 	}
 
 	private static function getProjetoById($id) {
@@ -254,6 +259,7 @@ class Projetos extends Controller {
 			INNER JOIN equipe e ON e.id_projeto = p.id 
 			INNER JOIN usuario u ON u.id = e.id_usuario
 			WHERE p.id = {$id}
+			ORDER BY e.admin DESC
 		";
 
 		$result = mysqli_query(static::$dbConn, $query);
@@ -312,55 +318,6 @@ class Projetos extends Controller {
 		$informacoes["admin"] = $is_admin;
 		
 		return toUTF($informacoes);
-	}
-
-	private static function getStatus($status, $data) {
-		switch ($status) {
-			case 0:	
-				$data_entrega = new DateTime($data);
-				$data_hoje = new DateTime();
-				$diff = $data_entrega->diff($data_hoje);
-				
-				// (string) [+/-]days
-				$days = $diff->format("%R%a");
-				return ($days[0] == '+' && (int)$days[1] > 0) ? "Atrasado" : "Em andamento";
-
-			case 1: return "Completo";
-			default: return "Status: ".$status;
-		}
-	}
-
-	private static function getPrioridade($prioridade) {
-		switch ($prioridade) {
-			case 0:	return "Baixa";
-			case 1: return "Normal";
-			case 2: return "Alta";
-			case 3: return "Crítica";
-			default: return "Prioridade: ".$prioridade;
-		}
-	}
-
-	private static function getPriorityLabel($prioridade) {
-		switch ($prioridade) {
-			case 0:	return "alert-low";
-			case 1: return "alert-normal";
-			case 2: return "alert-danger";
-			case 3: return "alert-critical";
-			default: return "Prioridade: ".$prioridade;
-		}
-	}
-
-	private static function getOrder($int) {
-		switch ($int) {
-			case 1:	return "ORDER BY prioridade DESC";
-			case 2: return "ORDER BY prioridade ASC";
-			case 3: return "ORDER BY titulo ASC";
-			case 4: return "ORDER BY titulo DESC";
-			case 5:	return "ORDER BY data DESC";
-			case 6: return "ORDER BY data ASC";
-
-			default: return "";
-		}
 	}
 }
 
