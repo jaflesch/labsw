@@ -150,7 +150,7 @@ class Lembretes extends Controller {
 						<td>
 							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
 				";
-				if($fetch->status != "Completo") {
+				if($fetch->status != "<span style='color:#2fa561;'>Completo</span>") {
 					echo "
 							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 2px;'><i class='fa fa-check'></i></button>
 					";
@@ -226,7 +226,7 @@ class Lembretes extends Controller {
 				$days = $diff->format("%R%a");
 				return ($days[0] == '+' && (int)$days[1] > 0) ? "Atrasado" : "Em andamento";
 
-			case 1: return "Completo";
+			case 1: return "<span style='color:#2fa561;'>Completo</span>";
 			default: return "Status: ".$status;
 		}
 	}
