@@ -35,8 +35,7 @@ class Home extends Controller {
 		";
 		if(mysqli_num_rows(mysqli_query(static::$dbConn, $query)) > 0) {
 			$json->success = false;
-			$json->msg = "Já existe um usuário com o login solicitado!";
-			$json->error = 1;
+			$json->msg = "login_error";
 			die(json_encode($json));
 		}
 		
@@ -48,8 +47,7 @@ class Home extends Controller {
 		";
 		if(mysqli_num_rows(mysqli_query(static::$dbConn, $query)) > 0) {
 			$json->success = false;
-			$json->msg = "Já existe um usuário com o e-mail solicitado!";
-			$json->error = 1;
+			$json->msg = "email_error";
 			die(json_encode($json));
 		}
 		

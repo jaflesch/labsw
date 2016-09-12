@@ -28,13 +28,25 @@
 				method: 'POST',
 				dataType: 'json',
 				data: form.serializeArray(),
-				success: function() {
-					$('.help-success').show();
+				success: function(json) {
+					$('.help-success').hide();
+					$('.help-email').hide();
+					$('.help-login').hide();
 
-					$("#nome").text($('[name="nome"]').val());
-					$("#login").text($('[name="login"]').val());
-					$("#email").text($('[name="email"]').val());
+					if(json.success) {
+						$('.help-success').show();
 
+						$("#nome").text($('[name="nome"]').val());
+						$("#login").text($('[name="login"]').val());
+						$("#email").text($('[name="email"]').val());
+					}
+					else if(json.msg == "email_error") {
+						$('.help-email').show();
+					}
+					else if(json.msg == "login_error") {
+						$('.help-login').show();
+					}
+					
 					$("#editPerfilModal").modal("hide");
 				},
 				error: function() {
