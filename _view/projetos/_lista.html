@@ -13,7 +13,7 @@
 		{% set i = 0 %}
 		{% for projeto in projetos %}
 				<div class="col-sm-3 mgb15">
-					<a href="projetos/sobre/{{ projeto.id }}">
+					<a href="{{ root }}/projetos/sobre/{{ projeto.id }}">
 						<div class="projeto-box animated" style="background: {{ projeto.identidade_visual }}">
 							<p> {{ projeto.nome }} </p>
 						</div>

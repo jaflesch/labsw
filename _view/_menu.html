@@ -22,9 +22,27 @@
 					<li class="{{ app.controller == 'lembretes' ? 'active' : '' }}">
 						<a class="animated" title="" href="{{ root }}/lembretes"><i class="fa fa-sticky-note"></i> Lembretes </a>
 					</li>
+
+					{% if user.nivel_privilegios == 0 %}
+					<li class="dropdown {{ app.controller == 'projetos' ? 'active' : '' }}">
+						<a class="animated" title="" href="#" data-toggle="dropdown">
+							<i class="fa fa-group"></i> Projetos <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li> 
+								<a class="animated" href="{{ root }}/projetos/gerenciar"><i class="fa fa-edit"></i> Gerenciar </a>
+							</li>
+							<li> 
+								<a class="animated" href="{{ root }}/projetos/"><i class="fa fa-th-list"></i> Listar </a>
+							</li>
+						</ul>
+					</li>
+					{% else %}
 					<li class="{{ app.controller == 'projetos' ? 'active' : '' }}">
 						<a class="animated" title="" href="{{ root }}/projetos"><i class="fa fa-group"></i> Projetos </a>
 					</li>
+					{% endif %}
+
 					<li class="{{ app.controller == 'agenda' ? 'active' : '' }}">
 						<a class="animated" title="" href="{{ root }}/#"><i class="fa fa-calendar"></i> Agenda </a>
 					</li>

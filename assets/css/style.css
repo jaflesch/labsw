@@ -337,6 +337,14 @@ table tbody td { vertical-align: middle !important; }
 	font-size: 14px;
 }
 #projetos table.sobre td.alert { padding-left: 15px; }
+
+.identidade-box {
+	height: 20px;
+	width: 40px;
+	border-radius: 50px;
+	display: block;
+	margin: 0 auto;
+}
 /*
 =================
 	USER

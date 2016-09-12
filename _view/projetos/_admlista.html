@@ -1,0 +1,83 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-group mgr10"></i> Projetos </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 mgb60"></div>
+	</div>
+	<div class="row mgb15">
+		<form id="formFiltroProjeto" method="POST" action="{{ root }}/projetos/getlist">
+			<div class="col-sm-2 mgb15">
+				<button class="btn btn-primary" id="turnOnModal"><i class="fa fa-plus-circle"></i> Novo </button>
+			</div>
+			<div class="col-sm-3">
+				<div class="input-group">
+					<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-sort-alpha-asc" id="icon-sort"></i></span>
+					<select name="sort_type" class="form-control" placeholder="Título" aria-describedby="sizing-addon2">
+						<option value="1" data-sort="fa fa-sort-alpha-asc"> Nome (A-Z) </option>
+						<option value="2" data-sort="fa fa-sort-alpha-desc"> Nome (Z-A) </option>
+						<option value="3" data-sort="fa fa-sort-alpha-asc"> Criador (A-Z) </option>
+						<option value="4" data-sort="fa fa-sort-alpha-desc"> Criador (Z-A) </option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="input-group">
+					<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-eye" id="icon-sort2"></i></span>
+					<select name="sort_privacidade" class="form-control" placeholder="Título" aria-describedby="sizing-addon2">
+						<option value="1" data-sort="fa fa-eye"> Todos </option>
+						<option value="2" data-sort="fa fa-eye"> Público </option>
+						<option value="3" data-sort="fa fa-eye-slash"> Privado </option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-4 mgb15">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Título" name="search_titulo" aria-describedby="sizing-addon2">
+					<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-search"></i></span>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col-md-12"> 
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td> Nome </td>
+						<td class="text-center"> Identidade Visual </td>
+						<td class="text-center"> Website </td>
+						<td class="text-center"> Criador </td>
+						<td class="text-center"> Privacidade </td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+				{% for projeto in projetos %}
+					<tr data-id="{{ projeto.id }}">
+						<td> {{ projeto.nome }} </td>
+						<td class="text-center">
+							<span class="identidade-box" style="background: {{ projeto.identidade_visual }};"></span>
+						</td>
+						<td class="text-center">
+							<a href="{{ projeto.url }}" target="_blank"> Visitar <i class="fa fa-external-link" style="margin-left: 2px;"></i></a>
+						</td>
+						<td class="text-center"> {{ projeto.criador }} </td>
+						<td class="text-center"> {{ projeto.privacidade|raw }} </td>
+						<td>
+							<button class="btn-delete btn btn-default text-center pull-right btn-danger"><i class="fa fa-times"></i></button>
+							<button class="btn-check btn btn-default text-center pull-right btn-success" style="margin-right: 2px;"><i class="fa fa-check "></i></button>
+							<button class="btn-edit btn btn-default text-center pull-right" style="margin-right: 2px;"><i class="fa fa-pencil"></i></button>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!-- Notification -->
+<!-- <p class="task-completed-notification" style="display: none;"> Lembrete concluído com sucesso! </p> -->

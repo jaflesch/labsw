@@ -4,6 +4,33 @@ function codificacao($string) {
 	return mb_detect_encoding($string.'x', 'UTF-8, ISO-8859-1');
 }
 
+function preprocess($var, $xss = false) {
+    if (!is_array($var) && !is_object($var)) {
+        if (codificacao($var) == 'UTF-8') {
+            $var = toUTF($var);
+        }
+    		
+    	if ($xss == true) {
+            $var = htmlspecialchars(strip_tags($var));
+        }
+    		
+        if (!get_magic_quotes_gpc()) {
+            $var = addslashes($var);
+        }
+            
+    } else if (is_array($var)) {
+        foreach ($var as $key => $value) {
+            $var[$key] = preprocess($value, $xss);
+        }
+    } else if (is_object($var)) {
+        foreach ((array) $var as $key => $value) {
+            $var->{$key} = preprocess($value, $xss);
+        }
+    }
+    
+    return $var;
+}
+
 function toUTF($var) {
     if (!is_array($var) && !is_object($var)) {
         if (codificacao($var)!='UTF-8') {
