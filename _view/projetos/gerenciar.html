@@ -75,6 +75,7 @@
 					$('#color-help span').css("background", json.projeto.identidade_visual);
 					$('#formEditProjeto [name="url"]').val(json.projeto.url);
 					$('#formEditProjeto [name="privacidade"]').val(json.projeto.privacidade);
+					$('#link-equipe').attr("href", $('#link-equipe').attr("href") + json.projeto.id);
 					
 					$("#editProjetoModal").modal("show");
 
@@ -110,17 +111,13 @@
 			$('.help-remove').hide();
 
 			$.ajax({
-				url: 'lembretes/get',
+				url: '../projetos/get',
 				method: 'POST',
 				dataType: 'json',
 				data: {id: id},
 				success: function(json) {
-					$('#formRemoveLembrete [name="id"]').val(json.lembrete.id);
-					$('#formRemoveLembrete [name="titulo"]').val(json.lembrete.titulo);
-					$('#formRemoveLembrete [name="prioridade"]').val(json.lembrete.prioridade);
-					$('#formRemoveLembrete [name="descricao"]').val(json.lembrete.descricao);
-					$('#formRemoveLembrete [name="data"]').val(json.lembrete.data);
-					$("#removeLembreteModal").modal("show");
+					$('#formRemoveProjeto [name="id"]').val(json.projeto.id);
+					$("#removeProjetoModal").modal("show");
 				},
 				error: function() {
 					alert('Erro na requisição AJAX!');
@@ -147,7 +144,7 @@
 			});
 		});
 
-		$('#formRemoveLembrete').unbind("submit").bind("submit", function(e){
+		$('#formRemoveProjeto').unbind("submit").bind("submit", function(e){
 			e.preventDefault();
 			var form = $(this);
 
@@ -156,8 +153,15 @@
 				method: 'POST',
 				dataType: 'json',
 				data: form.serializeArray(),
-				success: function() {
-					$('.help-remove').show();
+				success: function(json) {
+					if(json.success){
+						$("#removeProjetoModal").modal("hide");
+						$('.task-removed-notification').fadeIn('fast');
+						setTimeout(function(){
+							$('.task-removed-notification').fadeOut('fast');
+						}, 2000);
+					}
+					
 					loadAll();
 				},
 				error: function() {

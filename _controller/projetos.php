@@ -150,15 +150,15 @@ class Projetos extends Controller {
 	public static function delete() {
 		$id_user = Auth::id();
 		$id = (int) static::$app->post['id'];
-
 		$json = new stdclass();
 
 		$query = "
-			DELETE FROM lembrete
-			WHERE id_usuario = {$id_user} AND id = {$id}
+			DELETE FROM projeto
+			WHERE id = {$id}
 		";
 		$result = mysqli_query(static::$dbConn, $query);		
-		$json->success = ($result)? true : false;
+		
+		$json->success = (mysqli_affected_rows(static::$dbConn) > 0)? true : false;
 		
 		die(json_encode($json));
 	}
