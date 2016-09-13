@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.2.7.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 10-Set-2016 às 20:20
--- Versão do servidor: 5.6.21
--- PHP Version: 5.6.3
+-- Generation Time: 13-Set-2016 às 19:01
+-- Versão do servidor: 5.6.20
+-- PHP Version: 5.5.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `equipe` (
   `id_usuario` int(11) NOT NULL,
   `funcao` int(11) NOT NULL,
   `admin` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Extraindo dados da tabela `equipe`
@@ -46,7 +46,7 @@ INSERT INTO `equipe` (`id`, `id_projeto`, `id_usuario`, `funcao`, `admin`) VALUE
 (3, 3, 1, 1, 1),
 (4, 4, 1, 1, 1),
 (5, 5, 1, 1, 1),
-(6, 1, 2, 1, 1);
+(6, 1, 2, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -57,7 +57,7 @@ INSERT INTO `equipe` (`id`, `id_projeto`, `id_usuario`, `funcao`, `admin`) VALUE
 CREATE TABLE IF NOT EXISTS `funcao` (
 `id` int(11) NOT NULL,
   `descricao` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Extraindo dados da tabela `funcao`
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `lembrete` (
   `prioridade` int(11) NOT NULL,
   `data` datetime NOT NULL,
   `status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Extraindo dados da tabela `lembrete`
@@ -95,7 +95,7 @@ INSERT INTO `lembrete` (`id`, `id_usuario`, `titulo`, `descricao`, `prioridade`,
 (2, 2, 'Teste Lembrete 2', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 3, '2016-08-28 00:00:00', 1),
 (3, 1, 'teste2', 'a\r\nb\r\n\r\n\r\nc\r\nas', 3, '2016-09-04 00:00:00', 0),
 (4, 1, 'Lembrete novo', 'a\r\nk\r\nl\r\noo', 2, '2016-09-02 00:00:00', 0),
-(5, 1, 'Com reload agora', 'penis', 0, '2016-09-29 00:00:00', 0),
+(5, 1, 'Com reload agora', 'penis', 0, '2016-09-29 00:00:00', 1),
 (6, 1, 'Mais um teste agora vai  ', 'abc', 1, '2016-09-05 00:00:00', 0);
 
 -- --------------------------------------------------------
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `projeto` (
   `identidade_visual` varchar(8) NOT NULL,
   `url` varchar(40) NOT NULL,
   `privacidade` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Extraindo dados da tabela `projeto`
@@ -123,7 +123,19 @@ INSERT INTO `projeto` (`id`, `id_admin`, `nome`, `imagem`, `identidade_visual`, 
 (2, 1, 'Linkker', '', '#4E5A62', 'http://linkker.com.br', 1),
 (3, 1, 'Contato Seguro', '', '#283c54', 'https://contatoseguro.com.br', 1),
 (4, 1, 'Share Hunter', '', '#05a4e1', 'http://sharehunter.com.br', 1),
-(5, 1, 'QualiStatus', '', '#a6ce42', 'http://www.qualistatus.com.br/', 1);
+(5, 1, 'QualiStatus', '', '#a6ce42', 'http://www.qualistatus.com.br/', 1),
+(6, 1, 'Nós60+', '', '#834b1f', 'http://nos60mais.com.br', 1),
+(7, 1, 'Prioritá Grupos', '', '#727a18', 'http://www.prioritagrupos.com.br/', 1),
+(8, 1, 'RHFARMA Brasil', '', '#2980B9', 'http://rhfarmabrasil.com.br/', 1),
+(9, 1, 'CPRS', '', '#51A8B1', 'http://circulopsicanaliticors.com.br/', 1),
+(10, 1, 'Galvão & Petter', '', '#353738', 'http://www.galvaoepetter.com.br/', 1),
+(11, 1, 'Toro', '', '#082f41', 'http://toropartners.com.br/', 1),
+(12, 1, 'CFP', '', '#173F63', 'http://cfp.net.br/', 1),
+(13, 1, 'EBANC', '', '#FDAC32', 'http://www.ebanc.com.br/', 1),
+(14, 1, 'Compliance Total', '', '#A8CF45', 'https://www.compliancetotal.com.br/', 1),
+(15, 1, 'Cozinhal', '', '#304671', 'http://cozinhal.com.br/', 1),
+(16, 1, 'Rita Lamas', '', '#0a6f45', '', 0),
+(17, 1, 'Cabosul', '', '#bd141b', 'http://cabosul.com.br', 1);
 
 -- --------------------------------------------------------
 
@@ -136,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `trofeu` (
   `nome` varchar(64) NOT NULL,
   `descricao` varchar(128) NOT NULL,
   `categoria` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Extraindo dados da tabela `trofeu`
@@ -155,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `trofeu_usuario` (
 `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_trofeu` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Extraindo dados da tabela `trofeu_usuario`
@@ -178,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `nivel_privilegios` int(1) NOT NULL,
   `email` varchar(32) NOT NULL,
   `tarefas_completas` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Extraindo dados da tabela `usuario`
@@ -257,7 +269,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 -- AUTO_INCREMENT for table `projeto`
 --
 ALTER TABLE `projeto`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `trofeu`
 --
