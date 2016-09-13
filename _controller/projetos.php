@@ -84,19 +84,17 @@ class Projetos extends Controller {
 		
 		$post = static::$app->post;
 		$id = (int)$post['id'];
-		$data = Data::str2date($post['data'])." 00:00:00";
-		$prioridade = $post['prioridade'] - 1;
-
+		
 		$json = new stdclass();
 
 		$query = "
-			UPDATE lembrete 
+			UPDATE projeto 
 			SET 
-				titulo = '{$post['titulo']}',
-				prioridade = {$prioridade},
-				descricao = '{$post['descricao']}',
-				data = '{$data}'
-			WHERE id = {$id} AND id_usuario = {$id_user}
+				nome = '{$post['nome']}',
+				privacidade = {$post['privacidade']},
+				identidade_visual = '{$post['identidade_visual']}',
+				url = '{$post['url']}'
+			WHERE id = {$id}
 		";
 		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		$json->success = ($result)? true : false;
@@ -112,22 +110,40 @@ class Projetos extends Controller {
 
 		$query = "
 			SELECT *
-			FROM projeto
-			WHERE id = {$id}
+			FROM projeto p
+			WHERE p.id = {$id}
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		if($result && mysqli_num_rows($result) == 1 ) {
 			$fetch = mysqli_fetch_object($result);
 			
-			// correct display on HTML <select>
-			$fetch->prioridade++;
-			$fetch->data = Data::datetime2str($fetch->data);
-
 			$json->success = true;
 			$json->projeto = toUTF($fetch);
 		}
 		else $json->success = false;
 		
+		$query = "
+			SELECT u.login, f.descricao funcao
+			FROM projeto p
+			INNER JOIN equipe e ON e.id_projeto = p.id 
+			INNER JOIN usuario u ON u.id = e.id_usuario
+			INNER JOIN funcao f ON f.id = e.funcao
+			WHERE p.id = {$id}
+			ORDER BY login
+		";
+		$equipe = array();
+		$result = mysqli_query(static::$dbConn, $query);
+		
+		if($result && mysqli_num_rows($result) > 0) {
+			while($fetch = mysqli_fetch_object($result)) {
+				$equipe[] = $fetch;
+			}
+
+			$json->success = true;
+			$json->equipe = toUTF($equipe);
+		}
+		else $json->success = false;
+
 		die(json_encode($json));
 	}
 
@@ -155,8 +171,8 @@ class Projetos extends Controller {
 		$query = "
 			SELECT DISTINCT p.*, u.login criador
 			FROM projeto p 
-			INNER JOIN equipe e ON e.id_projeto = p.id
-			INNER JOIN usuario u ON  u.id = p.id_admin
+			LEFT JOIN equipe e ON e.id_projeto = p.id
+			LEFT JOIN usuario u ON  u.id = p.id_admin
 			{$ORDER}
 		";
 
@@ -164,6 +180,7 @@ class Projetos extends Controller {
 		$lembretes = array();
 		if($result && mysqli_num_rows($result) > 0) {
 			while ($fetch = mysqli_fetch_object($result)) {
+				$fetch = toUTF($fetch);
 				$fetch->privacidade = ($fetch->privacidade == 1)? 
 				"Privado <i class='fa fa-lock' style='margin-left: 3px;'></i>" : 
 				"Público <i class='fa fa-eye' style='margin-left: 3px;'></i>";
@@ -206,8 +223,8 @@ class Projetos extends Controller {
 		$query = "
 			SELECT DISTINCT p.*, u.login criador
 			FROM projeto p 
-			INNER JOIN equipe e ON e.id_projeto = p.id
-			INNER JOIN usuario u ON  u.id = p.id_admin
+			LEFT JOIN equipe e ON e.id_projeto = p.id
+			LEFT JOIN usuario u ON  u.id = p.id_admin
 			ORDER BY p.nome ASC
 		";
 		$result = mysqli_query(static::$dbConn, $query);

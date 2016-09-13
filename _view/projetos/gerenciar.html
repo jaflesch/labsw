@@ -77,6 +77,26 @@
 					$('#formEditProjeto [name="privacidade"]').val(json.projeto.privacidade);
 					
 					$("#editProjetoModal").modal("show");
+
+					var i = 0;
+					$('#equipe-lista div').remove();
+					try {
+						for(i; i< json.equipe.length; i++) {
+							$("#equipe-lista").append(
+								"<div class='value'> <i class='fa fa-user' style='margin-right:10px'></i>" + 
+									json.equipe[i].login + 
+									"<span class='pull-right' style='font-size: 12px; margin-top: 2px;'>" + 
+										json.equipe[i].funcao + 
+									"</span>" +
+								"</div>"
+							);
+						}
+					}
+					catch(e) {
+						$("#equipe-lista").append(
+							"<div class='value'> Nenhum usuário atribuído à equipe ainda. </div>"
+						);
+					}					
 				},
 				error: function() {
 					alert('Erro na requisição AJAX!');
