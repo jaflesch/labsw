@@ -43,6 +43,19 @@ class Projetos extends Controller {
 		else self::redirect("home");
 	}
 
+	public static function equipe() {
+		if(Auth::user() && Auth::is('admin')) {
+			
+			$bag = array(
+				"user" => Auth::getUser(),
+				"projetos" => self::getAllProjetos()
+			);
+
+			echo self::render("projetos/equipe.html", $bag);
+		}
+		else self::redirect("home");
+	}
+
 	public static function render($tpl, $vars=array()) {
 		return parent::render($tpl,$vars);
 	}

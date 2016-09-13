@@ -155,8 +155,7 @@
 				data: form.serializeArray(),
 				success: function(json) {
 					if(json.success){
-						$("#removeProjetoModal").modal('hide');
-						
+						$("#removeProjetoModal").modal("hide");
 						$('.task-removed-notification').fadeIn('fast');
 						setTimeout(function(){
 							$('.task-removed-notification').fadeOut('fast');
