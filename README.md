@@ -43,3 +43,6 @@ Além disso, o sistema contará com outras funcionalidades para aumentar o níve
 - SCRUM
 - Controle de versionamento de código com GitHub
 - Gerenciamento de Backlog, sprints e tasks em gerais com Trello [ https://trello.com/b/TqDlZ7pD/labsw ]
+- 
+
+
