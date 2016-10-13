@@ -21,6 +21,7 @@
 			<li class="active"><a data-toggle="tab" href="#home"> Tarefas </a></li>
 			<li><a data-toggle="tab" href="#menu1"> Informações </a></li>
 			<li><a data-toggle="tab" href="#menu2"> Equipe </a></li>
+			<li><a data-toggle="tab" href="#menu3"> Sobre mim </a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -32,6 +33,9 @@
 			</div>			
 			<div id="menu2" class="tab-pane fade">
 				{% include 'projetos/_tab_equipe.html' %}
+			</div>
+			<div id="menu3" class="tab-pane fade">
+				{% include 'projetos/_tab_sobremim.html' %}
 			</div>
 		</div>
 	</section>
