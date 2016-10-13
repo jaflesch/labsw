@@ -138,9 +138,17 @@
 				method: 'POST',
 				dataType: 'json',
 				data: form.serializeArray(),
-				success: function() {
-					$('.help-remove').show();
-					loadAll();
+				success: function(json) {
+					if(json.success) {
+						$("#removeLembreteModal").modal("hide");
+						$('.task-removed-notification').fadeIn('fast');
+						setTimeout(function(){
+							$('.task-removed-notification').fadeOut('fast');
+						}, 2000);
+
+						$('.help-remove').show();					
+						loadAll();
+					}					
 				},
 				error: function() {
 					alert('Erro na requisição AJAX!');
