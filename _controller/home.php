@@ -22,7 +22,7 @@ class Home extends Controller {
 		$query = "
 			SELECT *
 			FROM usuario
-			WHERE senha = '{$senha}' AND login = '{$_POST['login']}'
+			WHERE senha = '{$senha}' AND BINARY login = '{$_POST['login']}'
 		";
 
 		$result = mysqli_query($dbConn, $query);
