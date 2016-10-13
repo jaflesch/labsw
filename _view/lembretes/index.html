@@ -19,6 +19,7 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ root }}/assets/js/plugins/datepicker.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/validate.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 
@@ -41,19 +42,21 @@
 		$('#formCreateLembrete').unbind("submit").bind("submit", function(e){
 			e.preventDefault();
 			var form = $(this);
-
-			$.ajax({
-				url: form.attr("action"),
-				method: 'POST',
-				dataType: 'json',
-				data: form.serializeArray(),
-				success: function() {
-					window.location.reload(true);
-				},
-				error: function() {
-					alert('Erro na requisição AJAX!');
-				}
-			});
+			if(validateForm("#formCreateLembrete")) {
+				$.ajax({
+					url: form.attr("action"),
+					method: 'POST',
+					dataType: 'json',
+					data: form.serializeArray(),
+					success: function() {
+						window.location.reload(true);
+					},
+					error: function() {
+						alert('Erro na requisição AJAX!');
+					}
+				});				
+			}
+			else alert("Preencha os campos obrigatórios");
 		});
 
 
@@ -108,19 +111,22 @@
 			e.preventDefault();
 			var form = $(this);
 
-			$.ajax({
-				url: form.attr("action"),
-				method: 'POST',
-				dataType: 'json',
-				data: form.serializeArray(),
-				success: function() {
-					$('.help-edit').show();
-					loadAll();
-				},
-				error: function() {
-					alert('Erro na requisição AJAX!');
-				}
-			});
+			if(validateForm("#formEditLembrete")) {
+				$.ajax({
+					url: form.attr("action"),
+					method: 'POST',
+					dataType: 'json',
+					data: form.serializeArray(),
+					success: function() {
+						$('.help-edit').show();
+						loadAll();
+					},
+					error: function() {
+						alert('Erro na requisição AJAX!');
+					}
+				});
+			}
+			else alert("Preencha os campos obrigatórios");
 		});
 
 		$('#formRemoveLembrete').unbind("submit").bind("submit", function(e){
@@ -147,7 +153,7 @@
 			
 			if(text == "Ativo:") {
 				$('#help-text-toggle').fadeOut('fast', function(){
-					$(this).text("Todos:");
+					$(this).text("Prontos:");
 				}).fadeIn();
 			}
 			else {

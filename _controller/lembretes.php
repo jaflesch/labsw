@@ -25,8 +25,8 @@ class Lembretes extends Controller {
 		$id = Auth::id();
 		$post = static::$app->post;
 		$data = Data::str2date($post['data']);
-		$prioridade = $post['prioridade'] - 1;
-
+		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
+		
 		$json = new stdclass();
 
 		$query = "
@@ -141,8 +141,10 @@ class Lembretes extends Controller {
 				$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
 				$fetch->prioridade = self::getPrioridade($fetch->prioridade);
 				$fetch->data = Data::datetime2str($fetch->data);
+
+				$text = ($fetch->status == "Atrasado")? "text-danger" : "";
 				echo "
-					<tr data-id='{$fetch->id}'>
+					<tr data-id='{$fetch->id}' class='{$text}'>
 						<td> {$fetch->titulo } </td>	
 						<td class='text-center'><span class='prioridade-label {$fetch->prioridade_label}'> {$fetch->prioridade} </span></td>	
 						<td class='text-center'> {$fetch->data} </td>	

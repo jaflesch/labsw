@@ -51,7 +51,7 @@
 		</thead>
 		<tbody>
 		{% for lembrete in lembretes %}
-			<tr data-id="{{ lembrete.id }}">
+			<tr data-id="{{ lembrete.id }}" class="{{ lembrete.status == 'Atrasado' ? 'text-danger' : ''}}">
 				<td> {{ lembrete.titulo }} </td>	
 				<td class="text-center"><span class="prioridade-label {{ lembrete.prioridade_label }}"> {{ lembrete.prioridade }} </span></td>	
 				<td class="text-center"> {{ lembrete.data }} </td>	
