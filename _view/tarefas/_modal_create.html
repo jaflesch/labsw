@@ -1,0 +1,105 @@
+<div id="createLembreteModal" class="modal fade" role="dialog">
+	<form id="formCreateTarefa" action="{{ root }}/tarefas/create" method="POST">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Criar Tarefa </h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-6 mgb15">
+							<label class="value">* Título </label>
+							<input class="value required" name="titulo" value="">
+						</div>
+						<div class="col-sm-6 mgb15">
+							<label class="value">* Prioridade </label>
+							<select class="value required" name="prioridade" value="">
+								<option value="">Selecione uma opção...</option>
+								<option value="1"> Baixa </option>
+								<option value="2"> Normal </option>
+								<option value="3"> Alta </option>
+								<option value="4"> Crítica </option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 mgb15">
+							<label class="value">* Categoria </label>
+							<select class="value required" name="categoria" value="">
+								<option value="">Selecione uma opção...</option>
+								<option value="1"> Backend </option>
+								<option value="2"> Frontend </option>
+								<option value="3"> Web Design </option>
+								<option value="4"> Teste </option>
+							</select>
+						</div>
+						<div class="col-sm-6 mgb15">
+							<label class="value">* Projeto </label>
+							<select class="value required" name="projeto" value="">
+								<option value="">Selecione uma opção...</option>
+								{% for projeto in projetos %}
+								<option value="{{ projeto.id }}"> {{ projeto.nome }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12 mgb15">
+							<label class="value">* Descrição Formal</label>
+							<textarea class="value" name="descricao_formal"></textarea>
+						</div>
+					</div>
+					<div class="row mgb15">
+						<div class="col-sm-12">
+							<label class="value">* Descrição Técnica</label>
+							<textarea class="value" name="descricao_tecnica"></textarea>
+						</div>
+					</div>
+					<div class="row view-dev mgb15" style="display: none;">
+						<div class="col-sm-12">
+							<label class="value">* Solução</label>
+							<textarea class="value" name="solucao"></textarea>
+						</div>
+					</div>
+					<div class="row view-tester mgb15" style="display: none;">
+						<div class="col-sm-12">
+							<label class="value">* Resultados</label>
+							<textarea class="value" name="resultados"></textarea>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 view-tester" style="display: none;">
+							<label class="value">* Nível Erro</label>
+							<select class="value" name="status_erro">
+								<option value="">Selecione uma opção...</option>
+								<option value="1"> Baixo </option>
+								<option value="2"> Normal </option>
+								<option value="3"> Alto </option>
+								<option value="4"> Crítico </option>
+							</select>							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<label class="value">* Tempo Previsto para Conclusão </label>
+							<input type="text" name="tempo_previsto" class="form-control mask-horario value required" placeholder="00h00min">
+						</div>
+						<div class="col-sm-6">
+							<label class="value">* Data entrega </label>
+							<input type="text" name="data_entrega" class="form-control mask-datetime value required" placeholder="dd/mm/aaaa hh:mm">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 mgb15">
+							
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-success" value="Confirmar">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

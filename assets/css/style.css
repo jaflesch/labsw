@@ -98,7 +98,8 @@
 */
 #perfil>div.container,
 #lembretes>div.container,
-#projetos>div.container { 
+#projetos>div.container, 
+#tarefas>div.container { 
 	background: #fff; 
 	padding: 30px 15px;
 	border-radius: 4px;

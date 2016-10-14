@@ -7,6 +7,12 @@ function validateForm(formSelector) {
 		}
 	});
 
+	$(formSelector + ' textarea.required').each(function() {
+		if($(this).val() == "") {
+			valid = false;
+		}
+	});
+
 	$(formSelector + ' select.required').each(function() {
 		option = $(this).find(":selected").val();
 		if(option == "") {

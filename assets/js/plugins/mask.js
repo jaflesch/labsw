@@ -17,5 +17,6 @@ p.dataMask&&b.applyDataMask();setInterval(function(){b.jMaskGlobals.watchDataMas
 // Definitions::
 $('.mask-phone').mask('(00) 0000-00000');
 $('.mask-data').mask('00/00/0000');
+$('.mask-datetime').mask('00/00/0000 00:00');
 $('.mask-cpf').mask('000.000.000-00');
 $('.mask-cep').mask('00000-000');
