@@ -1,41 +1,57 @@
-<div id="createLembreteModal" class="modal fade" role="dialog">
-	<form id="formCreateLembrete" action="{{ root }}/lembretes/create" method="POST">
+<div id="createProjetoModal" class="modal fade" role="dialog">
+	<form id="formCreateProjeto" action="{{ root }}/projetos/create" method="POST">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Criar Lembrete </h4>
+					<h4 class="modal-title">Criar Projeto </h4>
 				</div>
 				<div class="modal-body">
+					<h3 class="intern" style="margin-top: 20px;"> Informações Gerais </h3>
 					<div class="row">
 						<div class="col-sm-6 mgb15">
-							<label class="value"> Título </label>
-							<input class="value" name="titulo" value="">
+							<label class="value"> Nome </label>
+							<input class="value" name="nome" value="">
+						</div>
+						<div class="col-sm-6 mgb15" style="max-height: 77px;">
+							<label class="value"> Identidade Visual </label>
+							<input class="value" name="identidade_visual" value="">
+							<span id="color-help"><span></span></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6 mgb15">
+							<label class="value"> Website </label>
+							<input class="value" name="url" value="">
 						</div>
 						<div class="col-sm-6 mgb15">
-							<label class="value"> Prioridade </label>
-							<select class="value" name="prioridade" value="">
-								<option value="0">Selecione uma opção...</option>
-								<option value="1"> Baixa </option>
-								<option value="2"> Normal </option>
-								<option value="3"> Alta </option>
-								<option value="4"> Crítica </option>
+							<label class="value"> Privacidade </label>
+							<select class="value" name="privacidade">
+								<option value="0"> Público </option>
+								<option value="1"> Privado </option>
 							</select>
+						</div>
+					</div>
+					
+					<hr>
+
+					<h3 class="intern" style="margin-top: 20px;"> Equipe </h3>
+
+					<div class="row">
+						<div class="col-sm-6" id="equipe-lista"></div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<a href="{{ root }}/projetos/equipe/" id="link-equipe" class="btn btn-default">
+								<i class="fa fa-cog" style="margin-right: 5px"></i> Equipe 
+							</a>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-12">
-							<label class="value"> Descrição </label>
-							<textarea class="value" name="descricao"></textarea>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 mgb15">
-							<label class="value"> Data </label>
-							<div class="input-group">
-								<input type="text" name="data" class="form-control mask-data value datepick" placeholder="dd/mm/aaaa" aria-describedby="sizing-addon2" style="border-radius: 0; box-shadow: none;">
-								<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-calendar"></i></span>
-							</div>
+							<p class="alert alert-success text-center help-create mgt30" style="display:none; padding: 10px 15px;">	
+								Projeto criado com sucesso! <i class="fa fa-check"></i>
+							</p>
 						</div>
 					</div>
 				</div>

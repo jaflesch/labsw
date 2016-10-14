@@ -65,25 +65,23 @@ class Projetos extends Controller {
 	public static function create() {
 		$id = Auth::id();
 		$post = static::$app->post;
-		$data = Data::str2date($post['data']);
-		$prioridade = $post['prioridade'] - 1;
+		$privacidade = (int)$post['privacidade'];
 
 		$json = new stdclass();
-
 		$query = "
-			INSERT INTO lembrete (
-				id_usuario,
-				titulo, 
-				descricao,
-				prioridade,
-				data
+			INSERT INTO projeto (
+				id_admin,
+				nome,
+				identidade_visual, 
+				url,
+				privacidade
 			)
 			VALUES (
 				{$id},
-				'{$post['titulo']}',
-				'{$post['descricao']}',
-				{$prioridade},
-				'{$data}'
+				'{$post['nome']}',
+				'{$post['identidade_visual']}',
+				'{$post['url']}',
+				{$privacidade}
 			)
 		";
 		$result = mysqli_query(static::$dbConn, $query);
