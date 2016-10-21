@@ -43,6 +43,13 @@
     -webkit-box-shadow: 0 0 0px 1000px white inset;
     -webkit-text-fill-color: #7c8a94 !important;
 }
+#login-box input.alert-danger:-webkit-autofill {
+	background: #f2dede;
+	color: #a94442;
+	-webkit-box-shadow: 0 0 0px 1000px #f2dede inset;
+	-webkit-text-fill-color: #a94442 !important;
+	border-color: #ebccd1;
+}
 
 .inner-addon { 
     position: relative; 
