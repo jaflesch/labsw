@@ -19,7 +19,7 @@ class Controller {
 		
 		if ($app->action=='') $app->action = $app->default_action;		
 
-		$action = $app->action;
+		$action = str_replace("-", "_", $app->action);
 		if (!method_exists(get_called_class(), $action)) $action = $app->default_action;
 		static::$action();
 	}

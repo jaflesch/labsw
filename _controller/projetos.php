@@ -134,7 +134,7 @@ class Projetos extends Controller {
 		else $json->success = false;
 		
 		$query = "
-			SELECT u.login, f.descricao funcao
+			SELECT u.login, f.descricao funcao, u.id
 			FROM projeto p
 			INNER JOIN equipe e ON e.id_projeto = p.id 
 			INNER JOIN usuario u ON u.id = e.id_usuario
@@ -225,6 +225,34 @@ class Projetos extends Controller {
 				<td></td>	
 			</tr>
 		";
+	}
+
+	public static function remove_member() {
+		$post = (object)static::$app->post;
+		$id_user = (int) $post->id;
+		$id_projeto = (int) $post->id_projeto;
+
+		$query = "
+			DELETE FROM equipe
+			WHERE id_usuario = {$id_user} AND id_projeto = {$id_projeto}
+		";
+
+		//echo $query;
+		die(json_encode(new stdclass()));
+	}
+
+	public static function add_member() {
+		$post = (object)static::$app->post;
+		$id_user = (int) $post->id;
+		$id_projeto = (int) $post->id_projeto;
+
+		$query = "
+			DELETE FROM equipe
+			WHERE id_usuario = {$id_user} AND id_projeto = {$id_projeto}
+		";
+
+		//echo $query;
+		die(json_encode(new stdclass()));
 	}
 
 	// Helpers::

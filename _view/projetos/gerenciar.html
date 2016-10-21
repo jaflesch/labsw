@@ -34,7 +34,7 @@
 			e.preventDefault();
 			$('.help-create').hide();
 			$('#formCreateProjeto input[type="submit"]').prop("disabled", false);
-			$('#createProjetoModal').modal('show');
+			$('#createProjetoModal').modal('show');			
 		});
 
 		$('body').on("keyup", '[name="identidade_visual"]', function(){
@@ -86,14 +86,17 @@
 					$('#link-equipe').attr("href", $('#link-equipe').attr("href") + json.projeto.id);
 					
 					$("#editProjetoModal").modal("show");
-
-					var i = 0;
-					$('#equipe-lista div').remove();
+					$('#href-equipe').attr('href', $('#href-equipe').attr('href') + json.projeto.id);
+					//$('#equipe-lista div').remove();
 					try {
+						var i = 0;
 						for(i; i< json.equipe.length; i++) {
-							$("#equipe-lista").append(
+							$("#editProjetoModal #equipe-lista").append(
 								"<div class='value'> <i class='fa fa-user' style='margin-right:10px'></i>" + 
 									json.equipe[i].login + 
+									"<span class='pull-right remove-member' data-id-member='" + json.equipe[i].id + "'>" + 
+										"<i class='fa fa-remove' style='margin-left:10px'></i>" +
+									"</span>" +
 									"<span class='pull-right' style='font-size: 12px; margin-top: 2px;'>" + 
 										json.equipe[i].funcao + 
 									"</span>" +
@@ -102,7 +105,7 @@
 						}
 					}
 					catch(e) {
-						$("#equipe-lista").append(
+						$("#editProjetoModal #equipe-lista").append(
 							"<div class='value'> Nenhum usuário atribuído à equipe ainda. </div>"
 						);
 					}					
@@ -186,6 +189,69 @@
 				$('.task-completed-notification').fadeOut('fast');
 			}, 2000);
 		});
+
+		$('body').on('click', '#link-equipe', function(e) {
+			e.preventDefault();
+
+			var id_projeto = $('[name="id"]').val();
+			var id_usuario = $('[name="equipe_nome"]').val();
+			var funcao = $('[name="equipe_funcao"]').val();
+
+			var nome = $('[name="equipe_nome"]').text();
+			var funcao_text = $('[name="equipe_funcao"]').text();
+
+			$.ajax({
+				url: '../projetos/add-member',
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					id_projeto : id_projeto,
+					id_usuario : id_usuario,
+					funcao: funcao 
+				},
+				success: function(json) {
+					$('#editProjetoModal #equipe-lista .no-user-yet').remove();
+					$("#editProjetoModal #equipe-lista").append(
+						"<div class='value'> <i class='fa fa-user' style='margin-right:10px'></i>" + 
+							nome + 
+							"<span class='pull-right remove-member' data-id-member='" + json.id_usuario + "'>" + 
+								"<i class='fa fa-remove' style='margin-left:10px'></i>" +
+							"</span>" +
+							"<span class='pull-right' style='font-size: 12px; margin-top: 2px;'>" + 
+								funcao_text + 
+							"</span>" +
+						"</div>"
+					);
+				}
+			});
+		});
+
+		$('body').on('click', '.remove-member', function(e) {
+			e.preventDefault();
+			var id = $(this).data('id-member');
+			var id_projeto = $('[name="id"]').val();
+			var icon = $(this);
+			
+			$.ajax({
+				url: '../projetos/remove-member',
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					id : id, 
+					id_projeto : id_projeto
+				},
+				success: function(json) {
+					$(icon).parent().remove();
+					
+					if($('#editProjetoModal #equipe-lista .value').length == 0) {
+						$("#editProjetoModal #equipe-lista").append(
+							"<div class='value no-user-yet'> Nenhum usuário atribuído à equipe ainda. </div>"
+						);
+					}
+				}
+			});
+		});
+
 
 		function loadAll() {
 			var form = $('#formFiltroProjeto');

@@ -43,8 +43,28 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
-							<a href="{{ root }}/projetos/equipe/" id="link-equipe" class="btn btn-default">
-								<i class="fa fa-cog" style="margin-right: 5px"></i> Equipe 
+							<hr>
+							
+							<div class="row">
+								<div class="col-md-6 membro-custom-box-left">
+									<select name="equipe_nome" class="value btn-flat">
+										<option value=""> Selecione um membro... </option>
+									</select> 
+								</div>
+								<div class="col-md-6 membro-custom-box-right">
+									<select name="equipe_funcao" class="value btn-flat">
+										<option value=""> Selecione uma função... </option>
+									</select> 
+								</div>
+							</div>
+							
+							<br/>
+
+							<button id="link-equipe" class="btn btn-primary">
+								<i class="fa fa-user-plus" style="margin-right: 5px"></i> Adicionar Membro 
+							</button>
+							<a href="{{ root }}/projetos/equipe/" id="href-equipe" class="btn btn-default">
+								<i class="fa fa-cog" style="margin-right: 5px"></i> Gerenciar Equipe 
 							</a>
 						</div>
 					</div>

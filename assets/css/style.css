@@ -334,6 +334,25 @@ table tbody td { vertical-align: middle !important; }
 	text-decoration: none;
 	color: #fff;
 }
+.remove-member {
+	font-size: 16px; 
+	position: relative; 
+	top: -2px;
+	color: #999;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+.remove-member:hover, .remove-member:focus {
+	color: #555;
+	transition: all 0.2s ease-in-out;
+}
+.membro-custom-box-left { padding-right: 3px; }
+.membro-custom-box-right { padding-left: 3px; }
+@media(max-width: 991px) {
+	.membro-custom-box-left { padding-right: 15px; }
+	.membro-custom-box-right { padding-left: 15px; }
+}
+
 #projetos .about-me {
 	padding: 20px 15px;
 	border: 1px solid #ddd;
