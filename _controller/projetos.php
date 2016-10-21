@@ -35,7 +35,9 @@ class Projetos extends Controller {
 		if(Auth::user() && Auth::is('admin')) {
 			$bag = array(
 				"user" => Auth::getUser(),
-				"projetos" => self::getAllProjetos()
+				"projetos" => self::getAllProjetos(),
+				"usuarios" => self::getAllUsers(),
+				"funcoes" => self::getAllFuncoes()
 			);
 
 			echo self::render("projetos/gerenciar.html", $bag);
@@ -236,23 +238,50 @@ class Projetos extends Controller {
 			DELETE FROM equipe
 			WHERE id_usuario = {$id_user} AND id_projeto = {$id_projeto}
 		";
+		$result = mysqli_query(static::$dbConn, $query);
 
-		//echo $query;
-		die(json_encode(new stdclass()));
+		$json = new stdclass();
+		$json->success = $result;
+
+		die(json_encode($json));
 	}
 
 	public static function add_member() {
 		$post = (object)static::$app->post;
-		$id_user = (int) $post->id;
+		$id_usuario = (int) $post->id_usuario;
 		$id_projeto = (int) $post->id_projeto;
+		$funcao = (int) $post->funcao;
 
 		$query = "
-			DELETE FROM equipe
-			WHERE id_usuario = {$id_user} AND id_projeto = {$id_projeto}
+			SELECT id
+			FROM equipe
+			WHERE id_projeto = {$id_projeto} AND id_usuario = {$id_usuario}
 		";
+		$result = mysqli_query(static::$dbConn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			$json = new stdclass();
+			$json->success = false;
+			$json->msg = "Usuário já atribuído à equipe!";
 
-		//echo $query;
-		die(json_encode(new stdclass()));
+			die(json_encode($json));
+		}
+
+		$query = "
+			INSERT INTO equipe (id_projeto, id_usuario, funcao, admin)
+			VALUES (
+				{$id_projeto},
+				{$id_usuario},
+				{$funcao},
+				0
+			)
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		if($result) {
+			$json = new stdclass();
+			$json->success = true;
+		}
+
+		die(json_encode($json));
 	}
 
 	// Helpers::
@@ -420,6 +449,35 @@ class Projetos extends Controller {
 		$informacoes["admin"] = $is_admin;
 		
 		return toUTF($informacoes);
+	}
+
+	private static function getAllUsers() {
+		$usuario = array();
+
+		$query = "
+			SELECT id, login
+			FROM usuario
+			WHERE nivel_privilegios < 3
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$usuario[] = $fetch;
+		}
+		return toUTF($usuario);
+	}
+
+	private static function getAllFuncoes() {
+		$funcao = array();
+
+		$query = "
+			SELECT id, descricao
+			FROM funcao
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$funcao[] = $fetch;
+		}
+		return toUTF($funcao);
 	}
 
 	private static function getOrder($order, $filter) {

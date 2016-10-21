@@ -106,7 +106,7 @@
 					}
 					catch(e) {
 						$("#editProjetoModal #equipe-lista").append(
-							"<div class='value'> Nenhum usuário atribuído à equipe ainda. </div>"
+							"<div class='value no-user-yet'> Nenhum usuário atribuído à equipe ainda. </div>"
 						);
 					}					
 				},
@@ -197,8 +197,8 @@
 			var id_usuario = $('[name="equipe_nome"]').val();
 			var funcao = $('[name="equipe_funcao"]').val();
 
-			var nome = $('[name="equipe_nome"]').text();
-			var funcao_text = $('[name="equipe_funcao"]').text();
+			var nome = $('[name="equipe_nome"]').find(":selected").text();
+			var funcao_text = $('[name="equipe_funcao"]').find(":selected").text();
 
 			$.ajax({
 				url: '../projetos/add-member',
@@ -210,18 +210,21 @@
 					funcao: funcao 
 				},
 				success: function(json) {
-					$('#editProjetoModal #equipe-lista .no-user-yet').remove();
-					$("#editProjetoModal #equipe-lista").append(
-						"<div class='value'> <i class='fa fa-user' style='margin-right:10px'></i>" + 
-							nome + 
-							"<span class='pull-right remove-member' data-id-member='" + json.id_usuario + "'>" + 
-								"<i class='fa fa-remove' style='margin-left:10px'></i>" +
-							"</span>" +
-							"<span class='pull-right' style='font-size: 12px; margin-top: 2px;'>" + 
-								funcao_text + 
-							"</span>" +
-						"</div>"
-					);
+					if(json.success) {
+						$('#editProjetoModal #equipe-lista .no-user-yet').remove();
+						$("#editProjetoModal #equipe-lista").append(
+							"<div class='value'> <i class='fa fa-user' style='margin-right:10px'></i>" + 
+								$.trim(nome) + 
+								"<span class='pull-right remove-member' data-id-member='" + id_usuario + "'>" + 
+									"<i class='fa fa-remove' style='margin-left:10px'></i>" +
+								"</span>" +
+								"<span class='pull-right' style='font-size: 12px; margin-top: 2px;'>" + 
+									$.trim(funcao_text) + 
+								"</span>" +
+							"</div>"
+						);
+					}
+					else alert(json.msg);
 				}
 			});
 		});
@@ -241,12 +244,14 @@
 					id_projeto : id_projeto
 				},
 				success: function(json) {
-					$(icon).parent().remove();
+					if(json.success) {
+						$(icon).parent().remove();
 					
-					if($('#editProjetoModal #equipe-lista .value').length == 0) {
-						$("#editProjetoModal #equipe-lista").append(
-							"<div class='value no-user-yet'> Nenhum usuário atribuído à equipe ainda. </div>"
-						);
+						if($('#editProjetoModal #equipe-lista .value').length == 0) {
+							$("#editProjetoModal #equipe-lista").append(
+								"<div class='value no-user-yet'> Nenhum usuário atribuído à equipe ainda. </div>"
+							);
+						}
 					}
 				}
 			});
