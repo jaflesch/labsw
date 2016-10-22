@@ -24,7 +24,7 @@
 					</li>
 
 					{% if user.nivel_privilegios == 0 %}
-					<li class="dropdown {{ app.controller == 'projetos' ? 'active' : '' }}">
+					<li class="dropdown {{ app.controller == 'projetos' or app.controller == 'equipe' ? 'active' : '' }}">
 						<a class="animated" title="" href="#" data-toggle="dropdown">
 							<i class="fa fa-group"></i> Projetos <span class="caret"></span>
 						</a>

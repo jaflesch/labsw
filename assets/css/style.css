@@ -106,7 +106,8 @@
 #perfil>div.container,
 #lembretes>div.container,
 #projetos>div.container, 
-#tarefas>div.container { 
+#tarefas>div.container,
+#equipe>div.container { 
 	background: #fff; 
 	padding: 30px 15px;
 	border-radius: 4px;
@@ -397,6 +398,12 @@ table tbody td { vertical-align: middle !important; }
 	display: block;
 	margin: 4px;
 }
+/*
+=================
+	EQUIPE
+=================
+*/
+
 /*
 =================
 	USER
