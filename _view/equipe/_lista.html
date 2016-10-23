@@ -8,57 +8,38 @@
 	<div class="col-md-12">
 		<table class="table table-striped">
 			<thead>
-				<th> Nome </th>
-				<th> Função </th>
-				<th> Posição </th>
-				<th> Ações </th>
+				<th width="40%"> Nome </th>
+				<th width="20%"> Função </th>
+				<th width="20%"> Posição </th>
+				<th width="20%"> Ações </th>
 			</thead>
 			<tbody>
-				{% for user in equipe %}
-				<tr>
-					<td width="40%"> {{ user.nome }} </td>
-					<td width="20%"> {{ user.funcao }} </td>
-					<td width="20%"> {{ user.admin ? 'Administrador' : 'Desenvolvedor' }} </td>
-					<td width="20%">
-						<button class="btn-edit btn btn-default text-center"><i class="fa fa-pencil"></i></button>
-						<button class="btn-delete btn btn-danger text-center"><i class="fa fa-remove"></i></button>
-					</td>
+				{% if equipe is not empty %}
+					{% for user in equipe %}
+					<tr data-id="{{ user.id }}">
+						<td> {{ user.nome }} </td>
+						<td> {{ user.funcao }} </td>
+						<td> {{ user.admin }} </td>
+						<td>
+							<button class="btn-edit btn btn-default text-center"><i class="fa fa-pencil"></i></button>
+							<button class="btn-delete btn btn-danger text-center"><i class="fa fa-remove"></i></button>
+						</td>
+					</tr>
+					{% endfor %}
+				{% else %}
+				<tr class="text-danger">
+					<td><i class='fa fa-exclamation-triangle' style='margin-right: 5px;'></i> Nenhum membro na equipe ainda </td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>					
 				</tr>
-				{% endfor %}
+				{% endif %}
 			</tbody>
 		</table>
 	</div>
 </div>
-<div class="row">
-	<div class="col-sm-6">
-		<hr>
-		
-		<div class="row">
-			<div class="col-md-6 membro-custom-box-left">
-				<select name="equipe_nome" class="value btn-flat">
-					<option value=""> Selecione um membro... </option>
-					{% for usuario in usuarios %}
-						<option value="{{ usuario.id }}"> {{ usuario.login }} </option>
-					{% endfor %}
-				</select> 
-			</div>
-			<div class="col-md-6 membro-custom-box-right">
-				<select name="equipe_funcao" class="value btn-flat">
-					<option value=""> Selecione uma função... </option>
-					{% for funcao in funcoes %}
-						<option value="{{ funcao.id }}"> {{ funcao.descricao }} </option>
-					{% endfor %}
-				</select> 
-			</div>
-		</div>
-		
-		<br/>
+<hr>
 
-		<button id="link-equipe" class="btn btn-primary">
-			<i class="fa fa-user-plus" style="margin-right: 5px"></i> Adicionar Membro 
-		</button>
-		<a href="{{ root }}/equipe/sobre/" id="href-equipe" class="btn btn-default">
-			<i class="fa fa-cog" style="margin-right: 5px"></i> Gerenciar 
-		</a>
-	</div>
-</div>
+<button id="btn-add-member" class="btn btn-primary" data-toggle="modal" data-target="#addMemberModal">
+	<i class="fa fa-user-plus" style="margin-right: 5px"></i> Adicionar Membro 
+</button>

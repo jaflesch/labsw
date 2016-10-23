@@ -7,7 +7,14 @@
 		<div class="container">
 			{% include 'equipe/_projeto.html' %}
 			{% include 'equipe/_lista.html' %}
+			{% include 'equipe/_modal_create.html' %}
+			{% include 'equipe/_modal_edit.html' %}
+			{% include 'equipe/_modal_delete.html' %}
 		</div>
+		
+		<!-- Notification -->
+		<p class="task-removed-notification" style="display: none;"> Membro excluído com sucesso! </p>
+		<p class="task-completed-notification" style="display: none;"> Projeto alterado com sucesso! </p>
 	</section>
 {% endblock %}
 
@@ -15,7 +22,10 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-	$(document).ready(function(){});
-</script>
+<script type="text/javascript" src="{{ root }}/assets/js/validate.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/equipe/utils.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/equipe/edit_projeto.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/equipe/add_member.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/equipe/edit_member.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/equipe/remove_member.js"></script>
 {% endblock %}

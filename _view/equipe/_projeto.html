@@ -4,32 +4,38 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-12 mgb20"></div>
+	<div class="col-md-12 breadcrumb">
+		<span class="line">&nbsp;</span><a href="{{ root }}/projetos/gerenciar"> Gerenciar Projetos</a> / {{ projeto.nome }}
+	</div>
+</div>
+<div class="row">
+	
 	
 	<div class="col-md-12">
 		<h3 class="intern"> Informações Gerais </h3>
 	</div>
 </div>
-<form id="editProjeto" action="{{ root }}/equipe/update-project" method="POST">
+<form id="editProjeto" action="{{ root }}/equipe/edit" method="POST">
+	<input type="hidden" name="id" value="{{ app.parametros[2] }}">
 	<div class="row">
 		<div class="col-sm-6 mgb15">
 			<label class="value"> Nome </label>
-			<input class="value" name="nome" value="{{ projeto.nome }}">
+			<input class="value required" name="nome" value="{{ projeto.nome }}">
 		</div>
 		<div class="col-sm-6 mgb15" style="max-height: 77px;">
 			<label class="value"> Identidade Visual </label>
-			<input class="value" name="identidade_visual" value="{{ projeto.identidade_visual }}">
-			<span id="color-help"><span></span></span>
+			<input class="value required" name="identidade_visual" value="{{ projeto.identidade_visual }}">
+			<span id="color-help"><span style="background: {{ projeto.identidade_visual }}"></span></span>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-sm-6 mgb15">
 			<label class="value"> Website </label>
-			<input class="value" name="url" value="{{ projeto.url }}">
+			<input class="value required" name="url" value="{{ projeto.url }}">
 		</div>
 		<div class="col-sm-6 mgb15">
 			<label class="value"> Privacidade </label>
-			<select class="value" name="privacidade">
+			<select class="value required" name="privacidade">
 				<option value="0" {{ projeto.privacidade == 0 ? 'selected' : '' }}> Público </option>
 				<option value="1" {{ projeto.privacidade == 1 ? 'selected' : '' }}> Privado </option>
 			</select>
