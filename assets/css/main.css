@@ -258,3 +258,24 @@ nav.shrink {
     transition: all 0.2s ease-in-out;
 }
 .btn:hover{ transition: all 0.2s ease-in-out; }
+
+/* Modal */
+.modal-header .close {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    transition: all 0.2s ease-in-out;
+    color: #ddd;
+    opacity: 1;
+}
+.modal-header .close:hover, .modal-header .close:focus, .modal-header .close:active {
+    color: #c9302c;
+    border: 1px solid #999;
+    transition: all 0.2s ease-in-out;
+}
+.modal-header .close:focus {
+	outline: none;
+	box-shadow: none;
+}
+.modal-open { padding-right: 0px !important; } /* fix glitch */

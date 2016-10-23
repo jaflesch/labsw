@@ -134,6 +134,20 @@
 	margin: 40px 0 30px;
 	border-bottom: 1px solid #ddd;
 }
+.breadcrumb { 
+	margin: 40px auto 10px; 
+	background: white;
+}
+.breadcrumb span {
+	background: #0eabbc;
+    font-size: 18px;
+    border-left: 1px solid #0eabbc;
+    margin-right: 4px;
+    position: relative;
+    top: 2px;
+}
+.breadcrumb a, .breadcrumb a:focus, .breadcrumb a:hover, .breadcrumb a:visited, .breadcrumb a:active { color: #0eabbc; }
+
 /*
 =================
 	LEMBRETES
@@ -267,6 +281,7 @@ table tbody td { vertical-align: middle !important; }
 	text-align: center;
 	margin: 0;
 	padding: 15px 0;
+	z-index: 999;
 }
 .task-removed-notification {
 	background: #e74c3c;
@@ -277,6 +292,7 @@ table tbody td { vertical-align: middle !important; }
 	text-align: center;
 	margin: 0;
 	padding: 15px 0;
+	z-index: 999;
 }
 /*
 =================
@@ -397,6 +413,8 @@ table tbody td { vertical-align: middle !important; }
 	width: 40px;
 	display: block;
 	margin: 4px;
+	position: relative;
+    top: 1px;
 }
 /*
 =================

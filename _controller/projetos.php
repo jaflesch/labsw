@@ -211,7 +211,9 @@ class Projetos extends Controller {
 						<td class='text-center'> {$fetch->privacidade} </td>
 						<td>
 							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
-							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
+							<a href='../equipe/sobre/{$fetch->id}'>
+								<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
+							</a>
 						</td>	
 					</tr>
 				";
@@ -313,10 +315,10 @@ class Projetos extends Controller {
 		$lembretes = array();
 
 		$query = "
-			SELECT *
+			SELECT DISTINCT *
 			FROM equipe e
 			INNER JOIN projeto p ON e.id_projeto = p.id
-			WHERE e.id_usuario = {$id}
+			WHERE e.id_usuario = {$id} OR p.privacidade = 0
 			ORDER BY p.nome
 		";
 
@@ -361,7 +363,7 @@ class Projetos extends Controller {
 			WHERE id = {$id} AND privacidade = 0
 		";
 		$result = mysqli_query(static::$dbConn, $query);
-		var_dump(mysqli_num_rows($result));
+		
 		return mysqli_num_rows($result);
 	}
 
@@ -443,7 +445,7 @@ class Projetos extends Controller {
 		
 		$is_admin = (self::isAdmin(Auth::id(), $id))? true : false;
 
-		$informacoes["funcao"] = $fetch->funcao;
+		$informacoes["funcao"] = ($fetch->funcao == "")? "Nenhuma" : $fetch->funcao;
 		$informacoes["total_equipe"] = count($membros);
 		$informacoes["geral"] = $membros[0];
 		$informacoes["admin"] = $is_admin;

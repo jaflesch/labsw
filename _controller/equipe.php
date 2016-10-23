@@ -1,7 +1,7 @@
 <?php
 include("_lib/data.php");
 
-class Projetos extends Controller {
+class Equipe extends Controller {
 
 	public static function index() {
 		self::redirect("projetos");
@@ -30,34 +30,6 @@ class Projetos extends Controller {
 
 	// AJAX Calls::
 
-	public static function create() {
-		$id = Auth::id();
-		$post = static::$app->post;
-		$privacidade = (int)$post['privacidade'];
-
-		$json = new stdclass();
-		$query = "
-			INSERT INTO projeto (
-				id_admin,
-				nome,
-				identidade_visual, 
-				url,
-				privacidade
-			)
-			VALUES (
-				{$id},
-				'{$post['nome']}',
-				'{$post['identidade_visual']}',
-				'{$post['url']}',
-				{$privacidade}
-			)
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		$json->success = ($result)? true : false;		
-
-		die(json_encode($json));
-	}
-
 	public static function edit() {
 		$id_user = Auth::id();
 		
@@ -82,115 +54,70 @@ class Projetos extends Controller {
 	}
 
 	public static function get() {
-		$id_user = Auth::id();
-		$id = (int) static::$app->post['id'];
-
+		$post = static::$app->post;
+		$id = (int)$post['id'];
+		
 		$json = new stdclass();
 
 		$query = "
-			SELECT *
-			FROM projeto p
-			WHERE p.id = {$id}
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		if($result && mysqli_num_rows($result) == 1 ) {
-			$fetch = mysqli_fetch_object($result);
-			
-			$json->success = true;
-			$json->projeto = toUTF($fetch);
-		}
-		else $json->success = false;
-		
-		$query = "
-			SELECT u.login, f.descricao funcao, u.id
-			FROM projeto p
-			INNER JOIN equipe e ON e.id_projeto = p.id 
-			INNER JOIN usuario u ON u.id = e.id_usuario
-			INNER JOIN funcao f ON f.id = e.funcao
-			WHERE p.id = {$id}
-			ORDER BY login
-		";
-		$equipe = array();
-		$result = mysqli_query(static::$dbConn, $query);
-		
-		if($result && mysqli_num_rows($result) > 0) {
-			while($fetch = mysqli_fetch_object($result)) {
-				$equipe[] = $fetch;
-			}
-
-			$json->success = true;
-			$json->equipe = toUTF($equipe);
-		}
-		else $json->success = false;
-
-		die(json_encode($json));
-	}
-
-	public static function delete() {
-		$id_user = Auth::id();
-		$id = (int) static::$app->post['id'];
-		$json = new stdclass();
-
-		$query = "
-			DELETE FROM projeto
+			SELECT * 
+			FROM equipe
 			WHERE id = {$id}
 		";
-		$result = mysqli_query(static::$dbConn, $query);		
-		
-		$json->success = (mysqli_affected_rows(static::$dbConn) > 0)? true : false;
-		
+		$result = mysqli_query(static::$dbConn, $query);
+		if($result && mysqli_num_rows($result) == 1) {
+			$fetch = mysqli_fetch_object($result);
+			$json->success = true;
+			$json->data = $fetch;			
+		}
+		else {
+			$json->success = false;
+		}
+
 		die(json_encode($json));
 	}
 
 	public static function getlist() {
-		$post = static::$app->post;
-		$id = Auth::id();
-		$ORDER = self::getOrder($post['sort_type'], $post['sort_privacidade']);
+		$id = (int)static::$app->post['id'];
+		$equipe = "";
 
 		$query = "
-			SELECT DISTINCT p.*, u.login criador
-			FROM projeto p 
-			LEFT JOIN equipe e ON e.id_projeto = p.id
-			LEFT JOIN usuario u ON  u.id = p.id_admin
-			{$ORDER}
+			SELECT f.descricao funcao, u.nome nome, e.id, e.admin
+			FROM projeto p
+			INNER JOIN equipe e ON e.id_projeto = p.id 
+			INNER JOIN funcao f ON f.id = e.funcao 
+			INNER JOIN usuario u ON u.id = e.id_usuario
+			WHERE p.id = {$id}
+			ORDER BY e.admin ASC, u.nome ASC
 		";
-
-		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
-		$lembretes = array();
-		if($result && mysqli_num_rows($result) > 0) {
-			while ($fetch = mysqli_fetch_object($result)) {
+		$result = mysqli_query(static::$dbConn, $query);
+		if($result && mysqli_num_rows($result)) {
+			while($fetch = mysqli_fetch_object($result)) {
 				$fetch = toUTF($fetch);
-				$fetch->privacidade = ($fetch->privacidade == 1)? 
-				"Privado <i class='fa fa-lock' style='margin-left: 3px;'></i>" : 
-				"Público <i class='fa fa-eye' style='margin-left: 3px;'></i>";
-
+				switch ($fetch->admin) {
+					case 0: $fetch->admin = "Desenvolvedor"; break;
+					case 1: $fetch->admin = "Administrador"; break;
+					case 2: $fetch->admin = "Visitante"; break;
+				}
 				echo "
 					<tr data-id='{$fetch->id}'>
 						<td> {$fetch->nome } </td>	
-						<td class='text-center'>
-							<span class='identidade-box' style='background: {$fetch->identidade_visual};'></span>
-						</td>	
-						<td class='text-center'>
-							<a href='{$fetch->url}' target='_blank'> Visitar <i class='fa fa-external-link' style='margin-left: 2px;'></i></a>
-						</td>	
-						<td class='text-center'> {$fetch->criador} </td>
-						<td class='text-center'> {$fetch->privacidade} </td>
+						<td> {$fetch->funcao} </td>
+						<td> {$fetch->admin} </td>
 						<td>
-							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
-							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
+							<button class='btn-edit btn btn-default text-center' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
+							<button class='btn-delete btn btn-default text-center btn-danger'><i class='fa fa-times'></i></button>
 						</td>	
 					</tr>
 				";
 			}
 		}
 		else echo "
-			<tr style='height: 51px;'>
-				<td class='text-danger'><i class='fa fa-exclamation-triangle' style='margin-right: 5px;'></i> Nenhum resultado encontrado!</td>
-				<td></td>
-				<td></td>	
-				<td></td>
-				<td></td>	
-				<td></td>	
+			<tr>
+				<td class='text-danger'><i class='fa fa-exclamation-triangle' style='margin-right: 5px;'></i> Nenhum membro na equipe ainda! </td>
+				<td>-</td>
+				<td>-</td>	
+				<td>-</td>
 			</tr>
 		";
 	}
@@ -199,6 +126,9 @@ class Projetos extends Controller {
 		$post = (object)static::$app->post;
 		$id_user = (int) $post->id;
 		$id_projeto = (int) $post->id_projeto;
+		$json = new stdclass();
+		$json->success = true;
+		die(json_encode($json));
 
 		$query = "
 			DELETE FROM equipe
@@ -214,9 +144,10 @@ class Projetos extends Controller {
 
 	public static function add_member() {
 		$post = (object)static::$app->post;
-		$id_usuario = (int) $post->id_usuario;
+		$id_usuario = (int) $post->nome;
 		$id_projeto = (int) $post->id_projeto;
 		$funcao = (int) $post->funcao;
+		$posicao = (int) $post->posicao;
 
 		$query = "
 			SELECT id
@@ -227,7 +158,7 @@ class Projetos extends Controller {
 		if(mysqli_num_rows($result) > 0) {
 			$json = new stdclass();
 			$json->success = false;
-			$json->msg = "Usuário já atribuído à equipe!";
+			$json->msg = "Membro já pertencente à equipe!";
 
 			die(json_encode($json));
 		}
@@ -245,6 +176,29 @@ class Projetos extends Controller {
 		if($result) {
 			$json = new stdclass();
 			$json->success = true;
+			$json->msg = "Membro adicionado à equipe!";
+		}
+
+		die(json_encode($json));
+	}
+
+	public static function edit_member() {
+		$post = (object)static::$app->post;
+		$id = (int) $post->id;
+
+		$query = "
+			UPDATE equipe 
+			SET 
+				id_usuario = {$post->nome},
+				funcao = {$post->funcao},
+				admin = {$post->posicao}
+			WHERE id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		if($result) {
+			$json = new stdclass();
+			$json->success = true;
+			$json->msg = "Membro editado com sucesso!";
 		}
 
 		die(json_encode($json));
@@ -272,52 +226,26 @@ class Projetos extends Controller {
 		$equipe = array();
 
 		$query = "
-			SELECT u.nome, f.descricao funcao, e.admin
+			SELECT u.nome, f.descricao funcao, e.admin, e.id
 			FROM usuario u
 			INNER JOIN equipe e ON e.id_usuario = u.id
 			INNER JOIN funcao f ON e.funcao = f.id
 			WHERE e.id_projeto = {$id}
+			ORDER BY e.admin ASC, u.nome ASC
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		if($result && mysqli_num_rows($result) > 0) {
 			while($fetch = mysqli_fetch_object($result)) {
+				switch ($fetch->admin) {
+					case 0: $fetch->admin = "Desenvolvedor"; break;
+					case 1: $fetch->admin = "Administrador"; break;
+					case 2: $fetch->admin = "Visitante"; break;
+				}
 				$equipe[] = $fetch;
 			}
 		}
 
 		return toUTF($equipe);
-	}
-
-	private static function getAllProjetosByUserId($id) {
-		$lembretes = array();
-
-		$query = "
-			SELECT *
-			FROM equipe e
-			INNER JOIN projeto p ON e.id_projeto = p.id
-			WHERE e.id_usuario = {$id}
-			ORDER BY p.nome
-		";
-
-		$result = mysqli_query(static::$dbConn, $query);
-		while($fetch = mysqli_fetch_object($result)) {
-			$lembretes[] = $fetch;
-		}
-
-		return toUTF($lembretes);
-	}
-
-	private static function isUserOnProject($id_user, $id_project) {
-		$query = "
-			SELECT *
-			FROM projeto p 
-			INNER JOIN equipe e ON e.id_projeto = p.id
-			WHERE e.id_usuario = {$id_user} AND p.id = {$id_project}
-		";
-
-		$result = mysqli_query(static::$dbConn, $query);
-
-		return mysqli_num_rows($result);
 	}
 
 	private static function isAdmin($id_user, $id_project) {
@@ -333,87 +261,6 @@ class Projetos extends Controller {
 		return (mysqli_num_rows($result))? 1 : 0;
 	}
 
-	private static function isProjectPublic($id) {
-		$query = "
-			SELECT id
-			FROM projeto 
-			WHERE id = {$id} AND privacidade = 0
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		var_dump(mysqli_num_rows($result));
-		return mysqli_num_rows($result);
-	}
-
-	private static function getTeamByProjetoId($id) {
-		$equipe = array();
-
-		$query = "
-			SELECT e.funcao, u.login usuario, u.id
-			FROM projeto p
-			INNER JOIN equipe e ON e.id_projeto = p.id 
-			INNER JOIN usuario u ON u.id = e.id_usuario
-			WHERE p.id = {$id}
-			ORDER BY e.admin DESC
-		";
-
-		$result = mysqli_query(static::$dbConn, $query);
-		if($result && mysqli_num_rows($result)) {
-			while($fetch = mysqli_fetch_object($result)) {
-				$fetch->inicial = $fetch->usuario[0];
-				$equipe[] = $fetch;
-			}
-		}
-
-		return toUTF($equipe);
-	}
-
-	private static function getInfoByProjetoId($id) {
-		$informacoes = array();
-		$membros = array();
-		
-		// Obtém dados gerais do projeto::
-		$query = "
-			SELECT 
-				p.nome projeto, 
-			    p.identidade_visual, 
-			    p.privacidade, 
-			    u.login criador,
-			    u2.nome membro 
-			FROM `projeto` p
-			INNER JOIN equipe e ON e.id_projeto = p.id
-			INNER JOIN usuario u2 ON u2.id = e.id_usuario
-			INNER JOIN usuario u ON u.id = p.id_admin
-			WHERE p.id = {$id}
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		while($fetch = mysqli_fetch_object($result)) {
-			$fetch->privacidade = ($fetch->privacidade == 1)? "Privado" : "Público";
-			$membros[] = $fetch;
-		}		
-
-		// Obtém função do usuário no projeto::
-		$id_user = Auth::id();
-		$query = "
-			SELECT  f.descricao funcao 
-			FROM `projeto` p
-			INNER JOIN equipe e ON e.id_projeto = p.id
-			INNER JOIN usuario u ON u.id = e.id_usuario
-			INNER JOIN funcao f ON f.id = e.funcao
-			WHERE p.id = {$id} AND u.id = {$id_user}
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		$fetch = mysqli_fetch_object($result);
-		
-		$is_admin = (self::isAdmin(Auth::id(), $id))? true : false;
-
-		$informacoes["funcao"] = $fetch->funcao;
-		$informacoes["total_equipe"] = count($membros);
-		$informacoes["geral"] = $membros[0];
-		$informacoes["admin"] = $is_admin;
-		
-		return toUTF($informacoes);
-	}
-
 	private static function getAllUsers() {
 		$usuario = array();
 
@@ -421,6 +268,7 @@ class Projetos extends Controller {
 			SELECT id, login
 			FROM usuario
 			WHERE nivel_privilegios < 3
+			ORDER BY login ASC
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		while ($fetch = mysqli_fetch_object($result)) {
@@ -435,6 +283,7 @@ class Projetos extends Controller {
 		$query = "
 			SELECT id, descricao
 			FROM funcao
+			ORDER BY descricao
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		while ($fetch = mysqli_fetch_object($result)) {
@@ -442,29 +291,6 @@ class Projetos extends Controller {
 		}
 		return toUTF($funcao);
 	}
-
-	private static function getOrder($order, $filter) {
-		
-		$ORDERBY = "ORDER BY ";
-		switch($order) {
-			case 1: $ORDERBY .= "nome ASC"; break;
-			case 2:	$ORDERBY .= "nome DESC"; break;
-			case 3:	$ORDERBY .= "criador ASC"; break;
-			case 4:	$ORDERBY .= "criador DESC"; break;
-		}
-
-		// privacidade::
-		$post = preprocess(static::$app->post['search_titulo']);
-		
-		$WHERE = "WHERE p.nome LIKE '%{$post}%' ";
-		switch($filter) {
-			case 1: $WHERE .= ""; break;
-			case 2:	$WHERE .= "AND privacidade = 0"; break;
-			case 3:	$WHERE .= "AND privacidade = 1"; break;
-		}
-		
-		return $WHERE." ".$ORDERBY;
-	}
 }
 
-Projetos::exec($app);
+Equipe::exec($app);
