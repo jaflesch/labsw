@@ -88,8 +88,10 @@ try {
 	}
 
 	// Filtra post
-	$post = xssFilter($_POST);
-	$get = xssFilter($_GET);
+	// $post = xssFilter($_POST);
+	// $get = xssFilter($_GET);
+	$post = $_POST;
+	$get = $_GET;
 
 	$path_info = isset($_SERVER['PATH_INFO'])?trim($_SERVER['PATH_INFO'],'/'):'';
 	$parametros =  explode('/',$path_info);	

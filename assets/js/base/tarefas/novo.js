@@ -23,7 +23,7 @@ $(document).ready(function(){
 	$('[name="responsavel_tarefa"]').change(function() {
 		var val = $(this).val();
 
-		if(val == '-1') {
+		if(val == '2') {
 			$('.member-resp-field').show();
 		}
 		else {
@@ -104,9 +104,9 @@ $(document).ready(function(){
 				method: 'POST',
 				dataType: 'json',
 				data: form.serializeArray(),
-				success: function() {
+				success: function(json) {
 					alert('Tarefa cadastrada com sucesso!');
-					window.location.reload(true);
+					window.location = "../tarefas/editar/"+ json.id;
 				},
 				error: function() {
 					alert('Erro na requisição AJAX!');

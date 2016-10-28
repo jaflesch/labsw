@@ -117,7 +117,6 @@ class Lembretes extends Controller {
 			
 			// format info
 			$media = $tempo / $i;
-			$media = 120;
 			if($media < 60) {
 				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente {$media} minutos.";
 			}
@@ -144,10 +143,13 @@ class Lembretes extends Controller {
 	public static function create() {
 		$id = Auth::id();
 		$post = static::$app->post;
-		//$data_entrega = Data::str2date($post['data_entrega']);
+
+		$datetime = explode(" ", $post['data_entrega']);
+		$data_entrega = Data::str2date($datetime[0])." ".$datetime[1].":00";
 		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
 		$status_erro = (isset($post['status_erro']) && $post['status_erro'] != "")? $post['status_erro'] : 0;
-
+		$post['responsavel_tarefa'] = ($post['responsavel_tarefa'] == 2)? $post['responsavel_membro_tarefa'] : $id;
+		
 		$json = new stdclass();
 		
 		$query = "
@@ -169,7 +171,7 @@ class Lembretes extends Controller {
 				data_entrega
 			)
 			VALUES (
-				{$id},
+				{$post['responsavel_tarefa']},
 				{$post['projeto']},
 				'{$post['titulo']}',
 				{$prioridade},
@@ -183,12 +185,14 @@ class Lembretes extends Controller {
 				'{$post['tempo_previsto']}',
 				0,
 				NOW(),
-				NOW()
+				'{$data_entrega}'
 			)
 		";
+		
 		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		$json->success = ($result)? true : false;		
-
+		$json->id = ($json->success)? mysqli_insert_id(static::$dbConn) : -1;
+		
 		die(json_encode($json));
 	}
 

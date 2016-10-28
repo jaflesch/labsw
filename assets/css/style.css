@@ -423,7 +423,10 @@ table tbody td { vertical-align: middle !important; }
 =================
 */
 /* JODIT Override */
-.jodit .jodit_editor { background: #eee; }
+.jodit .jodit_editor { 
+	background: #eee; 
+	background: #fff;
+}
 .jodit .jodit_editor:focus { 
 	background: #fff;
 	border: 1px solid #0eabbc; 
