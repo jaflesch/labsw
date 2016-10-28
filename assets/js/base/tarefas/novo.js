@@ -68,16 +68,7 @@ $(document).ready(function(){
 	})
 
 	// set mask for HH:MM
-	$('.mask-horario').mask('XXhYYmin', {
-		translation: {
-			'X': {
-				pattern: /[0-23]/
-			},
-			'Y': {
-				pattern: /[0-59]/
-			}
-		}
-	});
+	$('.mask-horario').mask('00h00min');
 
 	// switch between category boxes (dev | test)
 	$('[name="categoria"]').change(function(){
