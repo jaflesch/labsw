@@ -39,6 +39,7 @@ $(document).ready(function(){
 		});
 	})
 
+	// get average time for tasks from same subcategory
 	$('[name="subcategoria"]').change(function() {
 		var id_categoria = $('[name="categoria"]').val();
 		var id_subcategoria = $(this).val();
@@ -65,4 +66,56 @@ $(document).ready(function(){
 			}
 		});
 	})
+
+	// set mask for HH:MM
+	$('.mask-horario').mask('XXhYYmin', {
+		translation: {
+			'X': {
+				pattern: /[0-23]/
+			},
+			'Y': {
+				pattern: /[0-59]/
+			}
+		}
+	});
+
+	// switch between category boxes (dev | test)
+	$('[name="categoria"]').change(function(){
+		var value = $(this).find(":selected").val();
+
+		if(value == "") {
+			$('.view-dev, .view-tester').hide();
+			// should set field values to empty...
+		}
+		else if(value != 4) {
+			$('.view-tester').hide();	
+			$('.view-dev').show();
+		}
+		else {
+			$('.view-tester').show();	
+			$('.view-dev').hide();	
+		}
+	});
+
+	// submit form 
+	$('#formCreateTarefa').unbind("submit").bind("submit", function(e){
+		e.preventDefault();
+		var form = $(this);
+		if(validateForm("#formCreateTarefa")) {
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function() {
+					alert('Tarefa cadastrada com sucesso!');
+					window.location.reload(true);
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});				
+		}
+		else alert("Preencha os campos obrigatórios");
+	});
 });
