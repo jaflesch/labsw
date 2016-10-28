@@ -149,6 +149,10 @@ class Equipe extends Controller {
 		$funcao = (int) $post->funcao;
 		$posicao = (int) $post->posicao;
 
+		// get msg for mail body
+		$default_msg = "Olá, X, <br/>você foi selecionado para participar do projeto Y na função de Z.";
+		$mensagem = (isset($post->mensagem) && $post->mensagem != "")? $post->mensagem : $default_msg; 
+		
 		$query = "
 			SELECT id
 			FROM equipe
