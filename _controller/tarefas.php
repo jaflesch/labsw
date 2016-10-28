@@ -1,7 +1,7 @@
 <?php
 include("_lib/data.php");
 
-class Lembretes extends Controller {
+class Tarefas extends Controller {
 
 	public static function index() {
 		if(Auth::user()) {
@@ -33,113 +33,26 @@ class Lembretes extends Controller {
 		else self::redirect("home");
 	}
 
-	// AJAX Calls::
-	public static function getCategoryLabel() {
-		$post = static::$app->post;
-		$category = null;
-
-		$query = "
-			SELECT *
-			FROM categoria
-			WHERE id_projeto = {$post->id_projeto}
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		if($result && mysqli_num_rows($result) == 1) {
-			$category = toUTF($fetch);
-		}
-
-		return $category;
-	}
-
-	public static function get_team() {
-		$post = (object)static::$app->post;
-		$team = "<option value=''>Selecione uma opção...</option>";
-		
-		$query = "
-			SELECT u.nome, u.id
-			FROM equipe e
-			INNER JOIN usuario u ON e.id_usuario = u.id
-			WHERE id_projeto = {$post->id}
-			ORDER BY nome
-		";
-		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
-		if($result && mysqli_num_rows($result) > 0) {
-			while ($fetch = mysqli_fetch_object($result)) {
-				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
-			}
-		}
-
-		echo $team;
-	}
-
-	public static function get_subcategoria() {
-		$post = (object)static::$app->post;
-		$team = "<option value=''>Selecione uma categoria...</option>";
-		
-		$query = "
-			SELECT s.nome, s.id
-			FROM subcategoria s
-			INNER JOIN categoria c ON c.id = s.id_categoria
-			WHERE id_categoria = {$post->id}
-			ORDER BY nome
-		";
-		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
-		if($result && mysqli_num_rows($result) > 0) {
-			while ($fetch = mysqli_fetch_object($result)) {
-				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
-			}
-		}
-
-		echo $team;
-	}
-	public static function get_average_time() {
-		$post = (object)static::$app->post;
-		$tarefas = array();
-		$json = new stdclass();
-
-		$query = "
-			SELECT tempo_previsto
-			FROM tarefa
-			WHERE id_categoria = {$post->id_categoria} AND id_subcategoria = {$post->id_subcategoria}
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-
-		if($result && mysqli_num_rows($result) > 0) {
-			$i = 0;
-			$tempo = 0;
-			while ($fetch = mysqli_fetch_object($result)) {
-				$horas = (int)substr($fetch->tempo_previsto, 0, 2);
-				$min = (int)substr($fetch->tempo_previsto, 3, 2);
-
-				$tempo += $horas*60 + $min;
-				$i++;
-			}
+	public static function editar($tpl, $vars=array()) {
+		if(Auth::user()) {
+			$id = static::$app->parametros[2];
+			$tarefa = self::getTarefaById($id);
 			
-			// format info
-			$media = $tempo / $i;
-			if($media < 60) {
-				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente {$media} minutos.";
-			}
-			else {
-				$horas = (int) ($media / 60);
-				$min = $media % 60;
-				$textH = $horas == 1 ? "hora" : "horas";
-				$textMin = $min != 0 ? " e {$min} minutos" : "";
-				
-				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente 
-				{$horas} {$textH}{$textMin}.";
-			}
-
-			$json->success = true;
+			$bag = array(
+				"user" => Auth::getUser(),
+				"projetos_admin" => self::getAllProjetosWhereUserAdmin(Auth::id()),
+				"categorias" => self::getAllCategorias(),
+				"subcategorias" => self::getSubcategoriasByCategoriaId($tarefa->id_categoria),
+				"membros" => self::getTeamByProjetoId($tarefa->id_projeto),
+				"tarefa" => $tarefa
+			);
+		
+			echo self::render("tarefas/editar.html", $bag);
 		}
-		else {
-			$json->success = false;
-			$json->msg = "";
-		}
-
-		die(json_encode($json));
+		else self::redirect("home");
 	}
 
+	// AJAX Calls::
 	public static function create() {
 		$id = Auth::id();
 		$post = static::$app->post;
@@ -148,13 +61,14 @@ class Lembretes extends Controller {
 		$data_entrega = Data::str2date($datetime[0])." ".$datetime[1].":00";
 		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
 		$status_erro = (isset($post['status_erro']) && $post['status_erro'] != "")? $post['status_erro'] : 0;
-		$post['responsavel_tarefa'] = ($post['responsavel_tarefa'] == 2)? $post['responsavel_membro_tarefa'] : $id;
+		$post['responsavel_tarefa'] = ($post['responsavel_tarefa'] == 2)? $post['responsavel_membro_tarefa'] : 0;
 		
 		$json = new stdclass();
 		
 		$query = "
 			INSERT INTO tarefa (
 				id_autor,
+				id_usuario,
 				id_projeto,
 				titulo,
 				prioridade,
@@ -171,6 +85,7 @@ class Lembretes extends Controller {
 				data_entrega
 			)
 			VALUES (
+				{$id},
 				{$post['responsavel_tarefa']},
 				{$post['projeto']},
 				'{$post['titulo']}',
@@ -196,25 +111,54 @@ class Lembretes extends Controller {
 		die(json_encode($json));
 	}
 
-	public static function edit() {
-		$id_user = Auth::id();
-		
+	public static function update() {
 		$post = static::$app->post;
-		$id = (int)$post['id'];
-		$data = Data::str2date($post['data'])." 00:00:00";
-		$prioridade = $post['prioridade'] - 1;
+		
+		$id = $post['id'];
+		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
+		$responsavel_tarefa = ($post['responsavel_tarefa'] == 2)? $post['responsavel_membro_tarefa'] : 0;
+		$status_erro = (isset($post['status_erro']) && $post['status_erro'] != "")? $post['status_erro'] : 0;
 
 		$json = new stdclass();
 
-		$query = "
-			UPDATE tarefa 
-			SET 
-				titulo = '{$post['titulo']}',
-				prioridade = {$prioridade},
-				descricao = '{$post['descricao']}',
-				data = '{$data}'
-			WHERE id = {$id} AND id_autor = {$id_user}
-		";
+		if(Auth::is('admin')) {
+			$query = "
+				UPDATE tarefa 
+				SET 
+					id_usuario = {$responsavel_tarefa},
+					id_projeto = {$post['projeto']},
+					titulo = '{$post['titulo']}',
+					prioridade = {$prioridade},
+					id_categoria = {$post['categoria']}, 
+					id_subcategoria = {$post['subcategoria']},
+					descricao_formal = '{$post['descricao_formal']}',
+					descricao_tecnica = '{$post['descricao_tecnica']}',
+					solucao = '{$post['solucao']}',
+					resultados = '{$post['resultados']}',
+					status_erro = {$status_erro},
+					tempo_previsto = '{$post['tempo_previsto']}'
+
+				WHERE id = {$id}
+			";
+		}
+		else if(Auth::is('user')) {
+			$query = "
+				UPDATE tarefa 
+				SET 
+					id_usuario = {$responsavel_tarefa},
+					titulo = '{$post['titulo']}',
+					prioridade = {$prioridade},
+					descricao_formal = '{$post['descricao_formal']}',
+					descricao_tecnica = '{$post['descricao_tecnica']}',
+					solucao = '{$post['solucao']}',
+					resultados = '{$post['resultados']}',
+					status_erro = {$status_erro},
+					tempo_previsto = '{$post['tempo_previsto']}'
+
+				WHERE id = {$id}
+			";
+		}
+		
 		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		$json->success = ($result)? true : false;
 
@@ -320,20 +264,93 @@ class Lembretes extends Controller {
 		";
 	}
 
-	public static function complete() {
-		$id_user = Auth::id();
-		$id = (int) static::$app->post['id'];
+	public static function get_team() {
+		$post = (object)static::$app->post;
+		$team = "<option value=''>Selecione uma opção...</option>";
+		
+		$query = "
+			SELECT u.nome, u.id
+			FROM equipe e
+			INNER JOIN usuario u ON e.id_usuario = u.id
+			WHERE id_projeto = {$post->id}
+			ORDER BY nome
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		if($result && mysqli_num_rows($result) > 0) {
+			while ($fetch = mysqli_fetch_object($result)) {
+				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
+			}
+		}
 
+		echo $team;
+	}
+
+	public static function get_subcategoria() {
+		$post = (object)static::$app->post;
+		$team = "<option value=''>Selecione uma categoria...</option>";
+		
+		$query = "
+			SELECT s.nome, s.id
+			FROM subcategoria s
+			INNER JOIN categoria c ON c.id = s.id_categoria
+			WHERE id_categoria = {$post->id}
+			ORDER BY nome
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		if($result && mysqli_num_rows($result) > 0) {
+			while ($fetch = mysqli_fetch_object($result)) {
+				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
+			}
+		}
+
+		echo $team;
+	}
+	
+	public static function get_average_time() {
+		$post = (object)static::$app->post;
+		$tarefas = array();
 		$json = new stdclass();
 
 		$query = "
-			UPDATE lembrete
-			SET status = 1
-			WHERE id_usuario = {$id_user} AND id = {$id}
+			SELECT tempo_previsto
+			FROM tarefa
+			WHERE id_categoria = {$post->id_categoria} AND id_subcategoria = {$post->id_subcategoria}
 		";
-		$result = mysqli_query(static::$dbConn, $query);		
-		$json->success = ($result)? true : false;
-		
+		$result = mysqli_query(static::$dbConn, $query);
+
+		if($result && mysqli_num_rows($result) > 0) {
+			$i = 0;
+			$tempo = 0;
+			while ($fetch = mysqli_fetch_object($result)) {
+				$horas = (int)substr($fetch->tempo_previsto, 0, 2);
+				$min = (int)substr($fetch->tempo_previsto, 3, 2);
+
+				$tempo += $horas*60 + $min;
+				$i++;
+			}
+			
+			// format info
+			$media = $tempo / $i;
+			if($media < 60) {
+				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente {$media} minutos.";
+			}
+			else {
+				$horas = (int) ($media / 60);
+				$min = $media % 60;
+				$textH = $horas == 1 ? "hora" : "horas";
+				$textMin = $min != 0 ? " e {$min} minutos" : "";
+				
+				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente 
+				{$horas} {$textH}{$textMin}.";
+			}
+
+			$json->success = true;
+		}
+		else {
+			$json->success = false;
+			$json->msg = "";
+		}
+
 		die(json_encode($json));
 	}
 
@@ -419,6 +436,64 @@ class Lembretes extends Controller {
 		return toUTF($categorias);
 	}
 
+	private static function getTarefaById($id) {
+		$tarefa = null;
+
+		$query = "
+			SELECT *
+			FROM tarefa
+			WHERE id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+
+		if($result && mysqli_num_rows($result)) {
+			$fetch = mysqli_fetch_object($result);
+			
+			// prepare data
+			$datetime = explode(" ", $fetch->data_entrega);
+			$fetch->data_entrega = Data::datetime2str($fetch->data_entrega)." ".$datetime[1];
+			//$fetch->prioridade++;
+
+			$tarefa = toUTF($fetch);
+		}
+
+		return $tarefa;
+	}
+
+	private static function getSubcategoriasByCategoriaId($id) {
+		$subcategorias = array();
+
+		$query = "
+			SELECT id, nome
+			FROM subcategoria
+			WHERE id_categoria = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$subcategorias[] = toUTF($fetch);
+		}
+
+		return $subcategorias;
+	}
+	
+	private static function getTeamByProjetoId($id) {
+		$team = array();
+
+		$query = "
+			SELECT u.id, u.nome
+			FROM equipe e
+			INNER JOIN usuario u ON u.id = e.id_usuario
+			WHERE id_projeto = {$id}
+			ORDER BY u.nome
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$team[] = toUTF($fetch);
+		}
+
+		return $team;
+	}
+
 	private static function getStatus($status, $data) {
 		switch ($status) {
 			case 0:	
@@ -469,4 +544,4 @@ class Lembretes extends Controller {
 	}
 }
 
-Lembretes::exec($app);
+Tarefas::exec($app);
