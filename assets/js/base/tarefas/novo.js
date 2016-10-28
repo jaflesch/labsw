@@ -1,4 +1,10 @@
 $(document).ready(function(){
+	// WYSIWYG editor
+	new Jodit('.jodit_descricao_formal');
+	new Jodit('.jodit_descricao_tecnica');
+	new Jodit('.jodit_solucao');
+	new Jodit('.jodit_resultados');
+
 	// update subcategories
 	$('[name="categoria"]').change(function() {
 		$.ajax({
