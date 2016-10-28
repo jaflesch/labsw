@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
-{% set page_title = 'Tarefas' %}
+{% set page_title = 'Nova Tarefa' %}
 
 {% block main %}
 	<section id="tarefas">
-		{% include 'tarefas/_lista.html' %}
+		{% include 'tarefas/_form_novo.html' %}
 	</section>
 	<section id="modals">
 		{% include 'tarefas/_modal_create.html' %}
@@ -20,6 +20,7 @@
 {% block scripts %}
 <script type="text/javascript" src="{{ root }}/assets/js/plugins/mask.js"></script>
 <script type="text/javascript" src="{{ root }}/assets/js/validate.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/tarefas/novo.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 
@@ -54,6 +55,11 @@
 				$('.view-tester').show();	
 				$('.view-dev').hide();	
 			}
+		});
+
+		$("#turnOnModal").click(function(e){
+			e.preventDefault();
+			$('#createLembreteModal').modal('show');
 		});
 
 		$('[name="search_titulo"],[name="sort_type"]').on("change keyup", loadAll);

@@ -1,0 +1,142 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-group mgr10"></i> Nova Tarefa </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 breadcrumb">
+			<span class="line">&nbsp;</span><a href="{{ root }}/tarefas"> Tarefas</a> / Criar
+		</div>
+	</div>
+	<hr style="margin: 0px 0 30px;">
+
+	<form id="formCreateTarefa" action="{{ root }}/tarefas/create" method="POST">
+		<div class="row mgb15">
+			<div class="col-sm-6 mgb15">
+				<label class="value">* Título </label>
+				<input class="value required" name="titulo" value="">
+			</div>
+			<div class="col-sm-6 mgb15">
+				<label class="value">* Prioridade </label>
+				<select class="value required" name="prioridade" value="">
+					<option value="">Selecione uma opção...</option>
+					<option value="1"> Baixa </option>
+					<option value="2"> Normal </option>
+					<option value="3"> Alta </option>
+					<option value="4"> Crítica </option>
+				</select>
+			</div>
+		</div>
+		<div class="row mgb15">
+			<div class="col-sm-6 mgb15">
+				<label class="value">* Categoria </label>
+				<select class="value required" name="categoria">
+					<option value="">Selecione uma opção...</option>
+					{% for categoria in categorias %}
+					<option value="{{ categoria.id }}"> {{ categoria.nome }} </option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="col-sm-6 mgb15">
+				<label class="value">* Subcategoria </label>
+				<select class="value required" name="subcategoria">
+					<option value="">Selecione uma categoria...</option>
+				</select>
+			</div>
+		</div>
+		<div class="row mgb15">
+			<div class="col-sm-6 mgb15">
+				<label class="value">* Projeto </label>
+				<select class="value required" name="projeto" value="">
+					<option value="">Selecione uma opção...</option>
+					{% for projeto in projetos_admin %}
+					<option value="{{ projeto.id }}"> {{ projeto.nome }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="row mgb15">
+			<div class="col-sm-12 mgb15">
+				<label class="value">* Descrição Formal</label>
+				<textarea class="value" name="descricao_formal"></textarea>
+			</div>
+		</div>
+		<div class="row mgb15">
+			<div class="col-sm-12">
+				<label class="value">* Descrição Técnica</label>
+				<textarea class="value" name="descricao_tecnica"></textarea>
+			</div>
+		</div>
+		<div class="row view-dev mgb15" style="display: none;">
+			<div class="col-sm-12">
+				<label class="value">* Solução</label>
+				<textarea class="value" name="solucao"></textarea>
+			</div>
+		</div>
+		<div class="row view-tester mgb15" style="display: none;">
+			<div class="col-sm-12">
+				<label class="value">* Resultados</label>
+				<textarea class="value" name="resultados"></textarea>
+			</div>
+		</div>
+		<div class="row mgb15">
+			<div class="col-sm-6 view-tester" style="display: none;">
+				<label class="value">* Nível Erro</label>
+				<select class="value" name="status_erro">
+					<option value="">Selecione uma opção...</option>
+					<option value="1"> Baixo </option>
+					<option value="2"> Normal </option>
+					<option value="3"> Alto </option>
+					<option value="4"> Crítico </option>
+				</select>							
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="row mgb15">
+			<div class="col-sm-6">
+				<label class="value">* Tempo Previsto para Conclusão </label>
+				<input type="text" name="tempo_previsto" class="form-control mask-horario value required" placeholder="00h00min">
+			</div>
+			<div class="col-sm-6">
+				<label class="value">* Data entrega </label>
+				<input type="text" name="data_entrega" class="form-control mask-datetime value required" placeholder="dd/mm/aaaa hh:mm">
+			</div>
+		</div>	
+
+		<div class="row mgb15">
+			<div class="col-sm-12">
+				<p class="alert alert-info" id="average-time-info" style="display:none;">
+					<strong class="text-center"><i class="fa fa-clock-o" style="margin-right: 5px"></i>Tempo Médio Previsto: </strong>
+					<span></span>
+				</p>
+			</div>
+		</div>	
+
+		<div class="row mgb15">
+			<div class="col-sm-6 mgb15">
+				<label class="value">* Atribuir tarefa</label>
+				<select name="responsavel_tarefa" class="value required">
+					<option value=""> Selecione uma opção... </option>
+					<option value="{{ user.id }}"> A mim </option>
+					<option value="-1"> À membro da equipe </option>
+				</select>
+			</div>
+			<div class="col-sm-6 mgb15 member-resp-field" style="display:none;">
+				<label class="value">* Membro </label>
+				<select class="value" name="responsavel_membro_tarefa" value="">
+					<option value="">Selecione um projeto...</option>
+				</select>
+			</div>
+		</div>
+
+		<hr>
+
+		<input type="submit" class="btn btn-success" value="Confirmar">		
+	</form>
+</div>

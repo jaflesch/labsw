@@ -20,7 +20,126 @@ class Lembretes extends Controller {
 		return parent::render($tpl,$vars);
 	}
 
+	public static function novo($tpl, $vars=array()) {
+		if(Auth::user()) {
+			$bag = array(
+				"user" => Auth::getUser(),
+				"projetos_admin" => self::getAllProjetosWhereUserAdmin(Auth::id()),
+				"categorias" =>self::getAllCategorias()
+			);
+		
+			echo self::render("tarefas/novo.html", $bag);
+		}
+		else self::redirect("home");
+	}
+
 	// AJAX Calls::
+	public static function getCategoryLabel() {
+		$post = static::$app->post;
+		$category = null;
+
+		$query = "
+			SELECT *
+			FROM categoria
+			WHERE id_projeto = {$post->id_projeto}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		if($result && mysqli_num_rows($result) == 1) {
+			$category = toUTF($fetch);
+		}
+
+		return $category;
+	}
+
+	public static function get_team() {
+		$post = (object)static::$app->post;
+		$team = "<option value=''>Selecione uma opção...</option>";
+		
+		$query = "
+			SELECT u.nome, u.id
+			FROM equipe e
+			INNER JOIN usuario u ON e.id_usuario = u.id
+			WHERE id_projeto = {$post->id}
+			ORDER BY nome
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		if($result && mysqli_num_rows($result) > 0) {
+			while ($fetch = mysqli_fetch_object($result)) {
+				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
+			}
+		}
+
+		echo $team;
+	}
+
+	public static function get_subcategoria() {
+		$post = (object)static::$app->post;
+		$team = "<option value=''>Selecione uma categoria...</option>";
+		
+		$query = "
+			SELECT s.nome, s.id
+			FROM subcategoria s
+			INNER JOIN categoria c ON c.id = s.id_categoria
+			WHERE id_categoria = {$post->id}
+			ORDER BY nome
+		";
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
+		if($result && mysqli_num_rows($result) > 0) {
+			while ($fetch = mysqli_fetch_object($result)) {
+				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
+			}
+		}
+
+		echo $team;
+	}
+	public static function get_average_time() {
+		$post = (object)static::$app->post;
+		$tarefas = array();
+		$json = new stdclass();
+
+		$query = "
+			SELECT tempo_previsto
+			FROM tarefa
+			WHERE id_categoria = {$post->id_categoria} AND id_subcategoria = {$post->id_subcategoria}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+
+		if($result && mysqli_num_rows($result) > 0) {
+			$i = 0;
+			$tempo = 0;
+			while ($fetch = mysqli_fetch_object($result)) {
+				$horas = (int)substr($fetch->tempo_previsto, 0, 2);
+				$min = (int)substr($fetch->tempo_previsto, 3, 2);
+
+				$tempo += $horas*60 + $min;
+				$i++;
+			}
+			
+			// format info
+			$media = $tempo / $i;
+			$media = 120;
+			if($media < 60) {
+				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente {$media} minutos.";
+			}
+			else {
+				$horas = (int) ($media / 60);
+				$min = $media % 60;
+				$textH = $horas == 1 ? "hora" : "horas";
+				$textMin = $min != 0 ? " e {$min} minutos" : "";
+				
+				$json->msg = "O tempo médio para a realização de tarefas do tipo <em>{$post->nome}</em> é de aproximadamente 
+				{$horas} {$textH}{$textMin}.";
+			}
+
+			$json->success = true;
+		}
+		else {
+			$json->success = false;
+			$json->msg = "";
+		}
+
+		die(json_encode($json));
+	}
 
 	public static function create() {
 		$id = Auth::id();
@@ -253,6 +372,47 @@ class Lembretes extends Controller {
 
 		return toUTF($projetos);
 	}
+
+	private static function getAllProjetosWhereUserAdmin($id) {
+		$projetosAdmin = array();
+
+		$query = "
+			SELECT id, nome
+			FROM projeto
+			WHERE id_admin = {$id}
+			                    
+			UNION (
+			    SELECT id_projeto id, nome
+			    FROM equipe e
+			    INNER JOIN projeto p ON p.id = e.id_projeto
+			    WHERE id_usuario = {$id} AND admin = 1
+			)
+			ORDER BY nome
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$projetosAdmin[] = $fetch;
+		}
+
+		return toUTF($projetosAdmin);
+	}
+
+	private static function getAllCategorias() {
+		$categorias = array();
+
+		$query = "
+			SELECT *
+			FROM categoria
+			ORDER BY nome
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$categorias[] = $fetch;
+		}
+
+		return toUTF($categorias);
+	}
+
 	private static function getStatus($status, $data) {
 		switch ($status) {
 			case 0:	
