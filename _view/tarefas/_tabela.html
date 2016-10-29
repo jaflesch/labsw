@@ -1,4 +1,4 @@
-<section id="view-list">
+<section id="view-table">
 	<div class="row mgb15">
 		<form id="formFiltroLembrete" method="POST" action="{{ root }}/lembretes/getlist">
 			<div class="col-sm-4 mgb15">
@@ -31,7 +31,20 @@
 			</div>
 		</form>
 	</div>
-	<table id="lista-lembrete" class="table table-striped">
+	<div class="row">
+		<div class="col-sm-3 table-box">
+			<h2> Backlog </h2>
+		</div>
+		<div class="col-sm-3 table-box">
+			<h2> Trabalhando </h2>
+		</div>
+		<div class="col-sm-3 table-box">
+			<h2> Em fase de Testes </h2>
+		</div>
+		<div class="col-sm-3 table-box">
+			<h2> Pendente avisar Cliente</h2>
+		</div>
+	</div><table id="lista-lembrete" class="table table-striped">
 		<thead>
 			<tr>
 				<td> Título </td>

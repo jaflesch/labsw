@@ -433,7 +433,31 @@ table tbody td { vertical-align: middle !important; }
 }
 .jodit .jodit_workflow { box-shadow: none; }
 
+.display-filter span {
+	font-size: 20px;
+	color: #ccc;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+.display-filter span:hover, .display-filter span:focus, .display-filter span:active {
+	color: #999;
+	transition: all 0.2s ease-in-out;
+}
+.display-filter span.selected, 
+.display-filter span.selected:hover, 
+.display-filter span.selected:focus, 
+.display-filter span.selected:active { color: #555; }
 
+.display-filter span.vhr {
+	display: inline-block;
+	position: relative;
+	top: 2px;
+	background: #ccc;
+	width: 1px;
+	height: 20px;
+	margin: 0 4px;
+}
+#view-table, #view-list { padding: 0; }
 /*
 =================
 	USER
