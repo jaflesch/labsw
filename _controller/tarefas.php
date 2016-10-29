@@ -227,8 +227,8 @@ class Tarefas extends Controller {
 			while ($fetch = mysqli_fetch_object($result)) {
 				$fetch->descricao = nl2br($fetch->descricao);
 				$fetch->status = self::getStatus($fetch->status, $fetch->data);
-				$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
-				$fetch->prioridade = self::getPrioridade($fetch->prioridade);
+				$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade - 1);
+				$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
 				$fetch->data = Data::datetime2str($fetch->data);
 
 				$text = ($fetch->status == "Atrasado")? "text-danger" : "";
@@ -369,8 +369,8 @@ class Tarefas extends Controller {
 		while($fetch = mysqli_fetch_object($result)) {
 			$fetch->descricao = nl2br($fetch->descricao);
 			$fetch->status = self::getStatus($fetch->status, $fetch->data);
-			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade);
-			$fetch->prioridade = self::getPrioridade($fetch->prioridade);
+			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade - 1);
+			$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
 			$fetch->data = Data::datetime2str($fetch->data);
 
 			$tarefas[] = $fetch;
