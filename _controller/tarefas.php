@@ -458,7 +458,8 @@ class Tarefas extends Controller {
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 		while ($fetch = mysqli_fetch_object($result)) {
-			$team[] = toUTF($fetch);
+			if($fetch->id != Auth::id())
+				$team[] = toUTF($fetch);
 		}
 
 		return $team;
