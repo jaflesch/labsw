@@ -202,25 +202,21 @@ class Tarefas extends Controller {
 				$fetch->status = self::getStatus($fetch->status, $fetch->data);
 				$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade - 1);
 				$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
-				$fetch->data_entrega = Data::datetime2str($fetch->data_entrega);
-
+				$datetime = explode(" ", $fetch->data_entrega);
+				$fetch->data_entrega = Data::datetime2str($datetime[0])." ".substr($datetime[1], 0, 5);
+				
 				$text = ($fetch->status == "Atrasado")? "text-danger" : "";
 				echo "
 					<tr data-id='{$fetch->id}' class='{$text}'>
 						<td> {$fetch->titulo } </td>	
 						<td class='text-center'><span class='prioridade-label {$fetch->prioridade_label}'> {$fetch->prioridade} </span></td>	
-						<td class='text-center'> {$fetch->data} </td>	
+						<td class='text-center'> {$fetch->data_entrega} </td>	
 						<td class='text-center'> {$fetch->status} </td>
 						<td>
 							<button class='btn-delete btn btn-default text-center pull-right btn-danger'><i class='fa fa-times'></i></button>
-				";
-				if($fetch->status != "<span style='color:#2fa561;'>Completo</span>") {
-					echo "
-							<button class='btn-check btn btn-default text-center pull-right btn-success' style='margin-right: 2px;'><i class='fa fa-check'></i></button>
-					";
-				}
-				echo "
-							<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
+							<a href='tarefas/editar/{$fetch->id}'>
+								<button class='btn-edit btn btn-default text-center pull-right' style='margin-right: 2px;'><i class='fa fa-pencil'></i></button>
+							</a>
 						</td>	
 					</tr>
 				";
@@ -345,8 +341,7 @@ class Tarefas extends Controller {
 			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade - 1);
 			$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
 			$datetime = explode(" ", $fetch->data_entrega);
-			echo Data::datetime2str($datetime[0])." ".substr($datetime[1], 0, 5);
-			$fetch->data_entrega = Data::datetime2str($datetime[0])." ".$datetime[1];
+			$fetch->data_entrega = Data::datetime2str($datetime[0])." ".substr($datetime[1], 0, 5);
 
 			$tarefas[] = $fetch;
 		}
