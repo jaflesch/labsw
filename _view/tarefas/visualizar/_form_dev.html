@@ -1,0 +1,144 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="section"><i class="fa fa-group mgr10"></i> Visualizar Tarefa </h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 breadcrumb">
+			<span class="line">&nbsp;</span><a href="{{ root }}/tarefas"> Tarefas</a> / {{ tarefa.titulo }}
+		</div>
+	</div>
+	<hr style="margin: 0px 0 30px;">
+
+	<div class="row mgb15">
+		<div class="col-sm-6 mgb15">
+			<label class="value">* Título </label>
+			<div class="value">{{ tarefa.titulo }}</div>
+		</div>
+		<div class="col-sm-6 mgb15">
+			<label class="value">* Prioridade </label>
+			<div class="value required" value="">
+				{% if tarefa.prioridade == 1 %} Baixa
+				{% elseif tarefa.prioridade == 2 %} Normal
+				{% elseif tarefa.prioridade == 3 %} Alta
+				{% elseif tarefa.prioridade == 4 %} Crítica
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="row mgb15">
+		<div class="col-sm-6 mgb15">
+			<label class="value">* Categoria </label>
+			<div class="value required">
+				{% for categoria in categorias %}
+					{% if tarefa.id_categoria == categoria.id %} {{ categoria.nome }} {% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-sm-6 mgb15">
+			<label class="value">* Subcategoria </label>
+			<div class="value required">
+				{% for subcategoria in subcategorias %}
+					{% if tarefa.id_subcategoria == subcategoria.id %} {{ subcategoria.nome }} {% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div class="row mgb15">
+		<div class="col-sm-6 mgb15">
+			<label class="value">* Projeto </label>
+			<div class="value" value=""> {{ tarefa.projeto_nome }} </div>
+		</div>
+	</div>		
+
+	<hr>
+
+	<div class="row mgb15">
+		<div class="col-sm-12 mgb15">
+			<label class="value">* Descrição Formal</label>
+			<div class="value">{{ tarefa.descricao_formal|raw }}</div>
+		</div>
+	</div>
+	<div class="row mgb15">
+		<div class="col-sm-12">
+			<label class="value">* Descrição Técnica</label>
+			<div class="value">{{ tarefa.descricao_tecnica|raw }}</div>
+		</div>
+	</div>
+	{% if tarefa.solucao is not empty %}
+	<div class="row view-dev mgb15">
+		<div class="col-sm-12">
+			<label class="value">* Solução</label>
+			<div class="value">{{ tarefa.solucao|raw }}</div>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if tarefa.resultados is not empty %}
+	<div class="row view-tester mgb15">
+		<div class="col-sm-12">
+			<label class="value">* Resultados</label>
+			<div class="value">{{ tarefa.resultados|raw }}</div>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if tarefa.status_erro > 0 %}
+	<div class="row mgb15">
+		<div class="col-sm-6 view-tester">
+			<label class="value">* Nível Erro</label>
+			<div class="value" name="status_erro">
+				{% if tarefa.status_erro == 1 %} Baixo
+				{% elseif tarefa.status_erro == 2 %} Normal
+				{% elseif tarefa.status_erro == 3 %} Alto
+				{% elseif tarefa.status_erro == 4 %} Crítico
+				{% endif %}
+			</div>							
+		</div>
+	</div>
+	{% endif %}
+
+	<hr>
+
+	<div class="row mgb15">
+		<div class="col-sm-6">
+			<label class="value">* Data entrega </label>
+			<div class="value">{{ tarefa.data_entrega }}</div>
+		</div>
+		<div class="col-sm-6">
+			<label class="value">* Tempo Previsto para Conclusão </label>
+			<div class="value required">{{ tarefa.tempo_previsto }}</div>
+		</div>
+	</div>	
+	<div class="row mgb15">
+		<div class="col-sm-6 mgb15">
+			<label class="value">* Atribuir tarefa</label>
+			<div class="value">
+				{% if tarefa.id_usuario == 0 %} 
+					A mim 
+				{% else %} 
+					À membro da equipe
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-sm-6 mgb15 member-resp-field" style="{{ tarefa.id_usuario != 0 ? '' : 'display:none;'}}">
+			<label class="value">* Membro </label>
+			<div class="value" name="responsavel_membro_tarefa" value="">
+				{% set found = false %}
+				{% for membro in membros %}
+					{% if tarefa.id_usuario == membro.id %} 
+						{{ membro.nome }} 
+						{% set found = true %}
+					{% endif %}
+				{% endfor %}
+
+				{{ found ? '' : user.nome }}
+			</div>
+		</div>
+	</div>
+
+	<hr>
+
+	<a href="{{ root }}/tarefas" class="btn btn-default"><i class="fa fa-arrow-left"></i> Voltar </a>
+</div>

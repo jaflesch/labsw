@@ -24,10 +24,23 @@ $(document).ready(function(){
 		var val = $(this).val();
 
 		if(val == '2') {
-			$('.member-resp-field').show();
+			$('.member-resp-field').show();			
 		}
 		else {
 			$('.member-resp-field').hide();	
+		}
+
+		if(val == '1') {
+			$('.tempo-previsto').show();
+			var id_subcategoria = $('[name="subcategoria"]').val();
+			var id_categoria = $('[name="categoria"]').val();
+			
+			if(id_categoria != "" && id_subcategoria != "")
+				$('#average-time-info').fadeIn();	
+		}
+		else {
+			$('.tempo-previsto').hide();
+			$('#average-time-info').hide();	
 		}
 	});
 
@@ -51,26 +64,28 @@ $(document).ready(function(){
 		var id_subcategoria = $(this).val();
 		var nome = $('[name="subcategoria"]').find(":selected").text();
 		
-		$.ajax({
-			url: '../tarefas/get-average-time',
-			method: 'POST',
-			dataType: 'json',
-			data: {
-				id_categoria: id_categoria,
-				id_subcategoria: id_subcategoria,
-				nome: nome
-			},
-			success: function(json) {
-				if(json.success) {
-					$('#average-time-info span').html(json.msg);
-					$('#average-time-info').fadeIn();	
+		if($('[name="responsavel_tarefa"]').val() == "1") {
+			$.ajax({
+				url: '../tarefas/get-average-time',
+				method: 'POST',
+				dataType: 'json',
+				data: {
+					id_categoria: id_categoria,
+					id_subcategoria: id_subcategoria,
+					nome: nome
+				},
+				success: function(json) {
+					if(json.success) {
+						$('#average-time-info span').html(json.msg);
+						$('#average-time-info').fadeIn();	
+					}
+					else {
+						$('#average-time-info span').html("");
+						$('#average-time-info').hide();
+					}
 				}
-				else {
-					$('#average-time-info span').html("");
-					$('#average-time-info').hide();
-				}
-			}
-		});
+			});
+		}
 	})
 
 	// set mask for HH:MM

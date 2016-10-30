@@ -8,7 +8,7 @@ $(document).ready(function(){
 	// update subcategories
 	$('[name="categoria"]').change(function() {
 		$.ajax({
-			url: '../tarefas/get-subcategoria',
+			url: '../../tarefas/get-subcategoria',
 			method: 'POST',
 			dataType: 'html',
 			data: { id: $(this).val()},
@@ -24,17 +24,30 @@ $(document).ready(function(){
 		var val = $(this).val();
 
 		if(val == '2') {
-			$('.member-resp-field').show();
+			$('.member-resp-field').show();			
 		}
 		else {
 			$('.member-resp-field').hide();	
+		}
+
+		if(val == '1') {
+			$('.tempo-previsto').show();
+			var id_subcategoria = $('[name="subcategoria"]').val();
+			var id_categoria = $('[name="categoria"]').val();
+			
+			if(id_categoria != "" && id_subcategoria != "")
+				$('#average-time-info').fadeIn();	
+		}
+		else {
+			$('.tempo-previsto').hide();
+			$('#average-time-info').hide();	
 		}
 	});
 
 	// update team list
 	$('[name="projeto"]').change(function() {
 		$.ajax({
-			url: '../tarefas/get-team',
+			url: '../../tarefas/get-team',
 			method: 'POST',
 			dataType: 'html',
 			data: { id: $(this).val()},
@@ -52,7 +65,7 @@ $(document).ready(function(){
 		var nome = $('[name="subcategoria"]').find(":selected").text();
 		
 		$.ajax({
-			url: '../tarefas/get-average-time',
+			url: '../../tarefas/get-average-time',
 			method: 'POST',
 			dataType: 'json',
 			data: {
@@ -71,7 +84,7 @@ $(document).ready(function(){
 				}
 			}
 		});
-	})
+	});
 
 	// set mask for HH:MM
 	$('.mask-horario').mask('00h00min');

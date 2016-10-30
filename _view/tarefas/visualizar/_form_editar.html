@@ -10,13 +10,15 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 breadcrumb">
-			<span class="line">&nbsp;</span><a href="{{ root }}/tarefas"> Tarefas</a> / Editar / {{ tarefa.titulo }}
+			<span class="line">&nbsp;</span><a href="{{ root }}/tarefas"> Tarefas</a> / {{ tarefa.titulo }}
 		</div>
 	</div>
 	<hr style="margin: 0px 0 30px;">
 
 	<form id="formEditTarefa" action="{{ root }}/tarefas/update" method="POST">
 		<input type="hidden" name="id" value="{{ app.parametros[2] }}">
+		<input type="hidden" name="action" value="adm">
+		
 		<div class="row mgb15">
 			<div class="col-sm-6 mgb15">
 				<label class="value">* Título </label>
@@ -115,11 +117,11 @@
 		<div class="row mgb15">
 			<div class="col-sm-6">
 				<label class="value">* Tempo Previsto para Conclusão </label>
-				<input type="text" name="tempo_previsto" class="form-control value required mask-horario" placeholder="00h00min" pattern="([01]?[0-9]{1}|2[0-3]{1})h[0-5]{1}[0-9]{1}min" value="{{ tarefa.tempo_previsto }}">
+				<input type="text" name="tempo_previsto" class="value required mask-horario" placeholder="00h00min" pattern="([01]?[0-9]{1}|2[0-3]{1})h[0-5]{1}[0-9]{1}min" value="{{ tarefa.tempo_previsto }}">
 			</div>
 			<div class="col-sm-6">
 				<label class="value">* Data entrega </label>
-				<input type="text" name="data_entrega" class="form-control mask-datetime value required" placeholder="dd/mm/aaaa hh:mm" value="{{ tarefa.data_entrega }}">
+				<input type="text" name="data_entrega" class="mask-datetime value required" placeholder="dd/mm/aaaa hh:mm" value="{{ tarefa.data_entrega }}">
 			</div>
 		</div>	
 		<div class="row mgb15">

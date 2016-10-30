@@ -21,10 +21,13 @@ class Tarefas extends Controller {
 	}
 
 	public static function novo($tpl, $vars=array()) {
-		if(Auth::user()) {
+		$projetos_admin = self::getAllProjetosWhereUserAdmin(Auth::id());
+
+		// se usuário está logado, não é cliente e possui ao menos um projeto como líder
+		if(Auth::user() && !Auth::is('guest') && (count($projetos_admin) > 0)) {
 			$bag = array(
 				"user" => Auth::getUser(),
-				"projetos_admin" => self::getAllProjetosWhereUserAdmin(Auth::id()),
+				"projetos_admin" => $projetos_admin,
 				"categorias" =>self::getAllCategorias()
 			);
 		
@@ -37,21 +40,82 @@ class Tarefas extends Controller {
 		if(Auth::user()) {
 			$id = static::$app->parametros[2];
 			$tarefa = self::getTarefaById($id);
+			$membros = self::getTeamByProjetoId($tarefa->id_projeto);
+			
+			// if user is superAdm or task creator: (pode editar tudo)
+			if($tarefa->id_autor == Auth::id()) {
+				$page = "editar.html";
+			}
+
+			//if user is dev AND is task team leader (pode editar alguns campos, se mexer em data-> justificar)
+			else if(Auth::is('dev') && $tarefa->id_usuario == Auth::id()) {
+				$page = "editar_dev.html";
+			}
+
+			//if user is dev AND in task team (só visualiza, não pode editar)
+			else if (Auth::is('dev') && self::isUserOnTaskTeam(Auth::id(), $membros)) {
+				self::redirect("tarefas/visualizar/{$id}");
+			}
+
+			// if user is guest (view especial só com alguns campos...)
+			else if (Auth::is('guest')) {
+				self::redirect("tarefas/visualizar/{$id}");
+			}
+
+			else {
+				// for debug at this point
+				print_r($membros);
+				echo Auth::id();
+				var_dump(self::isUserOnTaskTeam(Auth::id(), $membros));
+				exit();
+				self::redirect("home");
+			}
 			
 			$bag = array(
 				"user" => Auth::getUser(),
 				"projetos_admin" => self::getAllProjetosWhereUserAdmin(Auth::id()),
 				"categorias" => self::getAllCategorias(),
 				"subcategorias" => self::getSubcategoriasByCategoriaId($tarefa->id_categoria),
-				"membros" => self::getTeamByProjetoId($tarefa->id_projeto),
-				"tarefa" => $tarefa
+				"membros" => $membros,
+				"tarefa" => $tarefa,
+				"tempo_medio" => self::getAverageTimeByTarefa($tarefa->id_categoria, $tarefa->id_subcategoria)
 			);
 		
-			echo self::render("tarefas/editar.html", $bag);
+			echo self::render("tarefas/editar/{$page}", $bag);
 		}
 		else self::redirect("home");
 	}
 
+	public static function visualizar($tpl, $vars=array()) {
+		if(Auth::user()) {
+			$id = static::$app->parametros[2];
+			$tarefa = self::getTarefaById($id);
+			$membros = self::getTeamByProjetoId($tarefa->id_projeto);
+			
+			//if user is dev AND in task team (só visualiza, não pode editar)
+			if ( (Auth::is('dev') && self::isUserOnTaskTeam(Auth::id(), $membros)) || Auth::is('admin') ) {
+				$page = "dev.html";
+			}
+			// if user is guest (view especial só com alguns campos...)
+			else if (Auth::is('guest')) {
+				$page = "guest.html";
+			}
+			else self::redirect("home");
+			
+			$bag = array(
+				"user" => Auth::getUser(),
+				"projetos_admin" => self::getAllProjetosWhereUserAdmin(Auth::id()),
+				"categorias" => self::getAllCategorias(),
+				"subcategorias" => self::getSubcategoriasByCategoriaId($tarefa->id_categoria),
+				"membros" => $membros,
+				"tarefa" => $tarefa,
+				"tempo_medio" => self::getAverageTimeByTarefa($tarefa->id_categoria, $tarefa->id_subcategoria)
+			);
+		
+			echo self::render("tarefas/visualizar/{$page}", $bag);
+		}
+		else self::redirect("home");
+	}
 	// AJAX Calls::
 	public static function create() {
 		$id = Auth::id();
@@ -113,15 +177,26 @@ class Tarefas extends Controller {
 
 	public static function update() {
 		$post = static::$app->post;
-		
 		$id = $post['id'];
+
+		// format data
 		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
 		$responsavel_tarefa = ($post['responsavel_tarefa'] == 2)? $post['responsavel_membro_tarefa'] : 0;
 		$status_erro = (isset($post['status_erro']) && $post['status_erro'] != "")? $post['status_erro'] : 0;
+		$tempo_previsto = ($post['responsavel_tarefa'] == 2)? "" : $post['tempo_previsto'];
 
 		$json = new stdclass();
 
-		if(Auth::is('admin')) {
+		$query = "
+			SELECT id_autor, id_usuario
+			FROM tarefa
+			WHERE id = {$id}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		$fetch = mysqli_fetch_object($result);
+
+		// validations
+		if((Auth::is('admin') || $fetch->id_autor == Auth::id() ) && $post['action'] == 'adm') {
 			$query = "
 				UPDATE tarefa 
 				SET 
@@ -136,29 +211,27 @@ class Tarefas extends Controller {
 					solucao = '{$post['solucao']}',
 					resultados = '{$post['resultados']}',
 					status_erro = {$status_erro},
-					tempo_previsto = '{$post['tempo_previsto']}'
+					tempo_previsto = '{$tempo_previsto}'
 
 				WHERE id = {$id}
 			";
 		}
-		else if(Auth::is('user')) {
+		else if((Auth::is('dev') && $fetch->id_usuario == Auth::id() && $post['action'] == 'dev') || Auth::is('admin')) {
 			$query = "
 				UPDATE tarefa 
 				SET 
-					id_usuario = {$responsavel_tarefa},
 					titulo = '{$post['titulo']}',
-					prioridade = {$prioridade},
 					descricao_formal = '{$post['descricao_formal']}',
 					descricao_tecnica = '{$post['descricao_tecnica']}',
 					solucao = '{$post['solucao']}',
 					resultados = '{$post['resultados']}',
 					status_erro = {$status_erro},
-					tempo_previsto = '{$post['tempo_previsto']}'
+					tempo_previsto = '{$tempo_previsto}'
 
 				WHERE id = {$id}
 			";
 		}
-		
+
 		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		$json->success = ($result)? true : false;
 
@@ -247,7 +320,8 @@ class Tarefas extends Controller {
 		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		if($result && mysqli_num_rows($result) > 0) {
 			while ($fetch = mysqli_fetch_object($result)) {
-				$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
+				if($fetch->id != Auth::id())
+					$team .= "<option value='{$fetch->id}'>{$fetch->nome}</option>";
 			}
 		}
 
@@ -324,6 +398,61 @@ class Tarefas extends Controller {
 	}
 
 	// Helpers::
+	private static function isUserOnTaskTeam($id_user, $arrayTeam) {
+		foreach ($arrayTeam as $membro) {
+			if($membro->id == $id_user)
+				return true;
+		}
+
+		return false;
+	}
+
+	private static function getAverageTimeByTarefa($id_categoria, $id_subcategoria) {
+		$query = "
+			SELECT nome
+			FROM subcategoria
+			WHERE id_categoria = {$id_categoria} AND id = {$id_subcategoria}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+		$fetch = mysqli_fetch_object($result);
+		$subcategoria_nome = $fetch->nome;
+
+		$query = "
+			SELECT tempo_previsto
+			FROM tarefa
+			WHERE id_categoria = {$id_categoria} AND id_subcategoria = {$id_subcategoria}
+		";
+		$result = mysqli_query(static::$dbConn, $query);
+
+		if($result && mysqli_num_rows($result) > 0) {
+			$i = 0;
+			$tempo = 0;
+			while ($fetch = mysqli_fetch_object($result)) {
+				$horas = (int)substr($fetch->tempo_previsto, 0, 2);
+				$min = (int)substr($fetch->tempo_previsto, 3, 2);
+
+				$tempo += $horas*60 + $min;
+				$i++;
+			}
+			
+			// format info
+			$media = $tempo / $i;
+			if($media < 60) {
+				return "O tempo médio para a realização de tarefas do tipo <em>{$subcategoria_nome}</em> é de aproximadamente {$media} minutos.";
+			}
+			else {
+				$horas = (int) ($media / 60);
+				$min = $media % 60;
+				$textH = $horas == 1 ? "hora" : "horas";
+				$textMin = $min != 0 ? " e {$min} minutos" : "";
+				
+				return "O tempo médio para a realização de tarefas do tipo <em>{$subcategoria_nome}</em> é de aproximadamente 
+				{$horas} {$textH}{$textMin}.";
+			}
+		}
+		else return "";
+	}
+
 	private static function getAllTarefasByUserId($id) {
 		$tarefas = array();
 
@@ -410,9 +539,10 @@ class Tarefas extends Controller {
 		$tarefa = null;
 
 		$query = "
-			SELECT *
-			FROM tarefa
-			WHERE id = {$id}
+			SELECT t.*, p.nome projeto_nome
+			FROM tarefa t
+			INNER JOIN projeto p ON t.id_projeto = p.id
+			WHERE t.id = {$id}
 		";
 		$result = mysqli_query(static::$dbConn, $query);
 
@@ -456,10 +586,9 @@ class Tarefas extends Controller {
 			WHERE id_projeto = {$id}
 			ORDER BY u.nome
 		";
-		$result = mysqli_query(static::$dbConn, $query);
+		$result = mysqli_query(static::$dbConn, $query) or die(mysqli_error(static::$dbConn));
 		while ($fetch = mysqli_fetch_object($result)) {
-			if($fetch->id != Auth::id())
-				$team[] = toUTF($fetch);
+			$team[] = toUTF($fetch);
 		}
 
 		return $team;

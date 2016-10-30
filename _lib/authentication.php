@@ -29,22 +29,17 @@ class Auth {
 
 	public static function is($role) {
 		session_start();
-
-		$user = self::getUser();
-
-		$nivel;
 		switch(strtolower($role)) {
 			case 'adm':
 			case 'admin':
 			case 'a':
-			case 0:
 				$nivel = 0;
 				break;
 
 			case 'user':
 			case 'usuario':
 			case 'u':
-			case 1:
+			case 'dev':
 				$nivel = 1;
 				break;
 
@@ -52,11 +47,11 @@ class Auth {
 			case 'visitor':
 			case 'visitante':
 			case 'v':
-			case 2:
 				$nivel = 2;
 				break;
 		}
 
+		$user = self::getUser();
 		return $user->nivel_privilegios == $nivel;
 	}
 
