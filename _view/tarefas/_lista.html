@@ -1,4 +1,4 @@
-<section id="view-list">
+<section id="view-list" style="display: none;">
 	<div class="row mgb15">
 		<form id="formFiltroLembrete" method="POST" action="{{ root }}/lembretes/getlist">
 			<div class="col-sm-4 mgb15">
@@ -46,7 +46,7 @@
 			<tr data-id="{{ tarefa.id }}" class="{{ tarefa.status == 'Atrasado' ? 'text-danger' : ''}}">
 				<td> {{ tarefa.titulo }} </td>	
 				<td class="text-center"><span class="prioridade-label {{ tarefa.prioridade_label }}"> {{ tarefa.prioridade }} </span></td>	
-				<td class="text-center"> {{ tarefa.data }} </td>	
+				<td class="text-center"> {{ tarefa.data_entrega }} </td>	
 				<td class="text-center"> {{ tarefa.status|raw }} </td>
 				<td>
 					<button class="btn-delete btn btn-default text-center pull-right btn-danger"><i class="fa fa-times"></i></button>

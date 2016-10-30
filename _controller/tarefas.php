@@ -165,33 +165,6 @@ class Tarefas extends Controller {
 		die(json_encode($json));
 	}
 
-	public static function get() {
-		$id_user = Auth::id();
-		$id = (int) static::$app->post['id'];
-
-		$json = new stdclass();
-
-		$query = "
-			SELECT *
-			FROM tarefa
-			WHERE id_autor = {$id_user} AND id = {$id}
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		if($result && mysqli_num_rows($result) == 1 ) {
-			$fetch = mysqli_fetch_object($result);
-			
-			// correct display on HTML <select>
-			$fetch->prioridade++;
-			$fetch->data = Data::datetime2str($fetch->data);
-
-			$json->success = true;
-			$json->lembrete = toUTF($fetch);
-		}
-		else $json->success = false;
-		
-		die(json_encode($json));
-	}
-
 	public static function delete() {
 		$id_user = Auth::id();
 		$id = (int) static::$app->post['id'];
@@ -229,7 +202,7 @@ class Tarefas extends Controller {
 				$fetch->status = self::getStatus($fetch->status, $fetch->data);
 				$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade - 1);
 				$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
-				$fetch->data = Data::datetime2str($fetch->data);
+				$fetch->data_entrega = Data::datetime2str($fetch->data_entrega);
 
 				$text = ($fetch->status == "Atrasado")? "text-danger" : "";
 				echo "
@@ -371,7 +344,9 @@ class Tarefas extends Controller {
 			$fetch->status = self::getStatus($fetch->status, $fetch->data);
 			$fetch->prioridade_label = self::getPriorityLabel($fetch->prioridade - 1);
 			$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
-			$fetch->data = Data::datetime2str($fetch->data);
+			$datetime = explode(" ", $fetch->data_entrega);
+			echo Data::datetime2str($datetime[0])." ".substr($datetime[1], 0, 5);
+			$fetch->data_entrega = Data::datetime2str($datetime[0])." ".$datetime[1];
 
 			$tarefas[] = $fetch;
 		}
@@ -496,7 +471,9 @@ class Tarefas extends Controller {
 
 	private static function getStatus($status, $data) {
 		switch ($status) {
-			case 0:	
+			case 0: return "Não iniciado";
+			case 1:	
+			case 2:
 				$data_entrega = new DateTime($data);
 				$data_hoje = new DateTime();
 				$diff = $data_entrega->diff($data_hoje);
@@ -505,7 +482,8 @@ class Tarefas extends Controller {
 				$days = $diff->format("%R%a");
 				return ($days[0] == '+' && (int)$days[1] > 0) ? "Atrasado" : "Em andamento";
 
-			case 1: return "<span style='color:#2fa561;'>Completo</span>";
+			case 3: return "Avisar cliente";
+			case 4: return "<span style='color:#2fa561;'>Completo</span>";
 			default: return "Status: ".$status;
 		}
 	}
