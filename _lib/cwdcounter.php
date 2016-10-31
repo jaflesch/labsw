@@ -74,7 +74,7 @@
 
 	$counter = new CWD($root);
 	echo "<h3>- Contribuições efetivas:</h3>";
-	print_r($counter->countAll());
+	print_r($counter->countAll(array("Twig", ".git", "bootstrap", "jquery")));
 	
 	echo "<br/><br/>";
 
