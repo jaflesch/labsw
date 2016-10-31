@@ -73,6 +73,14 @@
 	$root .= "../..";
 
 	$counter = new CWD($root);
-	print_r($counter->countAll(array(".git", "Twig"), true ));
+	echo "<h3>- Contribuições efetivas:</h3>";
+	print_r($counter->countAll());
+	
+	echo "<br/><br/>";
+
+	echo "<h3>- Listando todos os diretórios :</h3>";
+	$counter->countAll(array(), true);
+	
+	
 
 ?>
