@@ -37,147 +37,152 @@
 				<div class="table-box">
 					<h2> Backlog </h2>
 					
-					<div class="task alert-danger">
+					{% for tarefa in tarefas_tabela.backlog %}
+					<div class="task {{ tarefa.header }}">
 						<!-- Header -->
 						<div class="task-header">
 							<p class="task-project">
-								<span class="task-code"> #COD333 </span>
+								<span class="task-code"> {{ tarefa.codigo }} </span>
 							</p>
 							<p class="task-icons">
 								<a href="{{ root }}/tarefas/editar/{{ tarefa.id }}" class="maximize">
 									<i class="fa fa-window-maximize"></i> 
 								</a>
-								<i class="fa fa-window-close btn-close"></i>
+								<i class="fa fa-window-close btn-close" data-tarefa-id="{{ tarefa.id }}"></i>
 							</p>
 						</div>
 						
 						<!-- Body -->
 						<div class="task-body">
-							<p class="task-name"> Tarefa atrasada </p>
+							<p class="task-name"> {{ tarefa.titulo }} </p>
 						</div>
 
 						<!-- Footer -->
-						<div class="task-footer danger">
-							<div class="task-data">
+						<div class="task-footer {{ tarefa.footer }}">
+							<div class="task-data" data-toggle="tooltip" data-container="body" title="{{ tarefa.data_entrega }}">
 								<i class="fa fa-clock-o"></i>
 							</div>
 							<div class="task-team">
-								<i class="fa fa-user"></i> 99
+								<i class="fa fa-user"></i> {{ tarefa.equipe }}
 							</div>
-							<div class="task-info">	Entrega atrasou	</div>
+							<div class="task-info" style="color: {{ tarefa.header == "" ? '#777;' : '' }}">	{{ tarefa.status_mensagem }} </div>
 						</div>
 					</div>
-
-					<div class="task alert-warning">
-						<!-- Header -->
-						<div class="task-header">
-							<p class="task-project">
-								<span class="task-code"> #COD333 </span>
-							</p>
-							<p class="task-icons">
-								<a href="{{ root }}/tarefas/editar/{{ tarefa.id }}" class="maximize">
-									<i class="fa fa-window-maximize"></i> 
-								</a>
-								<i class="fa fa-window-close btn-close"></i>
-							</p>
-						</div>
-						
-						<!-- Body -->
-						<div class="task-body">
-							<p class="task-name"> Tarefa com menos de 24h para terminar </p>
-						</div>
-
-						<!-- Footer -->
-						<div class="task-footer warning">
-							<div class="task-data">
-								<i class="fa fa-clock-o"></i>
-							</div>
-							<div class="task-team">
-								<i class="fa fa-user"></i> 99
-							</div>
-							<div class="task-info">	Atente ao prazo </div>
-						</div>
-					</div>
-
+					{% endfor %}
 				</div>
 			</div>
 			<div class="col-sm-3 table-box-border">
 				<div class="table-box">
 					<h2> Trabalhando </h2>
 
-					<div class="task">
+					{% for tarefa in tarefas_tabela.trabalhando %}
+					<div class="task {{ tarefa.header }}">
 						<!-- Header -->
 						<div class="task-header">
 							<p class="task-project">
-								<span class="task-code"> #COD333 </span>
+								<span class="task-code"> {{ tarefa.codigo }} </span>
 							</p>
 							<p class="task-icons">
 								<a href="{{ root }}/tarefas/editar/{{ tarefa.id }}" class="maximize">
 									<i class="fa fa-window-maximize"></i> 
 								</a>
-								<i class="fa fa-window-close btn-close"></i>
+								<i class="fa fa-window-close btn-close" data-tarefa-id="{{ tarefa.id }}"></i>
 							</p>
 						</div>
 						
 						<!-- Body -->
 						<div class="task-body">
-							<p class="task-name"> Tarefa normal </p>
+							<p class="task-name"> {{ tarefa.titulo }} </p>
 						</div>
 
 						<!-- Footer -->
-						<div class="task-footer">
-							<div class="task-data">
+						<div class="task-footer {{ tarefa.footer }}">
+							<div class="task-data" data-toggle="tooltip" data-container="body" title="{{ tarefa.data_entrega }}">
 								<i class="fa fa-clock-o"></i>
 							</div>
 							<div class="task-team">
-								<i class="fa fa-user"></i> 99
+								<i class="fa fa-user"></i> {{ tarefa.equipe }}
 							</div>
-							<div class="task-info"></div>
+							<div class="task-info" style="color: {{ tarefa.header == "" ? '#777;' : '' }}">	{{ tarefa.status_mensagem }} </div>
 						</div>
 					</div>
+					{% endfor %}
 				</div>
 			</div>
 			<div class="col-sm-3 table-box-border">
 				<div class="table-box">
 					<h2> Em fase de Testes </h2>
+
+					{% for tarefa in tarefas_tabela.testes %}
+					<div class="task {{ tarefa.header }}">
+						<!-- Header -->
+						<div class="task-header">
+							<p class="task-project">
+								<span class="task-code"> {{ tarefa.codigo }} </span>
+							</p>
+							<p class="task-icons">
+								<a href="{{ root }}/tarefas/editar/{{ tarefa.id }}" class="maximize">
+									<i class="fa fa-window-maximize"></i> 
+								</a>
+								<i class="fa fa-window-close btn-close" data-tarefa-id="{{ tarefa.id }}"></i>
+							</p>
+						</div>
+						
+						<!-- Body -->
+						<div class="task-body">
+							<p class="task-name"> {{ tarefa.titulo }} </p>
+						</div>
+
+						<!-- Footer -->
+						<div class="task-footer {{ tarefa.footer }}">
+							<div class="task-data" data-toggle="tooltip" data-container="body" title="{{ tarefa.data_entrega }}">
+								<i class="fa fa-clock-o"></i>
+							</div>
+							<div class="task-team">
+								<i class="fa fa-user"></i> {{ tarefa.equipe }}
+							</div>
+							<div class="task-info" style="color: {{ tarefa.header == "" ? '#777;' : '' }}">	{{ tarefa.status_mensagem }} </div>
+						</div>
+					</div>
+					{% endfor %}
 				</div>
 			</div>
 			<div class="col-sm-3 table-box-border">
 				<div class="table-box">
 					<h2> Pendente avisar Cliente</h2>
 
-					<div class="task alert-success">
+					{% for tarefa in tarefas_tabela.cliente %}
+					<div class="task {{ tarefa.header }}">
 						<!-- Header -->
 						<div class="task-header">
 							<p class="task-project">
-								<span class="task-code"> #COD333 </span>
+								<span class="task-code"> {{ tarefa.codigo }} </span>
 							</p>
 							<p class="task-icons">
 								<a href="{{ root }}/tarefas/editar/{{ tarefa.id }}" class="maximize">
 									<i class="fa fa-window-maximize"></i> 
 								</a>
-								<i class="fa fa-window-close btn-close"></i>
+								<i class="fa fa-window-close btn-close" data-tarefa-id="{{ tarefa.id }}"></i>
 							</p>
 						</div>
 						
 						<!-- Body -->
 						<div class="task-body">
-							<p class="task-name"> Tarefa concluída </p>
+							<p class="task-name"> {{ tarefa.titulo }} </p>
 						</div>
 
 						<!-- Footer -->
-						<div class="task-footer success">
-							<div class="task-data">
+						<div class="task-footer {{ tarefa.footer }}">
+							<div class="task-data" data-toggle="tooltip" data-container="body" title="{{ tarefa.data_entrega }}">
 								<i class="fa fa-clock-o"></i>
 							</div>
 							<div class="task-team">
-								<i class="fa fa-user"></i> 99
+								<i class="fa fa-user"></i> {{ tarefa.equipe }}
 							</div>
-							<div class="task-info">
-								<i class="fa fa-check"></i>
-							</div>
+							<div class="task-info" style="color: {{ tarefa.header == "" ? '#777;' : '' }}">	{{ tarefa.status_mensagem }} </div>
 						</div>
 					</div>
+					{% endfor %}
 				</div>
 			</div>
 		</div>

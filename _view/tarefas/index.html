@@ -22,13 +22,16 @@
 
 			{% include 'tarefas/_lista.html' %}
 			{% include 'tarefas/_tabela.html' %}
+
 		</div>
 	</section>
 	<section id="modals">
-		{% include 'tarefas/_modal_create.html' %}
-		{% include 'tarefas/_modal_edit.html' %}
+		<!-- {% include 'tarefas/_modal_create.html' %} -->
+		<!-- {% include 'tarefas/_modal_edit.html' %} -->
 		{% include 'tarefas/_modal_delete.html' %}
 	</scetion>
+
+	<p class="task-removed-notification" style="display: none;"> Tarefa excluída com sucesso! </p>
 {% endblock %}
 
 {% block styles %}
@@ -38,6 +41,6 @@
 {% block scripts %}
 <script type="text/javascript" src="{{ root }}/assets/js/plugins/mask.js"></script>
 <script type="text/javascript" src="{{ root }}/assets/js/validate.js"></script>
-<script type="text/javascript" src="{{ root }}/assets/js/base/tarefas/index.js"></script>
 <script type="text/javascript" src="{{ root }}/assets/js/base/tarefas/lista.js"></script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/tarefas/index.js"></script>
 {% endblock %}

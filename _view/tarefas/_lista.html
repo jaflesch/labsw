@@ -42,7 +42,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		{% for tarefa in tarefas %}
+		{% for tarefa in tarefas_lista %}
 			<tr data-id="{{ tarefa.id }}" class="{{ tarefa.status == 'Atrasado' ? 'text-danger' : ''}}">
 				<td> {{ tarefa.titulo }} </td>	
 				<td class="text-center"><span class="prioridade-label {{ tarefa.prioridade_label }}"> {{ tarefa.prioridade }} </span></td>	
