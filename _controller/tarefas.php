@@ -827,9 +827,8 @@ class Tarefas extends Controller {
 				
 		// (string) [+/-]days
 		$days = $diff->format("%R%a");
-		echo $days;
+		
 		return (int)$days;
-		//return ($days[0] == '+' && (int)$days[1] > 0) ? "Atrasado" : "Em andamento";
 	}
 
 	private static function getPrioridade($prioridade) {

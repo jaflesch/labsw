@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 14-Out-2016 às 06:00
+-- Generation Time: 04-Nov-2016 às 02:58
 -- Versão do servidor: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -25,6 +25,28 @@ USE `mhaas_task`;
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `categoria`
+--
+
+CREATE TABLE IF NOT EXISTS `categoria` (
+`id` int(11) NOT NULL,
+  `nome` varchar(32) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `categoria`
+--
+
+INSERT INTO `categoria` (`id`, `nome`) VALUES
+(1, 'Frontend'),
+(2, 'Backend'),
+(3, 'Web Design'),
+(4, 'Teste'),
+(5, 'Administrativo');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `equipe`
 --
 
@@ -34,19 +56,22 @@ CREATE TABLE IF NOT EXISTS `equipe` (
   `id_usuario` int(11) NOT NULL,
   `funcao` int(11) NOT NULL,
   `admin` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `equipe`
 --
 
 INSERT INTO `equipe` (`id`, `id_projeto`, `id_usuario`, `funcao`, `admin`) VALUES
-(1, 1, 1, 1, 1),
-(2, 2, 1, 1, 1),
-(3, 3, 1, 1, 1),
-(4, 4, 1, 1, 1),
-(5, 5, 1, 1, 1),
-(6, 1, 2, 1, 1);
+(2, 2, 2, 1, 0),
+(3, 3, 2, 1, 0),
+(4, 4, 1, 1, 0),
+(5, 5, 1, 1, 0),
+(8, 1, 2, 1, 0),
+(10, 1, 1, 1, 0),
+(20, 12, 2, 1, 0),
+(24, 13, 1, 2, 1),
+(25, 13, 2, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -133,16 +158,39 @@ CREATE TABLE IF NOT EXISTS `projeto` (
 --
 
 INSERT INTO `projeto` (`id`, `id_admin`, `nome`, `imagem`, `identidade_visual`, `url`, `privacidade`) VALUES
-(1, 1, 'MHAAS', '', '#0eabbc', 'http://mhaas.com.br', 0),
-(2, 1, 'Linkker', '', '#4E5A62', 'http://linkker.com.br', 1),
+(1, 1, 'MHAAS', '', '#0eabbc', 'http://mhaas.com.br', 1),
+(2, 1, 'Linkker', '', '#4E5A62', 'http://linkker.com.br', 0),
 (3, 1, 'Contato Seguro', '', '#283c54', 'https://contatoseguro.com.br', 1),
 (4, 1, 'Share Hunter', '', '#05a4e1', 'http://sharehunter.com.br', 1),
 (5, 1, 'QualiStatus', '', '#a6ce42', 'http://www.qualistatus.com.br/', 1),
 (6, 1, 'Projeto teste', '', '#f00', 'ashuahus', 1),
 (7, 1, 'Fake', '', '#0ff', 'lÃ§lÃ§lÃ§llÃ§qwqwqw', 0),
-(8, 1, 'wqwjksk', '', '#554647', '464as6as5', 1),
-(9, 1, 'wqwjksk', '', '#554647', '464as6as5', 1),
-(11, 1, 'kowqkowp', '', '#454545', '4644646', 1);
+(12, 1, 'abckspqw', '', '#454455', 'kslaskla', 1),
+(13, 1, 'projeto_editado wowwewe', '', '#905', 'kkkqw', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `subcategoria`
+--
+
+CREATE TABLE IF NOT EXISTS `subcategoria` (
+`id` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
+  `nome` varchar(32) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `subcategoria`
+--
+
+INSERT INTO `subcategoria` (`id`, `id_categoria`, `nome`) VALUES
+(1, 2, 'CRUD'),
+(2, 2, 'Login'),
+(3, 1, 'SPA'),
+(4, 1, 'View Login'),
+(5, 4, 'Unitário'),
+(6, 4, 'Smoke Test');
 
 -- --------------------------------------------------------
 
@@ -153,10 +201,11 @@ INSERT INTO `projeto` (`id`, `id_admin`, `nome`, `imagem`, `identidade_visual`, 
 CREATE TABLE IF NOT EXISTS `tarefa` (
 `id` int(11) NOT NULL,
   `id_autor` int(11) NOT NULL,
-  `id_usuarios_tarefa` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
   `id_projeto` int(11) NOT NULL,
   `titulo` varchar(128) NOT NULL,
   `id_categoria` int(11) NOT NULL,
+  `id_subcategoria` int(11) NOT NULL,
   `prioridade` int(11) NOT NULL,
   `descricao_formal` text NOT NULL,
   `descricao_tecnica` text NOT NULL,
@@ -168,14 +217,7 @@ CREATE TABLE IF NOT EXISTS `tarefa` (
   `data_criacao` datetime NOT NULL,
   `data_entrega` datetime NOT NULL,
   `data_fim` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `tarefa`
---
-
-INSERT INTO `tarefa` (`id`, `id_autor`, `id_usuarios_tarefa`, `id_projeto`, `titulo`, `id_categoria`, `prioridade`, `descricao_formal`, `descricao_tecnica`, `solucao`, `resultados`, `status_erro`, `tempo_previsto`, `status`, `data_criacao`, `data_entrega`, `data_fim`) VALUES
-(1, 1, 0, 3, 'titulo', 1, 1, 'aksas', 'wpoqpwoqpo', 'jddjdjkxkjc', '', 0, '12h00min', 0, '2016-10-14 00:49:12', '2016-10-28 12:00:00', '0000-00-00 00:00:00');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -283,6 +325,12 @@ CREATE TABLE IF NOT EXISTS `usuarios_tarefa` (
 --
 
 --
+-- Indexes for table `categoria`
+--
+ALTER TABLE `categoria`
+ ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `equipe`
 --
 ALTER TABLE `equipe`
@@ -310,6 +358,12 @@ ALTER TABLE `log`
 -- Indexes for table `projeto`
 --
 ALTER TABLE `projeto`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `subcategoria`
+--
+ALTER TABLE `subcategoria`
  ADD PRIMARY KEY (`id`);
 
 --
@@ -347,10 +401,15 @@ ALTER TABLE `usuarios_tarefa`
 --
 
 --
+-- AUTO_INCREMENT for table `categoria`
+--
+ALTER TABLE `categoria`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
 -- AUTO_INCREMENT for table `equipe`
 --
 ALTER TABLE `equipe`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `funcao`
 --
@@ -372,10 +431,15 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `projeto`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 --
+-- AUTO_INCREMENT for table `subcategoria`
+--
+ALTER TABLE `subcategoria`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT for table `tarefa`
 --
 ALTER TABLE `tarefa`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `trofeu`
 --
