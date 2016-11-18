@@ -181,6 +181,8 @@ class Tarefas extends Controller {
 		$id = $post['id'];
 
 		// format data
+		$datetime = explode(" ", $post['data_entrega']);
+		$data_entrega = Data::str2date($datetime[0])." ".$datetime[1].":00";
 		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
 		$responsavel_tarefa = ($post['responsavel_tarefa'] == 2)? $post['responsavel_membro_tarefa'] : 0;
 		$status_erro = (isset($post['status_erro']) && $post['status_erro'] != "")? $post['status_erro'] : 0;
@@ -212,7 +214,8 @@ class Tarefas extends Controller {
 					solucao = '{$post['solucao']}',
 					resultados = '{$post['resultados']}',
 					status_erro = {$status_erro},
-					tempo_previsto = '{$tempo_previsto}'
+					tempo_previsto = '{$tempo_previsto}',
+					data_entrega = '{$data_entrega}'
 
 				WHERE id = {$id}
 			";
@@ -508,7 +511,7 @@ class Tarefas extends Controller {
 			$equipe = mysqli_query(static::$dbConn, "SELECT id FROM equipe WHERE id_projeto = {$fetch->id_projeto}");
 			$fetch->equipe = mysqli_num_rows($equipe);
 
-			$time = self::getTimeLeft($fetch->data_entrega);
+			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
 			
 			// se tarefa completa
 			if($fetch->status == 3) {
@@ -516,7 +519,7 @@ class Tarefas extends Controller {
 				$fetch->footer = "success";
 			}
 			// senao checa status sobre atraso
-			else if($time == -1){
+			else if($time <= -1){
 				$fetch->header = "alert-warning";
 				$fetch->footer = "warning";
 			}
@@ -558,7 +561,7 @@ class Tarefas extends Controller {
 			$equipe = mysqli_query(static::$dbConn, "SELECT id FROM equipe WHERE id_projeto = {$fetch->id_projeto}");
 			$fetch->equipe = mysqli_num_rows($equipe);
 
-			$time = self::getTimeLeft($fetch->data_entrega);
+			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
 			
 			// se tarefa completa
 			if($fetch->status == 3) {
@@ -566,7 +569,7 @@ class Tarefas extends Controller {
 				$fetch->footer = "success";
 			}
 			// senao checa status sobre atraso
-			else if($time == -1){
+			else if($time <= -1){
 				$fetch->header = "alert-warning";
 				$fetch->footer = "warning";
 			}
@@ -616,7 +619,7 @@ class Tarefas extends Controller {
 				$fetch->footer = "success";
 			}
 			// senao checa status sobre atraso
-			else if($time == -1){
+			else if($time <= -1){
 				$fetch->header = "alert-warning";
 				$fetch->footer = "warning";
 			}
@@ -658,7 +661,7 @@ class Tarefas extends Controller {
 			$equipe = mysqli_query(static::$dbConn, "SELECT id FROM equipe WHERE id_projeto = {$fetch->id_projeto}");
 			$fetch->equipe = mysqli_num_rows($equipe);
 
-			$time = self::getTimeLeft($fetch->data_entrega);
+			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
 			
 			// se tarefa completa
 			if($fetch->status == 3) {
@@ -666,7 +669,7 @@ class Tarefas extends Controller {
 				$fetch->footer = "success";
 			}
 			// senao checa status sobre atraso
-			else if($time == -1){
+			else if($time <= -1){
 				$fetch->header = "alert-warning";
 				$fetch->footer = "warning";
 			}
@@ -821,12 +824,13 @@ class Tarefas extends Controller {
 	}
 
 	private static function getTimeLeft($data) {
-		$data_entrega = new DateTime(Data::str2date($data));
+		$data_entrega = new DateTime($data);
 		$data_hoje = new DateTime();
 		$diff = $data_entrega->diff($data_hoje);
 				
 		// (string) [+/-]days
 		$days = $diff->format("%R%a");
+		$days = ($days === "-0")? -1 : $days;
 		
 		return (int)$days;
 	}

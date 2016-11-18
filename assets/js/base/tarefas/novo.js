@@ -35,7 +35,7 @@ $(document).ready(function(){
 			var id_subcategoria = $('[name="subcategoria"]').val();
 			var id_categoria = $('[name="categoria"]').val();
 			
-			if(id_categoria != "" && id_subcategoria != "")
+			if(id_categoria != "" && id_subcategoria != "" && $('#average-time-info span').text() != "" )
 				$('#average-time-info').fadeIn();	
 		}
 		else {
