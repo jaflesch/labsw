@@ -107,7 +107,8 @@
 #lembretes>div.container,
 #projetos>div.container, 
 #tarefas>div.container,
-#equipe>div.container { 
+#equipe>div.container,
+#agenda>div.container { 
 	background: #fff; 
 	padding: 30px 15px;
 	border-radius: 4px;
@@ -593,6 +594,46 @@ table tbody td { vertical-align: middle !important; }
 	border-bottom: 0;
 }
 .table-box .task.alert-success .task-header .task-project { color: #1a541b; }
+
+/*
+=================
+	AGENDA
+=================
+*/
+.agenda-box {
+	background: #0eabbc;
+	background: #067384;
+	color: #fff;
+	padding: 30px 15px 50px;
+	margin-top: 40px;
+	min-height: 260px;
+}
+.agenda-box h3 {
+	font-family: 'Montserrat'; 
+	font-size: 14px;
+	text-transform: uppercase;
+	margin: 0;
+}
+.agenda-box hr { border-top-color: #0eabbc; }
+.agenda-box ul {
+	padding: 0;
+	margin: 0 0 40px;
+	list-style: none;
+}
+.agenda-box li { padding: 5px 0px; }
+.agenda-box li i { 
+	margin-right: 5px; 
+	width: 15px; 
+}
+.agenda-box .arrows {
+	font-size: 40px;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+.agenda-box .arrows:hover, .agenda-box .arrows:focus, .agenda-box .arrows:active {
+	color: #0eabbc;
+	transition: all 0.2s ease-in-out;
+}
 /*
 =================
 	USER

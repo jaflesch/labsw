@@ -1,4 +1,6 @@
 <?php
+require '_lib/data.php';
+
 class Agenda extends Controller {
 
 	public static function index() {
@@ -11,7 +13,8 @@ class Agenda extends Controller {
 		// 	//echo self::render("home/index.html", $bag);
 		// }
 		//else 
-		$bag['calendar'] =  self::draw_calendar(10,2016);
+		$bag['today'] = Data::today();
+		$bag['calendar'] =  self::draw_calendar(date('m'),date('Y'));
 		echo self::render("agenda/index.html", $bag);
 
 		/* sample usages */
@@ -22,6 +25,8 @@ class Agenda extends Controller {
 	}
 
 	private static function draw_calendar($month,$year) {
+		$today = date('d/m/Y');
+		$today = explode("/", $today);
 
 		/* draw table */
 		$calendar = '<table  class="calendar">';
@@ -49,12 +54,12 @@ class Agenda extends Controller {
 			$past_month_days++;
 		endfor;
 
-		/* keep going with days.... */
-		
+		/* keep going with days.... */		
 		for($list_day = 1; $list_day <= $days_in_month; $list_day++):
 			$calendar.= '<td class="calendar-day">';
 				/* add in the day number */
-				if($list_day == 11 && $month == 9 && $year == 2016)
+				
+				if($list_day == $today[0] && $month == $today[1] && $year == $today[2])
 					$calendar.= '<div class="day-number event">'.$list_day.'</div>';
 				else
 					$calendar.= '<div class="day-number">'.$list_day.'</div>';
