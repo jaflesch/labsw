@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% set page_title = 'Estatísticas' %}
+
+{% block main %}
+	<section id="projetos">
+		{% include 'estatisticas/_lista.html' %}
+	</section>
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>
+{% endblock %}
