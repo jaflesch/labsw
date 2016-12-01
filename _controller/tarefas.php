@@ -258,6 +258,28 @@ class Tarefas extends Controller {
 		die(json_encode($json));
 	}
 
+	public static function get() {
+		global $dbConn;
+		$id = (int)static::$app->post['id'];
+		$json = new stdclass();
+
+		$query = "
+			SELECT titulo 
+			FROM tarefa 
+			WHERE id = {$id}
+		";
+		$result = mysqli_query($dbConn, $query);
+		if($result && mysqli_num_rows($result) == 1 ) {
+			$fetch = mysqli_fetch_object($result);
+			$json->success = true;
+			$json->titulo = $fetch->titulo;
+		}
+		else {
+			$json->success = false;
+		}
+
+		die(json_encode($json));
+	}
 	public static function getlist() {
 		$post = static::$app->post;
 		$id = Auth::id();

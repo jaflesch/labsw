@@ -1,36 +1,12 @@
 <section id="view-table">
 	<div class="row mgb15">
-		<form id="formFiltroLembrete" method="POST" action="{{ root }}/lembretes/getlist">
-			<div class="col-sm-4 mgb15">
-				<a class="btn btn-primary" href="{{ root }}/tarefas/novo"><i class="fa fa-plus-circle"></i> Novo </a>
-
-				<div class="material-switch pull-right" style="position: relative; top: 7px">
-					<span id="help-text-toggle">Ativo:</span> &nbsp;
-	                <input id="someSwitchOptionDefault" name="status" type="checkbox" checked="" />
-	                <label for="someSwitchOptionDefault" class="label-primary"></label>
-	            </div>
-			</div>
-			<div class="col-sm-4 mgb15">
-				<div class="input-group">
-					<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-sort-amount-desc" id="icon-sort"></i></span>
-					<select name="sort_type" class="form-control" placeholder="Título" aria-describedby="sizing-addon2">
-						<option value="1" data-sort="fa fa-sort-amount-desc"> Prioridade (maior-menor) </option>
-						<option value="2" data-sort="fa fa-sort-amount-asc"> Prioridade (menor-maior) </option>
-						<option value="3" data-sort="fa fa-sort-alpha-asc"> Alfabética (A-Z) </option>
-						<option value="4" data-sort="fa fa-sort-alpha-desc"> Alfabética (Z-A) </option>
-						<option value="5" data-sort="fa fa-sort-numeric-desc"> Data (maior-menor) </option>
-						<option value="6" data-sort="fa fa-sort-numeric-asc"> Data (menor-maior) </option>
-					</select>
-				</div>
-			</div>
-			<div class="col-sm-4 mgb15">
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Título" name="search_titulo" aria-describedby="sizing-addon2">
-					<span class="input-group-addon" id="sizing-addon2"><i class="fa fa-search"></i></span>
-				</div>
-			</div>
-		</form>
+		<div class="col-sm-4 mgb15">
+			<a class="btn btn-primary" href="{{ root }}/tarefas/novo"><i class="fa fa-plus-circle"></i> Novo </a>
+		</div>
 	</div>
+	
+	<hr>
+	
 	<section id="table-content">
 		<div class="row">
 			<div class="col-sm-3 table-box-border">

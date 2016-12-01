@@ -1,6 +1,7 @@
-<div id="removeTarefaModal" class="modal fade" role="dialog">
-	<form id="formRemoveTarefa" action="{{ root }}/tarefas/delete" method="POST">
+<div id="removeTarefaModalList" class="modal fade" role="dialog">
+	<form id="formRemoveTarefaList" action="{{ root }}/tarefas/delete" method="POST">
 		<input type="hidden" name="id" value="">
+		
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -10,7 +11,7 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-sm-12 mgt15 mgb15">
-							<p class="text-center"><strong> Confirma exclusão da tarefa? </strong></p>
+							<p class="text-center"><strong> Confirma exclusão da tarefa '<span id="tarefa-titulo"></span>'? </strong></p>
 							<p class="text-center"> (Esta decisão é irreversível) </p>
 						</div>
 					</div>

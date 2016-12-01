@@ -1,5 +1,23 @@
 $(document).ready(function(){
 
+	function loadAll() {
+		var form = $('#formFiltroTarefa');
+		
+		$.ajax({
+			url: form.attr("action"),
+			method: 'POST',
+			dataType: 'html',
+			data: form.serializeArray(),
+			success: function(json) {
+				$('table tbody tr').remove();
+				$('table tbody').append(json);
+			},
+			error: function() {
+				alert('Erro na requisição AJAX!');
+			}
+		});
+	}
+
 	$('[name="sort_type"]').on("change", function(){
 		var sort = $(this).find(":selected").attr("data-sort");
 		$("#icon-sort").removeClass().addClass(sort);
@@ -26,21 +44,18 @@ $(document).ready(function(){
 
 	$('body').on("click", ".btn-delete", function() {
 		var id = $(this).parent().parent().attr("data-id");
+		$('#formRemoveTarefaList [name="id"]').val(id);
 		$('.help-edit').hide();
 		$('.help-remove').hide();
-
+		
 		$.ajax({
-			url: 'lembretes/get',
+			url: 'tarefas/get',
 			method: 'POST',
 			dataType: 'json',
 			data: {id: id},
 			success: function(json) {
-				$('#formRemoveTarefa [name="id"]').val(json.lembrete.id);
-				$('#formRemoveTarefa [name="titulo"]').val(json.lembrete.titulo);
-				$('#formRemoveTarefa [name="prioridade"]').val(json.lembrete.prioridade);
-				$('#formRemoveTarefa [name="descricao"]').val(json.lembrete.descricao);
-				$('#formRemoveTarefa [name="data"]').val(json.lembrete.data);
-				$("#removeLembreteModal").modal("show");
+				$('#formRemoveTarefaList #tarefa-titulo').text(json.titulo);
+				$("#removeTarefaModalList").modal("show");
 			},
 			error: function() {
 				alert('Erro na requisição AJAX!');
@@ -48,9 +63,10 @@ $(document).ready(function(){
 		})
 	});
 
-	$('#formRemoveTarefa').unbind("submit").bind("submit", function(e){
+	$('#formRemoveTarefaList').unbind("submit").bind("submit", function(e){
 		e.preventDefault();
 		var form = $(this);
+		var id = $('#formRemoveTarefaList [name="id"]').val();
 
 		$.ajax({
 			url: form.attr("action"),
@@ -59,12 +75,13 @@ $(document).ready(function(){
 			data: form.serializeArray(),
 			success: function(json) {
 				if(json.success) {
-					$("#removeLembreteModal").modal("hide");
+					$("#removeTarefaModalList").modal("hide");
 					$('.task-removed-notification').fadeIn('fast');
 					setTimeout(function(){
 						$('.task-removed-notification').fadeOut('fast');
 					}, 2000);
 
+					$('[data-tarefa-id="'+ id +'"]').parent().parent().parent().remove();
 					$('.help-remove').show();					
 					loadAll();
 				}					
@@ -91,22 +108,4 @@ $(document).ready(function(){
 
 		loadAll();
 	});
-
-	function loadAll() {
-		var form = $('#formFiltroLembrete');
-
-		$.ajax({
-			url: form.attr("action"),
-			method: 'POST',
-			dataType: 'html',
-			data: form.serializeArray(),
-			success: function(json) {
-				$('table tbody tr').remove();
-				$('table tbody').append(json);
-			},
-			error: function() {
-				alert('Erro na requisição AJAX!');
-			}
-		});
-	}
 });

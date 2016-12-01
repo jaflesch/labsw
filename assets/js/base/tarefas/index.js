@@ -18,22 +18,35 @@ $(document).ready(function(){
 
 	$('#view-table .btn-close').click(function() {
 		var tarefa_id = $(this).data('tarefa-id');
+		$('#formRemoveTarefaTable [name="src"]').val('table');
+		$('#formRemoveTarefaTable [name="id"]').val(tarefa_id);
 
-		$('#formRemoveTarefa [name="id"]').val(tarefa_id);
-		$('#removeTarefaModal').modal('show');
+		$.ajax({
+			url: 'tarefas/get',
+			method: 'POST',
+			dataType: 'json',
+			data: {id: tarefa_id},
+			success: function(json) {
+				$('#formRemoveTarefaTable #tarefa-titulo').text(json.titulo);
+				$("#removeTarefaModalTable").modal("show");
+			},
+			error: function() {
+				alert('Erro na requisição AJAX!');
+			}
+		});
 	});
 
 	$('#view-list .btn-delete').click(function() {
 		var tarefa_id = $(this).parent().parent().data('id');
 
-		$('#formRemoveTarefa [name="id"]').val(tarefa_id);
-		$('#removeTarefaModal').modal('show');
+		$('#formRemoveTarefaList [name="id"]').val(tarefa_id);
+		$('#removeTarefaModalList').modal('show');
 	})
 
-	$('#formRemoveTarefa').unbind("submit").bind("submit", function(e) {
+	$('#formRemoveTarefaTable').unbind("submit").bind("submit", function(e) {
 		e.preventDefault();
 		var form = $(this);
-		var id = $('#formRemoveTarefa [name="id"]').val();
+		var id = $('#formRemoveTarefaTable [name="id"]').val();
 
 		$.ajax({
 			url: form.attr('action'),
@@ -42,14 +55,14 @@ $(document).ready(function(){
 			data: form.serializeArray(),
 			success: function(json) {
 				if(json.success) {
-					$("#removeTarefaModal").modal("hide");
+					$("#removeTarefaModalTable").modal("hide");
 					$('.task-removed-notification').fadeIn('fast');
 					setTimeout(function(){
 						$('.task-removed-notification').fadeOut('fast');
 					}, 2000);
 
 					$('[data-tarefa-id="'+ id +'"]').parent().parent().parent().remove();
-					$('[data-id="' + id +'"]').parent().parent().remove();
+					$('#view-list [data-id="' + id +'"]').remove();
 				}
 				else alert("Erro ao executar script! Tente novamente.");
 			}
