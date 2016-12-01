@@ -280,6 +280,7 @@ class Tarefas extends Controller {
 
 		die(json_encode($json));
 	}
+
 	public static function getlist() {
 		$post = static::$app->post;
 		$id = Auth::id();
@@ -507,12 +508,23 @@ class Tarefas extends Controller {
 	private static function getTableFromAllTarefasByUserId($id) {
 		$tarefas = array();
 
-		// tarefas no backlog
+		$tarefas['backlog'] = self::getTableViewforTarefasByStatus($id, 0);
+		$tarefas['trabalhando'] = self::getTableViewforTarefasByStatus($id, 1);
+		$tarefas['testes'] = self::getTableViewforTarefasByStatus($id, 2);
+		$tarefas['cliente'] = self::getTableViewforTarefasByStatus($id, 3);
+
+		return $tarefas;
+	}
+
+	private static function getTableViewforTarefasByStatus($id, $status) {
+		global $dbConn;
+		$array = array();
+
 		$query = "
 			SELECT t.*, p.nome projeto_nome
 			FROM tarefa t 
 			INNER JOIN projeto p ON t.id_projeto = p.id
-			WHERE (t.id_autor = {$id} OR t.id_usuario = {$id}) AND t.status = 0
+			WHERE (t.id_autor = {$id} OR t.id_usuario = {$id}) AND t.status = {$status}
 			ORDER BY t.prioridade DESC, t.data_entrega ASC
 		";
 		$result = mysqli_query(static::$dbConn, $query);
@@ -534,18 +546,18 @@ class Tarefas extends Controller {
 			$fetch->equipe = mysqli_num_rows($equipe);
 
 			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
-			
+			echo $time.'__';
 			// se tarefa completa
 			if($fetch->status == 3) {
 				$fetch->header = "alert-success";
 				$fetch->footer = "success";
 			}
 			// senao checa status sobre atraso
-			else if($time <= -1){
+			else if($time == 0){
 				$fetch->header = "alert-warning";
 				$fetch->footer = "warning";
 			}
-			else if ($time >= 0){
+			else if ($time > 0){
 				$fetch->header = "alert-danger";
 				$fetch->footer = "danger";
 			}
@@ -554,160 +566,10 @@ class Tarefas extends Controller {
 				$fetch->footer = "";
 			}
 
-			$tarefas['backlog'][] = $fetch;
+			$array[] = $fetch;
 		}
 
-		// tarefas ativas
-		$query = "
-			SELECT t.*, p.nome projeto_nome
-			FROM tarefa t 
-			INNER JOIN projeto p ON t.id_projeto = p.id
-			WHERE (t.id_autor = {$id} OR t.id_usuario = {$id}) AND t.status = 1
-			ORDER BY t.prioridade DESC, t.data_entrega ASC
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		while($fetch = mysqli_fetch_object($result)) {
-			$initials = explode(" ", $fetch->projeto_nome);
-			if(count($initials) == 1)
-				$initials = $initials[0][0].$initials[0][1];
-			else 
-				$initials = $initials[0][0].$initials[1][0];
-			
-			$fetch->codigo = strtoupper($initials).$fetch->id;
-			$fetch->descricao = nl2br($fetch->descricao);
-			$fetch->status_mensagem = self::getStatus($fetch->status, $fetch->data_entrega);
-			$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
-			$datetime = explode(" ", $fetch->data_entrega);
-			$fetch->data_entrega = Data::datetime2str($datetime[0]);
-
-			$equipe = mysqli_query(static::$dbConn, "SELECT id FROM equipe WHERE id_projeto = {$fetch->id_projeto}");
-			$fetch->equipe = mysqli_num_rows($equipe);
-
-			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
-			
-			// se tarefa completa
-			if($fetch->status == 3) {
-				$fetch->header = "alert-success";
-				$fetch->footer = "success";
-			}
-			// senao checa status sobre atraso
-			else if($time <= -1){
-				$fetch->header = "alert-warning";
-				$fetch->footer = "warning";
-			}
-			else if ($time >= 0){
-				$fetch->header = "alert-danger";
-				$fetch->footer = "danger";
-			}
-			else {
-				$fetch->header = "";
-				$fetch->footer = "";
-			}
-
-			$tarefas['trabalhando'][] = $fetch;
-		}
-
-		// tarefas em fase de testes
-		$query = "
-			SELECT t.*, p.nome projeto_nome
-			FROM tarefa t 
-			INNER JOIN projeto p ON t.id_projeto = p.id
-			WHERE (t.id_autor = {$id} OR t.id_usuario = {$id}) AND t.status = 2
-			ORDER BY t.prioridade DESC, t.data_entrega ASC
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		while($fetch = mysqli_fetch_object($result)) {
-			$initials = explode(" ", $fetch->projeto_nome);
-			if(count($initials) == 1)
-				$initials = $initials[0][0].$initials[0][1];
-			else 
-				$initials = $initials[0][0].$initials[1][0];
-			
-			$fetch->codigo = strtoupper($initials).$fetch->id;
-			$fetch->descricao = nl2br($fetch->descricao);
-			$fetch->status_mensagem = self::getStatus($fetch->status, $fetch->data_entrega);
-			$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
-			$datetime = explode(" ", $fetch->data_entrega);
-			$fetch->data_entrega = Data::datetime2str($datetime[0]);
-
-			$equipe = mysqli_query(static::$dbConn, "SELECT id FROM equipe WHERE id_projeto = {$fetch->id_projeto}");
-			$fetch->equipe = mysqli_num_rows($equipe);
-
-			$time = self::getTimeLeft($fetch->data_entrega);
-			
-			// se tarefa completa
-			if($fetch->status == 3) {
-				$fetch->header = "alert-success";
-				$fetch->footer = "success";
-			}
-			// senao checa status sobre atraso
-			else if($time <= -1){
-				$fetch->header = "alert-warning";
-				$fetch->footer = "warning";
-			}
-			else if ($time >= 0){
-				$fetch->header = "alert-danger";
-				$fetch->footer = "danger";
-			}
-			else {
-				$fetch->header = "";
-				$fetch->footer = "";
-			}
-
-			$tarefas['testes'][] = $fetch;
-		}
-
-		// tarefas pendente avisar cliente
-		$query = "
-			SELECT t.*, p.nome projeto_nome
-			FROM tarefa t 
-			INNER JOIN projeto p ON t.id_projeto = p.id
-			WHERE (t.id_autor = {$id} OR t.id_usuario = {$id}) AND t.status = 3
-			ORDER BY t.prioridade DESC, t.data_entrega ASC
-		";
-		$result = mysqli_query(static::$dbConn, $query);
-		while($fetch = mysqli_fetch_object($result)) {
-			$initials = explode(" ", $fetch->projeto_nome);
-			if(count($initials) == 1)
-				$initials = $initials[0][0].$initials[0][1];
-			else 
-				$initials = $initials[0][0].$initials[1][0];
-			
-			$fetch->codigo = strtoupper($initials).$fetch->id;
-			$fetch->descricao = nl2br($fetch->descricao);
-			$fetch->status_mensagem = self::getStatus($fetch->status, $fetch->data_entrega);
-			$fetch->prioridade = self::getPrioridade($fetch->prioridade - 1);
-			$datetime = explode(" ", $fetch->data_entrega);
-			$fetch->data_entrega = Data::datetime2str($datetime[0]);
-
-			$equipe = mysqli_query(static::$dbConn, "SELECT id FROM equipe WHERE id_projeto = {$fetch->id_projeto}");
-			$fetch->equipe = mysqli_num_rows($equipe);
-
-			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
-			
-			// se tarefa completa
-			if($fetch->status == 3) {
-				$fetch->header = "alert-success";
-				$fetch->footer = "success";
-			}
-			// senao checa status sobre atraso
-			else if($time <= -1){
-				$fetch->header = "alert-warning";
-				$fetch->footer = "warning";
-			}
-			else if ($time >= 0){
-				$fetch->header = "alert-danger";
-				$fetch->footer = "danger";
-			}
-			else {
-				$fetch->header = "";
-				$fetch->footer = "";
-			}
-
-			$tarefas['cliente'][] = $fetch;
-		}
-
-		return toUTF($tarefas);
+		return toUTF($array);
 	}
 
 	private static function getAllProjetos() {
@@ -852,7 +714,12 @@ class Tarefas extends Controller {
 				
 		// (string) [+/-]days
 		$days = $diff->format("%R%a");
-		$days = ($days === "-0")? -1 : $days;
+
+		// se tem menos de 24h sobrando
+		$days = ($days === "-0")? 0 : $days;
+
+		// se atrasou
+		$days = ($days === "+0")? 1 : $days;
 		
 		return (int)$days;
 	}
