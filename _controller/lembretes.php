@@ -25,7 +25,7 @@ class Lembretes extends Controller {
 		$id = Auth::id();
 		$post = static::$app->post;
 		$data = Data::str2date($post['data']);
-		$prioridade = ($prioridade == 0)? $post['prioridade'] : $post['prioridade']-1;
+		$prioridade = $post['prioridade'] - 1;
 		
 		$json = new stdclass();
 
