@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% set page_title = 'Categorias' %}
+
+{% block main %}
+	<section id="projetos">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1 class="section"><i class="fa fa-list-ol mgr10"></i> Categorias </h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 breadcrumb">
+					<span class="line">&nbsp;</span><a href="{{ root }}/categorias"> Categorias</a> / Editar
+				</div>
+			</div>
+			<hr style="margin: 0px 0 30px;">
+
+			<div class="row">
+				<form id="editCategoria" action="{{ root }}/categorias/update">
+				<input type="hidden" name="id" value="{{ categoria.id }}">
+				
+				<div class="col-md-6 mgb30">
+					<label> Nome: </label>
+					<input type="text" name="nome" class="value" value="{{ categoria.nome }}">
+					
+					<br/><br/>
+					<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar </button>
+				</div>
+				</form>
+			</div>
+
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-striped table-hover">
+						<thead>
+							<th width="75%"> Subcategoria </th>
+							<th width="25%"> Ações </th>
+						</thead>
+						<tbody>
+						{% if subcategorias is not empty %}
+							{% for subcategoria in subcategorias %}
+								<tr>
+									<td> {{ subcategoria.nome }} </td>
+									<td>
+										<button data-id="{{ subcategoria.id }}" class="btn btn-danger btn-remove"> Excluir </button>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}	
+							<tr>
+								<td> Nenhuma subcategoria registrada ainda </td>
+								<td></td>
+							</tr>
+						{% endif %}
+						</tbody>						
+					</table>
+
+					<hr>
+
+					<form id="formAddSubcategoria" method="POST" class="form-inline" action="{{ root }}/categorias/add-subcategoria">
+						<div class="col-md-4 col-md-offset-4">
+							<input type="hidden" name="id" value="{{ app.parametros[2] }}">
+							<input type="text" name="nome" placeholder="Nome" class="value" style="display: inline-block; width: auto;">
+
+							<input type="submit" value="Criar" class="btn btn-primary" style="position: relative; top: -1px; height: 37px">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Notification -->
+		<p class="task-completed-notification" style="display: none;"> Categoria editada com sucesso! </p>
+	</section>
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		$('#formAddSubcategoria').unbind("submit").bind("submit", function(e) {
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function(json) {
+					if(json.success) {
+						$('table tbody').append("<tr><td>" + $('[name="nome"]').val() + "</td><td><button data-id='" + json.id + "' class='btn btn-danger btn-remove'> Excluir </button></td></tr>");
+					}
+				}
+			})
+		});
+
+		$('#editCategoria').unbind("submit").bind("submit", function(e) {
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function(json) {
+					if(json.success) {
+						$('.task-completed-notification').fadeIn('fast');
+						setTimeout(function(){
+							$('.task-completed-notification').fadeOut('fast');
+						}, 2000);
+					}
+				}
+			})
+		});
+
+		$('body').on("click", '.btn-remove', function() {
+			var id = $(this).data("id");
+			var url = $('#formAddSubcategoria').attr("action").split("add-subcategoria")[0] + "remove-subcategoria";
+			
+			$.ajax({
+				url: url,
+				method: 'POST',
+				dataType: 'json',
+				data: { id : id },
+				success: function(json) {
+					if(json.success) {
+						$('table tbody button[data-id="'+ id +'"]').parent().parent().remove();
+					}
+				}
+			})
+		});
+	});
+</script>
+{% endblock %}

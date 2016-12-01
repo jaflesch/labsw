@@ -1,0 +1,58 @@
+<div class="col-md-12">
+	<h3 class="intern"> Informações </h3>
+
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Nome do projeto </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span id="login"> {{ informacoes.geral.projeto }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Criador do projeto </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span id="nome"> {{ informacoes.geral.criador }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Privacidade </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span id="email"> {{ informacoes.geral.privacidade }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Função na equipe </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span> {{ informacoes.funcao }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Membros na equipe </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value"><span> {{ informacoes.total_equipe }} </span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<label class="value"> Website </label>
+				</div>
+				<div class="col-sm-6">
+					<div class="value">
+						<span><a href="{{ projeto.url }}" target="_blank"> Visitar <i class="fa fa-external-link"></i></a></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>

@@ -1,0 +1,55 @@
+<div class="col-md-12">
+	<h3 class="intern"> Sobre mim </h3>
+	
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="value"> Tarefas atribuídas a mim </label>
+					</div>
+					<div class="col-sm-6">
+						<div class="value"><span id="login"> {{ sobre.tarefas }}10 </span></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="value"> Tarefas completadas </label>
+					</div>
+					<div class="col-sm-6">
+						<div class="value"><span id="nome"> {{ sobre.completadas }}7 </span></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="value"> Tarefas em andamento </label>
+					</div>
+					<div class="col-sm-6">
+						<div class="value"><span id="email"> {{ sobre.andamento }}1 </span></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="value"> Tarefas atrasadas </label>
+					</div>
+					<div class="col-sm-6">
+						<div class="value"><span> {{ sobre.atrasadas }}2 </span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">		
+				<label class="value alert-success text-center" style="width:100%; color:#3c763d;"> 
+					Seu aproveitamento é de <strong>{{ sobre.aproveitamento }} 70.00%</strong> 
+				</label>
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<p> Atualmente você ocupa a posição de <strong>{{ informacoes.admin == 1 ? 'administrador' : 'membro' }}</strong> no projeto. </p>			
+			</div>
+		</div>
+	</div>	
+</div>

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% set page_title = 'Projetos' %}
+
+{% block main %}
+	<section id="projetos">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1 class="section"><i class="fa fa-group mgr10"></i> Projetos </h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 mgt30">
+					<img  class="center-block img-responsive" src="{{ root }}/{{ projeto.imagem }}">
+					<hr>
+				</div>
+			</div>
+		
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#home"> Tarefas </a></li>
+			<li><a data-toggle="tab" href="#menu1"> Informações </a></li>
+			<li><a data-toggle="tab" href="#menu2"> Equipe </a></li>
+			{% if informacoes.funcao != 'Nenhuma' %}
+				<li><a data-toggle="tab" href="#menu3"> Sobre mim </a></li>
+			{% endif %}
+		</ul>
+
+		<div class="tab-content">
+			<div id="home" class="tab-pane fade in active">
+				{% include 'projetos/_tab_tarefas.html' %}
+			</div>			
+			<div id="menu1" class="tab-pane fade">
+				{% include 'projetos/_tab_informacoes.html' %}
+			</div>			
+			<div id="menu2" class="tab-pane fade">
+				{% include 'projetos/_tab_equipe.html' %}
+			</div>
+			{% if informacoes.funcao != 'Nenhuma' %}
+			<div id="menu3" class="tab-pane fade">
+				{% include 'projetos/_tab_sobremim.html' %}
+			</div>
+			{% endif %}
+		</div>
+	</section>
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>
+{% endblock %}

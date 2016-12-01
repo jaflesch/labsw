@@ -279,3 +279,26 @@ nav.shrink {
 	box-shadow: none;
 }
 .modal-open { padding-right: 0px !important; } /* fix glitch */
+
+/* material design buttons */
+.btn {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+    border: none;
+    border-radius: 2px;
+    transition: all 0.2s ease-in-out;
+    text-transform: uppercase;
+    font-size: 13px;
+    padding: 9px 20px;
+}
+.btn:hover,.btn:focus,.btn:active,.btn:active:focus { 
+	box-shadow: 0 3px 5px rgba(0,0,0,0.3); 
+	transition: all 0.2s ease-in-out;
+	border: none;
+}
+.btn.btn-default { background: #fff !important; }
+.btn-danger { background: #F44336; }
+.btn-danger:hover ,.btn-danger:focus, .btn-danger:active { background: #d43529; }
+.btn-warning { background: #ffc107; }
+.btn-warning:hover ,.btn-warning:focus, .btn-warning:active { background: #dca70a; }
+.btn-success { background: #4caf50; }
+.btn-success:hover ,.btn-success:focus, .btn-success:active { background: #3f9843; }

@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+
+{% set page_title = 'Projetos' %}
+
+{% block main %}
+	<section id="projetos">
+		{% include 'projetos/_admlista.html' %}
+	</section>
+	<section id="modals">
+		{% include 'projetos/_modal_create.html' %}
+		{% include 'projetos/_modal_delete.html' %}
+	</scetion>
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('[name="sort_type"]').on("change", function(){
+			var sort = $(this).find(":selected").attr("data-sort");
+			$("#icon-sort").removeClass().addClass(sort);
+		});
+
+		$('[name="sort_privacidade"]').on("change", function(){
+			var sort = $(this).find(":selected").attr("data-sort");
+			$("#icon-sort2").removeClass().addClass(sort);
+		});
+
+		$("#turnOnModal").click(function(e){
+			e.preventDefault();
+			$('.help-create').hide();
+			$('#formCreateProjeto input[type="submit"]').prop("disabled", false);
+			$('#createProjetoModal').modal('show');			
+		});
+
+		$('body').on("keyup", '[name="identidade_visual"]', function(){
+			$('#color-help span').css("background", $(this).val());
+		});
+
+		$('[name="search_titulo"],[name="sort_type"],[name="sort_privacidade"]').on("change keyup", loadAll);
+
+		$('#formCreateProjeto').unbind("submit").bind("submit", function(e){
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function(json) {
+					if(json.success) {
+						$('.help-create').show();
+						$('#formCreateProjeto input[type="submit"]').prop("disabled", true);
+						loadAll();
+					}
+					else alert("Erro na criação do projeto!");
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		});
+
+		$('body').on("click", ".btn-delete", function() {
+			var id = $(this).parent().parent().attr("data-id");
+			$('.help-edit').hide();
+			$('.help-remove').hide();
+
+			$.ajax({
+				url: '../projetos/get',
+				method: 'POST',
+				dataType: 'json',
+				data: {id: id},
+				success: function(json) {
+					$('#formRemoveProjeto [name="id"]').val(json.projeto.id);
+					$("#removeProjetoModal").modal("show");
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			})
+		});
+
+		$('#formRemoveProjeto').unbind("submit").bind("submit", function(e){
+			e.preventDefault();
+			var form = $(this);
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function(json) {
+					if(json.success){
+						$("#removeProjetoModal").modal('hide');
+						
+						$('.task-removed-notification').fadeIn('fast');
+						setTimeout(function(){
+							$('.task-removed-notification').fadeOut('fast');
+						}, 2000);
+					}
+					
+					loadAll();
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		});
+
+		$('body').on("click", '.btn-check', function(){
+			$('.task-completed-notification').fadeIn('fast');
+			setTimeout(function(){
+				$('.task-completed-notification').fadeOut('fast');
+			}, 2000);
+		});
+
+		function loadAll() {
+			var form = $('#formFiltroProjeto');
+
+			$.ajax({
+				url: form.attr("action"),
+				method: 'POST',
+				dataType: 'html',
+				data: form.serializeArray(),
+				success: function(json) {
+					$('table tbody tr').remove();
+					$('table tbody').append(json);
+				},
+				error: function() {
+					alert('Erro na requisição AJAX!');
+				}
+			});
+		}
+	});
+</script>
+{% endblock %}

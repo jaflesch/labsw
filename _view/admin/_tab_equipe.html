@@ -1,0 +1,11 @@
+<div class="col-md-12">
+	<h3 class="intern"> Equipe </h3>
+
+	<div class="equipe-box">
+	{% for membro in equipe %}
+		<a href="usuarios/sobre/{{ membro.id }}" data-toggle="tooltip" title="{{ membro.usuario }}">
+			<span class="equipe-circle animated"> {{ membro.inicial }} </span>
+		</a>
+	{% endfor %}
+	</div>
+</div>
