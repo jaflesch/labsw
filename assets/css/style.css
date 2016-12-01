@@ -1,3 +1,14 @@
+footer, html {
+	background: #2b2b2b;
+}
+footer {
+	margin: 30px 0 0;
+	padding: 30px 0;
+	text-align: center;
+	color: #ddd;
+}
+footer span { color: #777; }
+footer small { color: #999; }
 /*
 =================
 	LOGIN
