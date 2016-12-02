@@ -4,6 +4,10 @@
 		<div class="row">
 		    <div class="collapse navbar-collapse" id="toggle-menu">
       			<ul class="nav navbar-nav">
+
+        			<li class="{{ app.controller == 'home' ? 'active' : '' }}">
+						<a class="animated" title="" href="{{ root }}/"><i class="fa fa-home"></i> Home </a>
+					</li>
       				{% if user.nivel_privilegios == 0 %}
       				<li class="dropdown {{ app.controller == 'admin' ? 'active' : '' }}">
 						<a class="animated" title="" href="#"  data-toggle="dropdown"><i class="fa fa-gear"></i> Admin <span class="caret"></span> </a>
@@ -14,10 +18,6 @@
 						</ul>
 					</li>
       				{% endif %}
-
-        			<li class="{{ app.controller == 'home' ? 'active' : '' }}">
-						<a class="animated" title="" href="{{ root }}/"><i class="fa fa-home"></i> Home </a>
-					</li>
 					<li class="{{ app.controller == 'tarefas' ? 'active' : '' }}">
 						<a class="animated" title="" href="{{ root }}/tarefas"><i class="fa fa-tasks"></i> Tarefas </a>
 					</li>

@@ -1,0 +1,109 @@
+<section id="home">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 mgb60">
+				<h1 class="section"><i class="fa fa-home mgr10"></i> Home </h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/configuracoes-globais">
+					<div class="configuracoes">
+						<p class=""><i class="fa fa-4x fa-globe"></i> </p>
+
+						<h4> Configurações Globais </h4>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/categorias">
+					<div class="categorias">
+						<p class=""><i class="fa fa-4x fa-list-ol"></i> </p>
+
+						<h4> Categorias </h4>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/usuarios">
+					<div class="usuarios">
+						<p class=""><i class="fa fa-4x fa-address-book-o"></i> </p>
+
+						<h4> Usuários </h4>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/tarefas">
+					<div class="tarefas">
+						<p class=""><i class="fa fa-4x fa-tasks"></i> </p>
+
+						<h4> Tarefas </h4>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/lembretes">
+					<div class="lembretes">
+						<p class=""><i class="fa fa-4x fa-sticky-note"></i> </p>
+
+						<h4> Lembretes </h4>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/projetos">
+					<div class="projetos">
+						<p class=""><i class="fa fa-4x fa-users"></i> </p>
+
+						<h4> Projetos </h4>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/agenda">
+					<div class="agenda">
+						<p class=""><i class="fa fa-4x fa-calendar"></i> </p>
+
+						<h4> Agenda </h4>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/estatisticas">
+					<div class="estatisticas">
+						<p class=""><i class="fa fa-4x fa-bar-chart"></i> </p>
+
+						<h4> Estatísticas </h4>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4 text-center dashboard-box">
+				<a href="{{ root }}/user/perfil">
+					<div class="perfil">
+						<p class=""><i class="fa fa-4x fa-user"></i> </p>
+
+						<h4> Perfil </h4>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<hr/>
+
+		<div class="row">
+			<div class="col-md-12">
+				<p class="text-right"> {{ data }} </p>
+			</div>
+		</div>
+	</div>
+
+	{% include 'categorias/_modal_delete.html' %}
+
+	<!-- Notification -->
+	<p class="task-removed-notification" style="display: none;"> Categoria excluída com sucesso! </p>
+</section>

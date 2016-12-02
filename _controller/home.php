@@ -1,13 +1,14 @@
 <?php
+require('_lib/data.php');
+
 class Home extends Controller {
 
 	public static function index() {
 		$bag = array();
 
 		if(Auth::user()) {
-			// debug
-			//print_r(Auth::getUser());
 			$bag["user"] = Auth::getUser();
+			$bag['data'] = Data::today();
 			echo self::render("home/index.html", $bag);
 		}
 		else echo self::render("login/index.html", $bag);
