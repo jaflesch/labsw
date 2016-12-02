@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 18-Nov-2016 às 04:58
+-- Generation Time: 02-Dez-2016 às 09:13
 -- Versão do servidor: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -31,7 +31,7 @@ USE `mhaas_task`;
 CREATE TABLE IF NOT EXISTS `categoria` (
 `id` int(11) NOT NULL,
   `nome` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `categoria`
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `lembrete` (
   `prioridade` int(11) NOT NULL,
   `data` datetime NOT NULL,
   `status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `lembrete`
@@ -118,10 +118,13 @@ CREATE TABLE IF NOT EXISTS `lembrete` (
 INSERT INTO `lembrete` (`id`, `id_usuario`, `titulo`, `descricao`, `prioridade`, `data`, `status`) VALUES
 (1, 1, 'Teste Lembrete', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 1, '2016-08-28 14:04:00', 1),
 (2, 2, 'Teste Lembrete 2', 'abcéóúíá´l ççç\r\nasas\r\nqwqwd\r\ngf\r\ngh\r\nh\r\n', 3, '2016-08-28 00:00:00', 1),
-(3, 1, 'teste2', 'a\r\nb\r\n\r\n\r\nc\r\nas', 3, '2016-09-04 00:00:00', 0),
+(3, 1, 'teste2', 'a\r\nb\r\n\r\n\r\nc\r\nas', 3, '2016-12-09 00:00:00', 0),
 (4, 1, 'Lembrete novo', 'a\r\nk\r\nl\r\noo', 2, '2016-09-02 00:00:00', 0),
 (9, 1, 'asasqawqwqw', 'asasas', 0, '2016-11-28 00:00:00', 1),
-(12, 1, 'qiwjqwjqojw', '', 3, '0000-00-00 00:00:00', 0);
+(10, 1, 'teste', 'abc', 0, '2016-12-01 00:00:00', 0),
+(11, 1, 'nvvb', '', 0, '2016-12-02 00:00:00', 0),
+(12, 1, 'qqwqwqwqw', '', 2, '0000-00-00 00:00:00', 0),
+(13, 1, 'fghjty', '', 1, '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -178,19 +181,20 @@ CREATE TABLE IF NOT EXISTS `subcategoria` (
 `id` int(11) NOT NULL,
   `id_categoria` int(11) NOT NULL,
   `nome` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `subcategoria`
 --
 
 INSERT INTO `subcategoria` (`id`, `id_categoria`, `nome`) VALUES
-(1, 2, 'CRUD'),
 (2, 2, 'Login'),
 (3, 1, 'SPA'),
 (4, 1, 'View Login'),
 (5, 4, 'Unitário'),
-(6, 4, 'Smoke Test');
+(6, 4, 'Smoke Test'),
+(20, 1, 'Form Style'),
+(27, 7, 'adwd');
 
 -- --------------------------------------------------------
 
@@ -217,24 +221,24 @@ CREATE TABLE IF NOT EXISTS `tarefa` (
   `data_criacao` datetime NOT NULL,
   `data_entrega` datetime NOT NULL,
   `data_fim` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `tarefa`
 --
 
 INSERT INTO `tarefa` (`id`, `id_autor`, `id_usuario`, `id_projeto`, `titulo`, `id_categoria`, `id_subcategoria`, `prioridade`, `descricao_formal`, `descricao_tecnica`, `solucao`, `resultados`, `status_erro`, `tempo_previsto`, `status`, `data_criacao`, `data_entrega`, `data_fim`) VALUES
-(1, 1, 0, 1, 'Teste 17/11', 1, 3, 1, '<p>\r\n	as\r\n</p>', '<p>\r\n	we\r\n</p>', '<p>\r\n	erer\r\n</p>', '', 0, '02h22min', 0, '2016-11-17 22:32:12', '2016-11-30 12:00:00', '0000-00-00 00:00:00'),
-(2, 1, 0, 1, 'Teste novo', 1, 3, 2, '<p>\r\n	qwqw\r\n</p>', '<p>\r\n	erer\r\n</p>', '<p>\r\n	tytyyt\r\n</p>', '', 0, '14h00min', 0, '2016-11-17 22:39:56', '2016-11-17 23:00:00', '0000-00-00 00:00:00'),
-(3, 1, 0, 1, 'Abc', 1, 3, 3, '<p>\r\n	 e\r\n</p>', '<p>\r\n	 q\r\n</p>', '<p>\r\n	 q\r\n</p>', '', 0, '00h30min', 0, '2016-11-17 22:43:32', '2016-11-18 23:30:00', '0000-00-00 00:00:00'),
+(1, 1, 0, 1, 'Teste 17/11', 1, 3, 1, '<p>\r\n	 as\r\n</p>', '<p>\r\n	 we\r\n</p>', '<p>\r\n	 erer\r\n</p>', '', 0, '02h22min', 0, '2016-11-17 22:32:12', '2016-12-01 12:00:00', '0000-00-00 00:00:00'),
+(2, 1, 0, 1, 'Teste novo', 1, 3, 2, '<p>\r\n	 qwqw\r\n</p>', '<p>\r\n	 erer\r\n</p>', '<p>\r\n	 tytyyt\r\n</p>', '', 0, '14h00min', 0, '2016-11-17 22:39:56', '2016-12-02 22:00:00', '0000-00-00 00:00:00'),
+(3, 1, 0, 1, 'Abc', 1, 3, 3, '<p>\r\n	 e\r\n</p>', '<p>\r\n	 q\r\n</p>', '<p>\r\n	 q\r\n</p>', '', 0, '00h30min', 0, '2016-11-17 22:43:32', '2016-12-28 23:03:00', '0000-00-00 00:00:00'),
 (4, 0, 0, 1, '', 0, 0, 0, '', '', '', '', 0, '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (5, 0, 0, 1, '', 0, 0, 0, '', '', '', '', 0, '', 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (6, 0, 0, 1, '', 0, 0, 0, '', '', '', '', 0, '', 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (7, 0, 0, 1, '', 0, 0, 0, '', '', '', '', 0, '', 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (8, 0, 0, 1, '', 0, 0, 0, '', '', '', '', 0, '', 4, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (9, 0, 0, 2, '', 0, 0, 0, '', '', '', '', 0, '', 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 1, 0, 12, '', 0, 0, 0, '', '', '', '', 0, '', 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, 2, 1, 3, '', 0, 0, 0, '', '', '', '', 0, '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(11, 2, 1, 3, '', 0, 0, 0, '', '', '', '', 0, '', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(34, 1, 0, 1, 'DJK', 0, 0, 4, '', '', '', '', 0, '', 4, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -421,7 +425,7 @@ ALTER TABLE `usuarios_tarefa`
 -- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `equipe`
 --
@@ -436,7 +440,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 -- AUTO_INCREMENT for table `lembrete`
 --
 ALTER TABLE `lembrete`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `log`
 --
@@ -451,12 +455,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 -- AUTO_INCREMENT for table `subcategoria`
 --
 ALTER TABLE `subcategoria`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT for table `tarefa`
 --
 ALTER TABLE `tarefa`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT for table `trofeu`
 --
