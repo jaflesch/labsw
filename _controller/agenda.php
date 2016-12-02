@@ -13,8 +13,40 @@ class Agenda extends Controller {
 		// 	//echo self::render("home/index.html", $bag);
 		// }
 		//else 
+		$mes = date('m');
+		$ano = date('Y');
+		$events = self::getAllEvents();
+
 		$bag['today'] = Data::today();
-		$bag['calendar'] =  self::draw_calendar(date('m'),date('Y'));
+		$bag['calendar'] =  self::draw_calendar($mes, $ano, $events);
+		$bag['eventos'] =  self::getEventosByData(date('d'), $mes, $ano);
+		
+		$mesNext = $mes;
+		$anoNext = $ano;
+		$mesPrev = $mes;
+		$anoPrev = $ano;
+
+		if($mes == 12){
+			$mesNext = 1;
+			$anoNext = $ano + 1;
+		}
+		else {
+			$mesNext = $mes + 1;
+			$anoNext = $ano;	
+		}
+
+		if($mes == 1){
+			$mesPrev = 12;
+			$anoPrev = $ano - 1;
+		}
+		else {
+			$mesPrev = $mes - 1;
+			$anoPrev = $ano;	
+		}
+
+		$bag['data_prev'] = $mesPrev.'-'.$anoPrev;
+		$bag['data_next'] = $mesNext.'-'.$anoNext;
+		
 		echo self::render("agenda/index.html", $bag);
 
 		/* sample usages */
@@ -24,10 +56,81 @@ class Agenda extends Controller {
 		//echo '<h2>August 2009</h2>';
 	}
 
-	private static function draw_calendar($month,$year) {
+	public static function get_calendar() {
+		$post = static::$app->post;
+		$piece = explode("-", $post['data']);
+		$events = self::getAllEvents();
+		
+		$tmes = $piece[0];
+		$tano = $piece[1];	
+
+		$tmesNext = $tmes;
+		$tanoNext = $tano;
+		$tmesPrev = $tmes;
+		$tanoPrev = $tano;
+
+		if($tmes == 12){
+			$tmesNext = 1;
+			$tanoNext = $tano + 1;
+		}
+		else {
+			$tmesNext = $tmes + 1;
+			$tanoNext = $tano;	
+		}
+
+		if($tmes == 1){
+			$tmesPrev = 12;
+			$tanoPrev = $tano - 1;
+		}
+		else {
+			$tmesPrev = $tmes - 1;
+			$tanoPrev = $tano;	
+		}
+
+		$json = new stdclass();
+		$json->prev = $tmesPrev.'-'.$tanoPrev;
+		$json->next = $tmesNext.'-'.$tanoNext;
+		$json->calendar = self::draw_calendar($tmes, $tano, $events);
+
+		$eventos = self::getEventosByData(1, $tmes, $tano);
+		$list = "";
+		
+		if(count($eventos) > 0) {
+			foreach ($eventos as $key => $value) {
+
+				$path = static::$app->base_path;
+				$path = explode("htdocs", $path);
+				$path = str_replace("\\", "/", $path[1]);
+
+				$tipo = $eventos[$key]->tipo == "l" ? "lembretes/" : "tarefas/editar/".$eventos[$key]->id;
+				$label = $eventos[$key]->tipo == "l" ? "Lembrete" : "Tarefa";
+				$list .= "
+					<li>
+						<a href='{$path}/{$tipo}'>
+							<i class='fa fa-bookmark'></i>{$label} - ". $eventos[$key]->titulo. "
+						</a>
+					</li>
+				";
+				
+			}
+		}
+		else {
+			$list .= "<li> Nenhum evento encontrado para esta data. </li>";
+		}
+
+		$json->list = $list;
+		$json->data_extenso = Data::string('1'.'/'.$tmes.'/'.$tano);
+
+		die(json_encode($json));
+	}
+
+	private static function draw_calendar($month,$year, $events) {
 		$today = date('d/m/Y');
 		$today = explode("/", $today);
-
+		$days = array();
+		foreach ($events as $key => $value) {
+			$days[] = $key;
+		}
 		/* draw table */
 		$calendar = '<table  class="calendar">';
 
@@ -59,8 +162,15 @@ class Agenda extends Controller {
 			$calendar.= '<td class="calendar-day">';
 				/* add in the day number */
 				
-				if($list_day == $today[0] && $month == $today[1] && $year == $today[2])
+				if(in_array($list_day, $days)) {
+					if($events[$list_day]->ano == $year && $events[$list_day]->mes == $month)
+						$calendar.= '<div class="day-number task">'.$list_day.'</div>';
+					else
+						$calendar.= '<div class="day-number">'.$list_day.'</div>';
+				}
+				else if($list_day == $today[0] && $month == $today[1] && $year == $today[2]) {
 					$calendar.= '<div class="day-number event">'.$list_day.'</div>';
+				}
 				else
 					$calendar.= '<div class="day-number">'.$list_day.'</div>';
 				
@@ -96,9 +206,66 @@ class Agenda extends Controller {
 		return $calendar;
 	}
 
-	public static function render($tpl, $vars=array()) {
-		return parent::render($tpl,$vars);
+	private static function getAllEvents() {
+		global $dbConn;
+		$datas[] = array();
+		$id = Auth::id();
+
+		$query = "
+			SELECT id, titulo, data_entrega data, 't' tipo
+			FROM `tarefa` 
+			WHERE (id_autor = {$id} OR id_usuario = {$id}) AND status < 4
+
+			UNION
+
+			SELECT id, titulo, data, 'l' tipo
+			FROM lembrete
+			WHERE id_usuario = {$id} AND status = 0
+		";
+		$result = mysqli_query($dbConn, $query);
+		while ($fetch = mysqli_fetch_object($result)) {
+			$piece = explode(" ", $fetch->data);
+			$piece = explode("-", $piece[0]);
+			$fetch->dia = (int)$piece[2];
+			$fetch->mes = $piece[1];
+			$fetch->ano = $piece[0];
+			$datas[$fetch->dia] = $fetch;
+		}
+
+		return toUTF($datas);
 	}
+
+	private static function getEventosByData($dia, $mes, $ano) {
+		global $dbConn;
+		$datas = array();
+		$id = Auth::id();
+
+		$query = "
+			SELECT id, titulo, data_entrega data, 't' tipo
+			FROM tarefa
+			WHERE (id_autor = {$id} OR id_usuario = {$id}) AND status < 4 AND DAY(data_entrega) = {$dia} AND MONTH(data_entrega) = {$mes} AND YEAR(data_entrega) = {$ano}
+
+			UNION
+
+			SELECT id, titulo, data, 'l' tipo
+			FROM lembrete
+			WHERE id_usuario = {$id} AND status = 0 AND DAY(data) = {$dia} AND MONTH(data) = {$mes} AND YEAR(data) = {$ano}
+		";
+		$result = mysqli_query($dbConn, $query) or die(mysqli_error($dbConn));
+		while ($fetch = mysqli_fetch_object($result)) {
+			$piece = explode(" ", $fetch->data);
+			$piece = explode("-", $piece[0]);
+			$fetch->dia = (int)$piece[2];
+			$fetch->mes = $piece[1];
+			$fetch->ano = $piece[0];
+
+			if($fetch->titulo != "")
+				$datas[$fetch->dia] = $fetch;
+		}
+
+		return toUTF($datas);
+	}
+		
 }
 
 Agenda::exec($app);

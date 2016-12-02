@@ -51,6 +51,14 @@ td.calendar-day, td.calendar-day-np {
 
 /* labels */
 div.day-number.event { 
+	background:#b1b1b3; 
+	border-radius: 50px;
+	color: #fff;
+	height: 30px;
+	width: 30px;
+	line-height: 30px;
+}
+div.day-number.task { 
 	background:#0eabbc; 
 	border-radius: 50px;
 	color: #fff;

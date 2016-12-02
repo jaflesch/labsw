@@ -11,21 +11,23 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6 no-pdr"> {{ calendar|raw }} </div>
+				<div class="col-md-6 no-pdr calendar-box"> {{ calendar|raw }} </div>
 				<div class="col-md-6 no-pdl">
 					<div class="agenda-box"> 
-						<h3>{{ today }}</h3>
+						<h3 id='data-titulo'>{{ today }}</h3>
 						<hr>
 
-						<ul>
-							<li><i class="fa fa-bookmark"></i> Evento Lorem Ipsum </li>
-							<li><i class="fa fa-warning"></i> Tarefa ABC </li>
-							<li><i class="fa fa-warning"></i> Tarefa ABC </li>
-							<li><i class="fa fa-warning"></i> Tarefa ABC </li>
+						<ul class="event-list">
+							{% for evento in eventos %}
+							<li>
+								<a href='{{ root }}/{{ evento.tipo == "l" ? "lembretes/" : "tarefas/editar/"~ evento.id }}'>
+									<i class="fa fa-bookmark"></i>{{ evento.tipo == 'l' ? 'Lembrete' : 'Tarefa'}} - {{ evento.titulo }} </li>
+								</a>
+							{% endfor %}
 						</ul>
 
-						<i class="arrows fa fa-angle-left pull-left"></i>
-						<i class="arrows fa fa-angle-right pull-right"></i>						
+						<i class="arrows fa fa-angle-left pull-left" data-date-prev="{{ data_prev }}"></i>
+						<i class="arrows fa fa-angle-right pull-right" data-date-next="{{ data_next }}"></i>						
 					</div>
 				</div>
 			</div>
@@ -44,4 +46,5 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="{{ root }}/assets/js/base/agenda/core.js"></script>
 {% endblock %}
