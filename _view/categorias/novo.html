@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% set page_title = 'Categorias' %}
+{% set page_title = 'Nova Categoria' %}
 
 {% block main %}
 	<section id="projetos">
@@ -20,17 +20,18 @@
 				<div class="row">
 					<div class="col-md-6 mgb10">
 						<label> Nome: </label>
-						<input type="text" name="nome" class="value" value="{{ categoria.nome }}">
+						<input type="text" name="nome" class="value" value="{{ categoria.nome }}" placeholder="Nome">
 					</div>
 				</div>
 				
 				<hr/>
 				
 				<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar </button>
+				<a href='{{ root }}/categorias' class="btn btn-default"><i class="fa fa-arrow-left"></i> Voltar </a>
 			</form>
 		</div>
 		<!-- Notification -->
-		<p class="task-completed-notification" style="display: none;"> Categoria excluída com sucesso! </p>
+		<p class="task-completed-notification" style="display: none;"> Categoria criada com sucesso! </p>
 	</section>
 {% endblock %}
 
@@ -38,28 +39,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-	$(document).ready(function() {
-
-		$('#insertCategoria').unbind("submit").bind("submit", function(e) {
-			e.preventDefault();
-			var form = $(this);
-
-			$.ajax({
-				url: form.attr("action"),
-				method: 'POST',
-				dataType: 'json',
-				data: form.serializeArray(),
-				success: function(json) {
-					if(json.success) {
-						$('.task-completed-notification').fadeIn('fast');
-						setTimeout(function(){
-							$('.task-completed-notification').fadeOut('fast');
-						}, 2000);
-					}
-				}
-			})
-		});
-	});
-</script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/categorias/novo.js"></script>
 {% endblock %}

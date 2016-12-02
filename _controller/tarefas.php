@@ -546,7 +546,7 @@ class Tarefas extends Controller {
 			$fetch->equipe = mysqli_num_rows($equipe);
 
 			$time = self::getTimeLeft($datetime[0]. " ".$datetime[1]);
-			echo $time.'__';
+			
 			// se tarefa completa
 			if($fetch->status == 3) {
 				$fetch->header = "alert-success";

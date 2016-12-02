@@ -23,7 +23,7 @@
 								<td> {{ categoria.nome }} </td>
 								<td>
 									<a href="{{ root }}/categorias/editar/{{ categoria.id }}" class="btn btn-default btn-edit"><i class="fa fa-pencil"></i> </a>
-									<a href="{{ root }}/categorias/delete/{{ categoria.id }}" class="btn btn-danger btn-delete"><i class="fa fa-remove"></i></a>
+									<a data-id="{{ categoria.id }}" class="btn btn-danger btn-delete"><i class="fa fa-remove"></i></a>
 								</td>
 							</tr>
 						{% endfor %}
@@ -43,6 +43,8 @@
 			</div>
 		</div>
 
+		{% include 'categorias/_modal_delete.html' %}
+
 		<!-- Notification -->
 		<p class="task-removed-notification" style="display: none;"> Categoria excluída com sucesso! </p>
 	</section>
@@ -52,55 +54,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-	$(document).ready(function() {
-
-		$('.btn-delete').click(function(e) {
-			e.preventDefault();
-			var button = $(this);
-			var url = button.attr("href");
-			var id = url.split("/");
-			id = id[id.length - 1];
-
-			$.ajax({
-				url: url,
-				method: 'POST',
-				dataType: 'json',
-				data: { id: id },
-				success: function(json) {
-					if(json.success) {
-						$(button).parent().parent().remove();
-
-						$('.task-removed-notification').fadeIn('fast');
-						setTimeout(function(){
-							$('.task-removed-notification').fadeOut('fast');
-						}, 2000);
-					}
-				}
-			})
-		});
-
-		$('#editCategoria').unbind("submit").bind("submit", function(e) {
-			e.preventDefault();
-			
-
-			$.ajax({
-				url: form.attr("action"),
-				method: 'POST',
-				dataType: 'json',
-				data: form.serializeArray(),
-				success: function(json) {
-					if(json.success) {
-						$(button).parent().parent().remove();
-
-						$('.task-completed-notification').fadeIn('fast');
-						setTimeout(function(){
-							$('.task-completed-notification').fadeOut('fast');
-						}, 2000);
-					}
-				}
-			})
-		});
-	});
-</script>
+<script type="text/javascript" src="{{ root }}/assets/js/base/categorias/index.js"></script>
 {% endblock %}
