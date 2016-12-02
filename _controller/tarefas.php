@@ -17,11 +17,7 @@ class Tarefas extends Controller {
 		else self::redirect("home");
 	}
 
-	public static function render($tpl, $vars=array()) {
-		return parent::render($tpl,$vars);
-	}
-
-	public static function novo($tpl, $vars=array()) {
+	public static function novo() {
 		$projetos_admin = self::getAllProjetosWhereUserAdmin(Auth::id());
 
 		// se usuário está logado, não é cliente e possui ao menos um projeto como líder
@@ -37,7 +33,7 @@ class Tarefas extends Controller {
 		else self::redirect("home");
 	}
 
-	public static function editar($tpl, $vars=array()) {
+	public static function editar() {
 		if(Auth::user()) {
 			$id = static::$app->parametros[2];
 			$tarefa = self::getTarefaById($id);
@@ -87,7 +83,7 @@ class Tarefas extends Controller {
 		else self::redirect("home");
 	}
 
-	public static function visualizar($tpl, $vars=array()) {
+	public static function visualizar() {
 		if(Auth::user()) {
 			$id = static::$app->parametros[2];
 			$tarefa = self::getTarefaById($id);
@@ -117,6 +113,26 @@ class Tarefas extends Controller {
 		}
 		else self::redirect("home");
 	}
+
+	public static function completar() {
+		if(Auth::user()) {
+			$id = static::$app->parametros[2];
+			
+			if( Auth::is('admin') || ($tarefa->id_autor == Auth::id()) || (Auth::is('dev') && $tarefa->id_usuario == Auth::id()) ) {
+				self::completeTask($id);
+				self::redirect("tarefas/visualizar/{$id}");	
+			}
+
+			else {
+				self::redirect("home");
+			}
+			
+			
+		}
+		else self::redirect("home");
+	}
+
+
 	// AJAX Calls::
 	public static function create() {
 		$id = Auth::id();
@@ -285,8 +301,8 @@ class Tarefas extends Controller {
 		$post = static::$app->post;
 		$id = Auth::id();
 		$ORDER = self::getOrder($post['sort_type']);
-		$value = isset($post['status'])? "0" : "1";
-		$STATUS = " AND status = ". $value;
+		$value = isset($post['status'])? "< 4" : " = 4";
+		$STATUS = " AND status ". $value;
 
 		$query = "
 			SELECT *
@@ -425,6 +441,18 @@ class Tarefas extends Controller {
 	}
 
 	// Helpers::
+	private static function completeTask($id) {
+		global $dbConn;
+		$query = "
+			UPDATE tarefa 
+			SET status = 4
+			WHERE id = {$id}
+		";
+		$result = mysqli_query($dbConn, $query);
+
+		return $result;
+	}
+
 	private static function isUserOnTaskTeam($id_user, $arrayTeam) {
 		foreach ($arrayTeam as $membro) {
 			if($membro->id == $id_user)
@@ -486,7 +514,7 @@ class Tarefas extends Controller {
 		$query = "
 			SELECT *
 			FROM tarefa 
-			WHERE id_autor = {$id} OR id_usuario = {$id} AND status = 0
+			WHERE (id_autor = {$id} OR id_usuario = {$id}) AND status < 4 
 			ORDER BY prioridade DESC, data_entrega ASC
 		";
 
@@ -499,7 +527,8 @@ class Tarefas extends Controller {
 			$datetime = explode(" ", $fetch->data_entrega);
 			$fetch->data_entrega = Data::datetime2str($datetime[0])." ".substr($datetime[1], 0, 5);
 
-			$tarefas[] = $fetch;
+			if($fetch->titulo != "")
+				$tarefas[] = $fetch;
 		}
 
 		return toUTF($tarefas);
