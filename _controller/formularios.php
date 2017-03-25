@@ -87,7 +87,7 @@ class Formularios extends Controller {
 		$result = $mysqli->execute();
 		
 		// send data via json on AJAX request
-		$json = stdclass();
+		$json = new stdclass();
 		$json->result = $result;
 
 		self::output($json);
