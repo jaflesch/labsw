@@ -69,7 +69,10 @@ class Controller {
 		$vars['session'] = $_SESSION;
 
 		echo json_encode(static::traduzObj($obj,$vars));
-		
+	}
+
+	public static function output($json) {
+		die(json_encode($json));
 	}
 
 	public static function render($tpl = "index.html", $vars = array()) {

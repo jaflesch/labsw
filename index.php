@@ -70,7 +70,7 @@ try {
 	Twig_Autoloader::register();
 
 	//Initiate the database
-	$dbConn = @mysqli_connect($config->db->host, $config->db->user, $config->db->pass, $config->db->name);
+	$dbConn = new mysqli($config->db->host, $config->db->user, $config->db->pass, $config->db->name);
 
 	//Initiate session
 	session_name($config->session_name);

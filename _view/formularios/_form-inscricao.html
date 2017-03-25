@@ -45,23 +45,23 @@
 			<h3> Formação </h3>
 			<div class="row">
 				<div class="col-sm-6">
-					<input type="checkbox" name="formacao"> <label> Aluno de Graduação em Física </label><br/>
-					<input type="checkbox" name="formacao"> <label> Aluno de Graduação em outro curso. Qual? </label>
-					<input type="text" name="formacao_outro_graduacao" placeholder="Nome do outro curso" class="form-control">
+					<input type="checkbox" name="formacao_aluno_fisica"> <label> Aluno de Graduação em Física </label><br/>
+					<input type="checkbox" name="formacao_aluno_outro"> <label> Aluno de Graduação em outro curso. Qual? </label>
+					<input type="text" name="formacao_aluno_nome" placeholder="Nome do outro curso" class="form-control">
 					<hr>
 
-					<input type="checkbox" name="formacao"> <label> Graduado em Física </label><br/>
-					<input type="checkbox" name="formacao"> <label> Graduado em outro curso. Qual? </label>
-					<input type="text" name="formacao_outro_graduado" placeholder="Nome do outro curso" class="form-control">
+					<input type="checkbox" name="formacao_graduado_fisica"> <label> Graduado em Física </label><br/>
+					<input type="checkbox" name="formacao_graduado_outro"> <label> Graduado em outro curso. Qual? </label>
+					<input type="text" name="formacao_graduado_nome" placeholder="Nome do outro curso" class="form-control">
 					<hr>
 
-					<input type="checkbox" name="formacao"> <label> Aluno de Pós-graduação. Qual instituição? </label>
+					<input type="checkbox" name="formacao_pos"> <label> Aluno de Pós-graduação. Qual instituição? </label>
 					<input type="text" name="formacao_pos_instituicao" placeholder="Nome da instituição" class="form-control">
 					<hr>
 
-					<input type="checkbox" name="formacao"> <label> Especialização </label><br/>
-					<input type="checkbox" name="formacao"> <label> Mestre </label><br/>
-					<input type="checkbox" name="formacao"> <label> Doutor </label>
+					<input type="checkbox" name="formacao_especializacao"> <label> Especialização </label><br/>
+					<input type="checkbox" name="formacao_mestre"> <label> Mestre </label><br/>
+					<input type="checkbox" name="formacao_doutor"> <label> Doutor </label>
 				</div>
 			</div>
 
@@ -69,11 +69,11 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<label> Nome: </label>
-					<input type="text" name="establecimento" class="form-control" placeholder="Nome Establecimento"> 
+					<input type="text" name="estabelecimento" class="form-control" placeholder="Nome Establecimento"> 
 				</div>
 				<div class="col-sm-6">
 					<label> Tipo: </label>
-					<select name="nivel" class="form-control">
+					<select name="tipo_estabelecimento" class="form-control">
 						<option value=""> Selecione uma opção... </option>
 						<option value="0"> Municipal </option>
 						<option value="1"> Estadual </option>
@@ -84,13 +84,13 @@
 				</div>
 				<div class="col-sm-6">
 					<label> Nível em que trabalha: </label><br/>
-					<input type="checkbox" name="formacao"> <label> Especialização </label><br/>
-					<input type="checkbox" name="formacao"> <label> Mestre </label><br/>
-					<input type="checkbox" name="formacao"> <label> Doutor </label>
+					<input type="checkbox" name="nivel_especializacao"> <label> Especialização </label><br/>
+					<input type="checkbox" name="nivel_mestre"> <label> Mestre </label><br/>
+					<input type="checkbox" name="nivel_doutor"> <label> Doutor </label>
 				</div>
 				<div class="col-sm-6">
 					<label> Atua em sala de aula: </label>
-					<select name="nivel" class="form-control">
+					<select name="atua_sala" class="form-control">
 						<option value=""> Selecione uma opção... </option>
 						<option value="0"> Não </option>
 						<option value="1"> Sim </option>
