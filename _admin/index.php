@@ -1,5 +1,6 @@
 <?php
-require_once('config.php');
+require_once('../config.php');
+$config->base_path = dirname(__FILE__);
 
 ini_set("display_errors", "1");
 error_reporting(E_ALL);
@@ -59,12 +60,12 @@ class Handlers {
 Handlers::start();
 
 try {
-	require_once('_lib/string.php');
-	require_once('_lib/controller.php');
-	require_once('_lib/recaptchalib.php');
-	require_once('_lib/Twig/Autoloader.php');
-	require_once("_lib/Traducao.php");
-	require_once("_lib/authentication.php");
+	require_once('../_lib/string.php');
+	require_once('../_lib/controller.php');
+	require_once('../_lib/recaptchalib.php');
+	require_once('../_lib/Twig/Autoloader.php');
+	require_once("../_lib/Traducao.php");
+	require_once("../_lib/authentication.php");
 
 	//Initiate Template
 	Twig_Autoloader::register();
@@ -119,7 +120,6 @@ try {
 	$app->dbConn = $dbConn;
 	$app->twig = $twig;
 	$app->metadata = $metadata;
-	$app->eeefis = $eeefis;
 	$app->idioma = $idioma;
 	$app->request_uri = $_SERVER["REQUEST_URI"];
 	
@@ -145,7 +145,7 @@ try {
 	}
 
 	$app->controller = $controller;
-	$app->action = $action;
+	$app->action = str_replace("-", "_", $action);
 
 	require ($controller_path);
 

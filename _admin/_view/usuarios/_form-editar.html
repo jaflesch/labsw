@@ -1,0 +1,64 @@
+<section id='adm-usuarios'>
+	<div class="row">
+		<div class="col-md-12 breadcrumb">
+			<a href="{{ path.root }}/_admin"> Home </a> / <a href="{{ path.root }}/_admin/usuarios"> Usuários </a> / Editar
+		</div>
+	</div>
+	<form id="formEdit" action="{{ path.root }}/_admin/usuarios/update">
+		<div class="row">
+			<input type="hidden" name="id" value="{{ app.parametros[2] }}">
+			<div class="col-sm-6">
+				<label> Login </label>
+				<input type="text" name="login" class="form-admin" placeholder="Login" value="{{ user_info.login }}" required="">
+
+				<label> E-mail </label>
+				<input type="text" name="email" class="form-admin" placeholder="E-mail" value="{{ user_info.email }}" required="">
+			</div>
+			<div class="col-sm-6">
+				<label> Nova senha </label>
+				<input type="password" name="senha" class="form-admin" placeholder="Nova senha">
+
+				<label> Repetir nova senha </label>
+				<input type="password" name="senha2" class="form-admin" placeholder="Repetir nova senha">			
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p class="alert alert-info text-center"><i class="fa fa-warning"></i> Se os campos de senha não forem preenchidos, a senha do usuário não será alterada. </p>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-12">
+				<a href="{{ path.root }}/_admin/usuarios" class="btn btn-default"> <i class="fa fa-arrow-left"></i> Voltar </a> 
+				<button id='submit' class="btn btn-success"><i class="fa fa-save"></i> Salvar </button>
+				<a class="btn btn-danger pull-right" data-toggle="modal" data-target="#userDeleteModal"><i class="fa fa-trash-o"></i> Excluir </a>
+			</div>
+		</div>
+	</form>
+</section>
+<div id="userDeleteModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<form id="formDelete" action="{{ path.root }}/_admin/usuarios/delete">
+			<input type="hidden" name="id" value="{{ app.parametros[2] }}">
+		</form>
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h3 class="modal-title">Remover usuário</h3>
+			</div>
+			
+			<div class="modal-body">
+				<p class="text-center">
+					Você deseja realmente excluir este usuário? <br/>
+					<em>(A decisão é irreversível)</em>
+				</p>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"> Cancelar </button>
+				<button id='delete' type="button" class="btn btn-danger"> Excluir </button>
+			</div>
+		</div>
+	</div>
+</div>

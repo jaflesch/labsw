@@ -1,6 +1,0 @@
-{% set root = '' %}
-{% set meta_app = 'MHAAS Task Manager' %}
-{% set meta_keywords = '' %}
-
-{% block layout %}
-{% endblock %}

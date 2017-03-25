@@ -1,4 +1,55 @@
-<nav class='navbar navbar-default navbar-skin'>
-	<p> MHAAS Task Manager - Painel do Usuário </p>
+<nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<button type="button" class="navbar-toggle btn-nav" data-toggle="collapse" data-target="#navbar-links">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span> 
+				</button>
+				<div class="collapse navbar-collapse" id="navbar-links">
+					<ul class="nav navbar-nav">
+						<li><a href="{{ path.root }}"><i class="fa fa-home"></i> Home </a></li>
+
+						<li class="{{ app.controller == 'gerenciar' ? 'active' : '' }}">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-gear"></i> Gerenciar <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ path.root }}/gerenciar/planilhas"><i class="fa fa-file-pdf-o"></i> Planilhas</a></li>
+								<li><a href="{{ path.root }}/gerenciar/relatorios"><i class="fa fa-file-excel-o"></i> Relatórios</a></li>
+								<li><a href="{{ path.root }}/gerenciar/emails"><i class="fa fa-envelope"></i> E-mails</a></li>
+							</ul>
+						</li>
+						<li class="{{ app.controller == 'formularios' ? 'active' : '' }}">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-wpforms"></i> Formulários <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ path.root }}/formularios/inscricao">Inscrição</a></li>
+								<li><a href="{{ path.root }}/formularios/proposta-minicursos">Propostas Minicursos</a></li>
+								<li><a href="{{ path.root }}/formularios/trabalhos">Submissão Trabalhos</a></li>
+								<li><a href="{{ path.root }}/formularios/escolha-minicursos">Escolha Minicursos</a></li>
+							</ul>
+						</li>
+						</li>
+						<li class="{{ app.controller == 'inscritos' ? 'active' : '' }}">
+							<a href="{{ path.root }}/inscritos"><i class="fa fa-address-card"></i> Inscritos </a>
+						</li>
+						<li class="{{ app.controller == 'trabalhos' ? 'active' : '' }}">
+							<a href="{{ path.root }}/trabalhos"><i class="fa fa-file"></i> Trabalhos </a>
+						</li>
+						<li class="{{ app.controller == 'publicacao' ? 'active' : '' }}">
+							<a href="{{ path.root }}/publicacao"><i class="fa fa-certificate"></i> Publicação de Trabalhos </a>
+						</li>						
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="{{ app.controller == 'user' ? 'active' : '' }}">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-user"></i> Usuário <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="{{ path.root }}/user/edit"><i class="fa fa-edit"></i> Editar informações </a></li>
+								<li><a href="{{ path.root }}/user/logout"><i class="fa fa-power-off"></i> Sair</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </nav>
-{% include '_menu.html' %}

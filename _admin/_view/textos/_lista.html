@@ -1,0 +1,30 @@
+<section id='adm-usuarios'>
+	<div class="row">
+		<div class="col-md-12 breadcrumb">
+			<a href="{{ path.root }}/_admin"> Home </a> / Textos
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-striped table-responsive table-hover">
+				<thead>
+					<tr>
+						<th width="75%"> Título </th>
+						<th width="25%"> Ações </th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for text in texts %}
+					<tr>
+						<td>{{ text.title }}</td>
+						<td>
+							<a href="{{ path.root }}/_admin/textos/editar/{{ text.id }}" class="btn btn-default"><i class="fa fa-edit"></i> Editar </a>
+						</td>
+					</tr>
+				{% endfor %}				
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<hr>
+</section>

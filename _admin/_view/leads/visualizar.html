@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% set page_title = 'Visualizar Lead' %}
+
+{% block main %}
+	{% include 'leads/_form-visualizar.html' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#delete').click(function(e) {
+		e.preventDefault();			
+		var form = $("#formDelete");
+
+		$.ajax({
+			url: form.attr('action'),
+			method: 'POST',
+			dataType: 'json',
+			data: form.serializeArray(),
+			success: function(json) {
+				alert(json.msg);
+				if(json.success) {
+					document.location = "../";
+				}
+			}
+		});
+	});
+});
+</script>
+{% endblock %}

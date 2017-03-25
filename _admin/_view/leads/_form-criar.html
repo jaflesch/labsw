@@ -1,0 +1,23 @@
+<section id='adm-usuarios'>
+	<div class="row">
+		<div class="col-md-12 breadcrumb">
+			<a href="{{ path.root }}/_admin"> Home </a> / <a href="{{ path.root }}/_admin/clientes"> Clientes </a> / Criar
+		</div>
+	</div>
+	<form id="formCreate" action="{{ path.root }}/_admin/clientes/create">
+		<div class="row">
+			<div class="col-sm-6">
+				<label> Nome </label>
+				<input type="text" name="name" class="form-admin" placeholder="Nome">						
+			</div>		
+		</div>
+		<hr>
+
+		<div class="row">
+			<div class="col-md-12">
+				<a href="{{ path.root }}/_admin/clientes" class="btn btn-default"> <i class="fa fa-arrow-left"></i> Voltar </a> 
+				<button type='submit' class="btn btn-success"><i class="fa fa-save"></i> Salvar </button>
+			</div>
+		</div>
+	</form>
+</section>

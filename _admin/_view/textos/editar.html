@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% set page_title = 'Editar Texto' %}
+
+{% block main %}
+	{% include 'textos/_form-editar.html' %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#submit').click(function(e) {
+			e.preventDefault();
+			var form = $("#formEdit");
+
+			$.ajax({
+				url: form.attr('action'),
+				method: 'POST',
+				dataType: 'json',
+				data: form.serializeArray(),
+				success: function(json) {
+					alert(json.msg);
+					if(json.success) {
+						document.location = "../";
+					}
+				}
+			});
+		});
+	});
+</script>
+{% endblock %}

@@ -1,48 +1,29 @@
-# INF01120 - Laboratório Sistema de Softwares
-Repositório para o trabalho final da disciplina
+# README #
 
-**Sobre**
+This README would normally document whatever steps are necessary to get your application up and running.
 
-O software que o grupo desenvolverá será um Gerenciador de Tarefas para analisar e melhorar o desempenho de funcionários da empresa MHAAS. A ideia é utilizar o sistema para ter um controle maior de como o tempo dos funcionários é utilizado em tarefas cotidianas. 
+### What is this repository for? ###
 
-Essa informação será usada posteriormente para extrair o tempo destinadado em uma tarefa e estabelecer um preço mais justo ao cliente na cobrança do serviço, evitando que um dos dois lados saia perdendo. 
+* Quick summary
+* Version
+* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-Além disso, o sistema contará com outras funcionalidades para aumentar o nível de organização do grupo de desenvolvedores, facilitando a comunicação e tornando o trabalho em equipe mais sistemático, corroborando para a ideia inicial de mensurar a eficiência das tarefas atribuídas. 
+### How do I get set up? ###
 
-**Cliente**
+* Summary of set up
+* Configuration
+* Dependencies
+* Database configuration
+* How to run tests
+* Deployment instructions
 
-- MHAAS - Inteligência em Desenvolvimento
-- http://mhaas.com.br/
+### Contribution guidelines ###
 
-**Principais Funcionalidades**
+* Writing tests
+* Code review
+* Other guidelines
 
-- Páginas Web dinâmicas
-- Sistema de Cadastro/Login
-- Gestão de Tarefas
-- Gestão de Equipes
-- Gestão de Projetos
-- Sistema de Lembretes
-- Time Tracker
-- Indicadores de Performance [tarefas: total, completas, atrasadas]
-- Notificações por E-mail [todas | filtrar ]
-- Relatórios [baseado nos indicadores]
-- Agenda
-- Badges
+### Who do I talk to? ###
 
-**Tecnologias**
-- Aplicação Web
-- Desenvolvimento responsivo [Mobile, Tablet, Desktop]
-- PHP
-- Javascript/jQuery/AJAX
-- HTML
-- CSS
-- MYSQL
-
-**Processo de desenvolvimento**
-- Métodos Ágeis
-- SCRUM
-- Controle de versionamento de código com GitHub
-- Gerenciamento de Backlog, sprints e tasks em gerais com Trello [ https://trello.com/b/TqDlZ7pD/labsw ]
-- 
-
-
+* Repo owner or admin
+* Other community or team contact

@@ -1,0 +1,64 @@
+<section id="contato">
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-12'>
+				<h2 class="text-center"> Fale Conosco </h2>		
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-sm-6'>
+				<form id="formContato" action="{{ path.root }}/home/submit-form">
+					<div class='row'>
+						<div class='col-md-6'>
+							<label> NOME </label>
+							<input type="text" name="name" class='form-control mgb30' placeholder="Seu nome" required="">
+						</div>
+						<div class='col-md-6'>
+							<label> E-MAIL </label>
+							<input type="email" name="email" class='form-control mgb30' placeholder="Seu e-mail" required="">
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-md-6'>
+							<label> TELEFONE </label>
+							<input type="text" name="phone" class='form-control mgb30' placeholder="Seu telefone (51) 99999.9999" required="">							
+						</div>
+						<div class='col-md-6'>
+							<label> CIDADE </label>	
+							<input type="text" name="city" class='form-control mgb30' placeholder="Sua cidade" required="">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<label> MENSAGEM </label>
+							<textarea name="message" class='form-control mgb30' placeholder="Sua mensagem"></textarea>
+						</div>
+					</div>
+					<div class="row">	
+						<div class="col-md-12">
+							<input type="submit" class='btn btn-submit mgb60' value="ENVIAR">
+						</div>
+					</div>						
+				</form>
+			</div>
+			<div class='col-sm-6'>
+				<img src="{{ path.img }}/form/logo-eco-produtiva.png" class="img-responsive mgb60" alt="Logo Eco Produtiva" title="Logo Eco Produtiva">
+				
+				<p class='text-left mgb30'><i class="fa fa-envelope fa-2x mgr15"></i> comercial@ecoprodutiva.com.br </p>
+
+				<p class='text-left mgb30'><i class="fa fa-phone fa-2x mgr15"></i> (51) 3333-4144 </p>
+				
+				<address>
+					<div style="display: inline-block; vertical-align: top"><i class="fa fa-map-marker fa-2x mgr15"></i></div>
+					<div style="display: inline-block	">
+						Rua Chile, 841, cj 05 </br>
+						Porto Alegre | RS - Brasil <br/>
+						CEP 90670-140						
+					</div>
+				</address>
+				
+				{% include '_icon-list.html' %}
+			</div>
+		</div>
+	</div>
+</section>

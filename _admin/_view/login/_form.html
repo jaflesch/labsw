@@ -1,0 +1,22 @@
+<section id="adm-login">
+	<div class='container'>
+		<div class='row'>
+			<img src='{{ path.img }}/banner/logo-eco-produtiva.png' class='center-block'>
+			
+			<div class='col-sm-6 col-sm-offset-3 box-login'>
+				<h1 class='header'>COVN</h1>
+				<form id="formLogin" action='{{ path.root }}/_admin/login/submit-form'>
+					<div class='input-group'>
+						<span class='input-group-addon'><i class='fa fa-user'></i></span>
+						<input class='form-control' name='login' type='text' placeholder='NAME' style="background: #fff">
+					</div>
+					<div class='input-group'>
+						<span class='input-group-addon'><i class='fa fa-lock'></i></span>
+						<input class='form-control' name='password' type='password' placeholder='PASSWORD' style="background: #fff">
+					</div>
+					<input class='btn btn-submit center-block' type='submit' value="LOGIN">
+				</form>
+			</div>
+		</div>
+	</div>
+</section>

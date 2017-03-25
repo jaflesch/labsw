@@ -1,0 +1,27 @@
+<section id='adm-usuarios'>
+	<div class="row">
+		<div class="col-md-12 breadcrumb">
+			<a href="{{ path.root }}/_admin"> Home </a> / <a href="{{ path.root }}/_admin/textos"> Textos </a> / Editar
+		</div>
+	</div>
+	<form id="formEdit" action="{{ path.root }}/_admin/textos/update">
+		<input type="hidden" name="id" value="{{ app.parametros[2] }}">
+		<div class="row">
+			<div class="col-sm-6">
+				<label> Título </label>
+				<input type="text" name="title" class="form-admin" placeholder="Nome" value="{{ text.title }}">
+
+				<label> Texto </label>
+				<textarea name="content" class="form-admin" placeholder="Descrição">{{ text.content|nl2br }}</textarea>
+			</div>	
+		</div>
+		<hr>
+
+		<div class="row">
+			<div class="col-md-12">
+				<a href="{{ path.root }}/_admin/textos" class="btn btn-default"> <i class="fa fa-arrow-left"></i> Voltar </a> 
+				<button id='submit' class="btn btn-success"><i class="fa fa-save"></i> Salvar </button>
+			</div>
+		</div>
+	</form>
+</section>

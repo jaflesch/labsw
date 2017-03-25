@@ -4,6 +4,9 @@ class Controller {
 	public static $app;
 	public static $config;
 	public static $dbConn;
+	public static $twig;
+	public static $metadata;
+	public static $eeefis;
 
 	public static function redirect($url) {
 		$base_url = static::$app->base_url;
@@ -16,6 +19,9 @@ class Controller {
 		static::$app = $app;
 		static::$config = $app->config;
 		static::$dbConn = $app->dbConn;
+		static::$twig = $app->twig;
+		static::$metadata = $app->metadata;
+		static::$eeefis = $app->eeefis;
 		
 		if ($app->action=='') $app->action = $app->default_action;		
 
@@ -57,6 +63,9 @@ class Controller {
 		$vars['traducao'] = array();
 		$vars['post'] = static::$app->post;
 		$vars['get'] = static::$app->get;
+		$vars['twig'] = static::$app->twig;
+		$vars['meta'] = static::$metadata;
+		$vars['eeefis'] = static::$eeefis;
 		$vars['session'] = $_SESSION;
 
 		echo json_encode(static::traduzObj($obj,$vars));
@@ -73,7 +82,10 @@ class Controller {
 		$app = static::$app;
 		$vars['app'] = static::$app;
 		$vars['config'] = static::$config;
-		
+		$vars['path'] = static::$twig;
+		$vars['meta'] = static::$metadata;
+		$vars['eeefis'] = static::$eeefis;
+
 		return $twig->render($tpl,$vars);
 	}
 }

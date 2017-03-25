@@ -1,0 +1,44 @@
+<section id='adm-painel'>
+	<div class="row">
+		<div class="col-md-12">
+			<p class="text-justify"> 
+				Olá, <strong>{{ user.login }}</strong>! <br/><br/>
+				Abaixo você possui um painel de acesso rápido a todas funcionalidades do sistema. 
+			</p>
+		</div>
+	</div>
+	
+	<br/>
+
+	<div class="row">
+		<div class="col-md-4 text-center">
+			<a href="{{ path.root }}/_admin/textos">
+				<div class="panel panel-clients">
+					<i class="fa fa-font fa-4x"></i>
+					<h3> Textos </h3>
+					<p> Criação, edição e remoção de textos presentes em várias seções do site. </p>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-4 text-center">
+			<a href="{{ path.root }}/_admin/leads">
+				<div class="panel panel-leads">
+					<i class="fa fa-envelope fa-4x"></i>
+					<h3> Leads </h3>
+					<p> Registro de todos usuários que enviaram mensagem para o sistema. </p>
+				</div>
+			</a>
+		</div>
+		<div class="col-md-4 text-center">
+			<a href="{{ path.root }}/_admin/usuarios">
+				<div class="panel panel-user">
+					<i class="fa fa-user fa-4x"></i>
+					<h3> Usuários </h3>
+					<p> Lista de todos os administradores do painel administrativo. </p>
+				</div>
+			</a>
+		</div>
+	</div>
+	<hr>
+	<p class="text-right"> Hoje é {{ data }}.</p>
+</section>
