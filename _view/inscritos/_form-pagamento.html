@@ -1,0 +1,50 @@
+<section id="formulario">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1> Editar Pagamento Inscrito  </h1>
+			</div>
+		</div>
+
+		<form id="formEditar" action="{{ path.root }}/inscritos/update-pagamento" method="POST">
+			<input type="hidden" name="id" value="{{ inscrito.id }}">
+
+			<h3> Identificação </h3>
+			<div class="row">
+				<div class="col-sm-6">
+					<label>Nome completo: </label>
+					<input type="text" class="form-control" value="{{ inscrito.nome }}" disabled="">
+
+					<label>Ordem de Pagamento: </label>
+					<select name="status" class="form-control">
+						<option value=""> Selecione uma opção... </option>
+						<option value="0" {{ inscrito.status == 0 ? 'selected' : '' }}> Comissão Organizadora </option>
+						<option value="1" {{ inscrito.status == 1 ? 'selected' : '' }}> Convidado </option>
+						<option value="2" {{ inscrito.status == 2 ? 'selected' : '' }}> Isento </option>
+						<option value="3" {{ inscrito.status == 3 ? 'selected' : '' }}> Ministrante de Minicurso </option>
+						<option value="4" {{ inscrito.status == 4 ? 'selected' : '' }}> Monitor </option>
+						<option value="5" {{ inscrito.status == 5 ? 'selected' : '' }}> Participante </option>
+					</select>
+				</div>
+				<div class="col-sm-6">
+					<label> Data pagamento: </label>
+					<input type="text" name="data" placeholder="dd/mm/aaaa" class="form-control" value="{{ inscrito.data }}">
+
+					<label> Pagamento confirmado: </label>
+					<select name="pago" class="form-control">
+						<option value=""> Selecione uma opção... </option>
+						<option value="0" {{ inscrito.pago == 0 ? 'selected' : '' }}> Não </option>
+						<option value="1" {{ inscrito.pago == 1 ? 'selected' : '' }}> Sim </option>
+					</select>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-sm-12">
+				<a href="{{ path.root }}/inscritos" class="btn btn-default"><i class="fa fa-chevron-left"></i> Voltar </a>
+				<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar </a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -53,18 +53,18 @@
 			<h3> Formação </h3>
 			<div class="row">
 				<div class="col-sm-6">
-					<input type="checkbox" name="formacao_aluno_fisica" {{ inscrito.formacao_aluno == 0 ? 'checked=""' : '' }}> 
+					<input type="checkbox" name="formacao_aluno_fisica" {{ inscrito.formacao_aluno == 1 ? 'checked=""' : '' }}> 
 					<label> Aluno de Graduação em Física </label><br/>
 
-					<input type="checkbox" name="formacao_aluno_outro"  {{ inscrito.formacao_aluno == 1 ? 'checked=""' : '' }}> 
+					<input type="checkbox" name="formacao_aluno_outro"  {{ inscrito.formacao_aluno_outro == 1 ? 'checked=""' : '' }}> 
 					<label> Aluno de Graduação em outro curso. Qual? </label>
 					<input type="text" name="formacao_aluno_nome" placeholder="Nome do outro curso" class="form-control" value="{{ inscrito.formacao_aluno_nome }}">
 					<hr>
 
-					<input type="checkbox" name="formacao_graduado_fisica" {{ inscrito.formacao_graduado == 0 ? 'checked=""' : '' }}> 
+					<input type="checkbox" name="formacao_graduado_fisica" {{ inscrito.formacao_graduado == 1 ? 'checked=""' : '' }}> 
 					<label> Graduado em Física </label><br/>
 					
-					<input type="checkbox" name="formacao_graduado_outro" {{ inscrito.formacao_graduado == 1 ? 'checked=""' : '' }}> 
+					<input type="checkbox" name="formacao_graduado_outro" {{ inscrito.formacao_graduado_outro == 1 ? 'checked=""' : '' }}> 
 					<label> Graduado em outro curso. Qual? </label>
 					<input type="text" name="formacao_graduado_nome" placeholder="Nome do outro curso" class="form-control" value="{{ inscrito.formacao_graduado_nome }}">
 					<hr>
@@ -125,8 +125,10 @@
 			<hr>
 			<div class="row">
 				<div class="col-sm-12">
-				<a href="{{ path.root }}/inscritos" class="btn btn-default"><i class="fa fa-chevron-left"></i> Voltar </a>
-				<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar </a>
+					<a href="{{ path.root }}/inscritos" class="btn btn-default"><i class="fa fa-chevron-left"></i> Voltar </a>
+					<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar </button>
+
+					<a href="{{ path.root }}/inscritos/remover/{{ inscrito.id }}" class="btn btn-danger pull-right"><i class="fa fa-trash-o"></i> Excluir </a>
 				</div>
 			</div>
 		</div>

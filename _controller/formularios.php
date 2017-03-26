@@ -15,8 +15,10 @@ class Formularios extends Controller {
 
 		// prepare data
 		$post->estado = 'RS';
-		$post->formacao_aluno = isset($post->formacao_aluno)? 1 : 0;
-		$post->formacao_graduado = isset($post->formacao_graduado)? 1 : 0;
+		$post->formacao_aluno_fisica = isset($post->formacao_aluno_fisica)? 1 : 0;
+		$post->formacao_aluno_outro = isset($post->formacao_aluno_outro)? 1 : 0;
+		$post->formacao_graduado_fisica = isset($post->formacao_graduado_fisica)? 1 : 0;
+		$post->formacao_graduado_outro = isset($post->formacao_graduado_outro)? 1 : 0;
 		$post->formacao_pos = isset($post->formacao_pos)? 1 : 0;
 		$post->formacao_especializacao = isset($post->formacao_especializacao)? 1 : 0;
 		$post->formacao_mestre = isset($post->formacao_mestre)? 1 : 0;
@@ -24,6 +26,7 @@ class Formularios extends Controller {
 		$post->nivel_especializacao = isset($post->nivel_especializacao)? 1 : 0;
 		$post->nivel_mestre = isset($post->nivel_mestre)? 1 : 0;
 		$post->nivel_doutor = isset($post->nivel_doutor)? 1 : 0;
+		$edicao = static::$eeefis->edicao;
 
 		$query = "
 			INSERT INTO inscrito (
@@ -36,8 +39,10 @@ class Formularios extends Controller {
 				estado,
 				cidade,
 				formacao_aluno,
+				formacao_aluno_outro,
 				formacao_aluno_nome,
 				formacao_graduado,
+				formacao_graduado_outro,
 				formacao_graduado_nome,
 				formacao_pos,
 				formacao_pos_instituicao,
@@ -49,14 +54,14 @@ class Formularios extends Controller {
 				nivel_especializacao,
 				nivel_mestre,
 				nivel_doutor,
-				atua_sala
+				atua_sala,
+				edicao
 			)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		";
-
 		$mysqli = $dbConn->prepare($query);
 		$mysqli->bind_param(
-		 	"ssssssssisisisiiisiiiii",
+		 	"ssssssssiisiisisiiisiiiiii",
 		 	$post->nome,
 		 	$post->cpf,
 		 	$post->email,
@@ -65,9 +70,11 @@ class Formularios extends Controller {
 			$post->cep,
 			$post->estado,			
 			$post->cidade,
-			$post->formacao_aluno,
+			$post->formacao_aluno_fisica,
+			$post->formacao_aluno_outro,
 			$post->formacao_aluno_nome,
-			$post->formacao_graduado,
+			$post->formacao_graduado_fisica,
+			$post->formacao_graduado_outro,
 			$post->formacao_graduado_nome,
 			$post->formacao_pos,
 			$post->formacao_pos_instituicao,
@@ -79,11 +86,26 @@ class Formularios extends Controller {
 			$post->nivel_especializacao,
 			$post->nivel_mestre,
 			$post->nivel_doutor,
-			$post->atua_sala
+			$post->atua_sala,
+			$edicao
 		);
 
 		$result = $mysqli->execute();
-		
+		if($result) {
+			$id = $mysqli->insert_id;
+			$data = date('Y-m-d');
+			$query = "
+				INSERT INTO pagamento (id_inscrito, status, data, pago)
+				VALUES (
+					{$id}, 
+					0,
+					'{$data}', 
+					0
+				)
+			";
+			$result = $dbConn->query($query);
+		}
+
 		// send data via json on AJAX request
 		$json = new stdclass();
 		$json->result = $result;

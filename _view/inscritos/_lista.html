@@ -17,7 +17,7 @@
 						<tr>
 							<td> {{ inscrito.nome }} </td>
 							<td> {{ inscrito.email }} </td>
-							<td> {{ inscrito.cpf }} </td>
+							<td> {{ inscrito.cpf == '' ? '-' : inscrito.cpf }} </td>
 							<td> {{ inscrito.grupo == '' ? '-' : inscrito.grupo }} </td>
 							<td>
 								<a href="{{ path.root }}/inscritos/editar/{{ inscrito.id }}" class="btn btn-default"><i class="fa fa-edit"></i> Editar </a>
