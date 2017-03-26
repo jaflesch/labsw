@@ -25,8 +25,6 @@ class Formularios extends Controller {
 		$post->nivel_mestre = isset($post->nivel_mestre)? 1 : 0;
 		$post->nivel_doutor = isset($post->nivel_doutor)? 1 : 0;
 
-		print_r($post);
-		
 		$query = "
 			INSERT INTO inscrito (
 				nome,

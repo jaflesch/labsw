@@ -1,0 +1,134 @@
+<section id="formulario">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1> Editar Inscrito  </h1>
+			</div>
+		</div>
+
+		<form id="formEditar" action="{{ path.root }}/inscritos/update" method="POST">
+			<input type="hidden" name="id" value="{{ inscrito.id }}">
+
+			<h3> Identificação </h3>
+			<div class="row">
+				<div class="col-sm-6">
+					<label>Nome completo: </label>
+					<input type="text" name="nome" placeholder="Nome completo" class="form-control" value="{{ inscrito.nome }}">
+
+					<label>E-mail: </label>
+					<input type="text" name="email" placeholder="E-mail" class="form-control" value="{{ inscrito.email }}">
+				</div>
+				<div class="col-sm-6">
+					<label> CPF: </label>
+					<input type="text" name="cpf" placeholder="Nome completo" class="form-control" value="{{ inscrito.cpf }}">
+
+					<label> Documento de identificação para Estrangeiros: </label>
+					<input type="text" name="documento_estrangeiros" placeholder="Documento de identificação para Estrangeiros" class="form-control" value="{{ inscrito.documento_estrangeiro }}">
+				</div>
+			</div>
+
+			<h3> Endereço Residencial </h3>
+			<div class="row">
+				<div class="col-sm-6">
+					<label>Endereço: </label>
+					<input type="text" name="endereco" placeholder="Endereço" class="form-control" value="{{ inscrito.endereco }}">
+
+					<label>CEP: </label>
+					<input type="text" name="cep" placeholder="CEP" class="form-control" value="{{ inscrito.cep }}">
+				</div>
+				<div class="col-sm-6">
+					<label> Estado: </label>
+					<select name="estado" class="form-control">
+						<option value=""> Selecione uma opção... </option>
+						{% for estado in estados %}
+						<option value="{{ estado.uf }}"  selected="{{ inscrito.estado == estado.uf ? 'selected' : '' }}">{{ estado.nome }}</option>
+						{% endfor %}
+					</select>
+
+					<label> Cidade: </label>
+					<input type="text" name="cidade" placeholder="Cidade" class="form-control" value="{{ inscrito.cidade }}">
+				</div>
+			</div>
+
+			<h3> Formação </h3>
+			<div class="row">
+				<div class="col-sm-6">
+					<input type="checkbox" name="formacao_aluno_fisica" {{ inscrito.formacao_aluno == 0 ? 'checked=""' : '' }}> 
+					<label> Aluno de Graduação em Física </label><br/>
+
+					<input type="checkbox" name="formacao_aluno_outro"  {{ inscrito.formacao_aluno == 1 ? 'checked=""' : '' }}> 
+					<label> Aluno de Graduação em outro curso. Qual? </label>
+					<input type="text" name="formacao_aluno_nome" placeholder="Nome do outro curso" class="form-control" value="{{ inscrito.formacao_aluno_nome }}">
+					<hr>
+
+					<input type="checkbox" name="formacao_graduado_fisica" {{ inscrito.formacao_graduado == 0 ? 'checked=""' : '' }}> 
+					<label> Graduado em Física </label><br/>
+					
+					<input type="checkbox" name="formacao_graduado_outro" {{ inscrito.formacao_graduado == 1 ? 'checked=""' : '' }}> 
+					<label> Graduado em outro curso. Qual? </label>
+					<input type="text" name="formacao_graduado_nome" placeholder="Nome do outro curso" class="form-control" value="{{ inscrito.formacao_graduado_nome }}">
+					<hr>
+
+					<input type="checkbox" name="formacao_pos"  {{ inscrito.formacao_pos == 1 ? 'checked=""=""' : '' }}> 
+					<label> Aluno de Pós-graduação. Qual instituição? </label>
+					<input type="text" name="formacao_pos_instituicao" placeholder="Nome da instituição" class="form-control" value="{{ inscrito.formacao_pos_instituicao }}">
+					<hr>
+
+					<input type="checkbox" name="formacao_especializacao" {{ inscrito.especializacao == 1 ? 'checked=""' : '' }}> 
+					<label> Especialização </label><br/>
+
+					<input type="checkbox" name="formacao_mestre" {{ inscrito.mestre == 1 ? 'checked=""' : '' }}> 
+					<label> Mestre </label><br/>
+
+					<input type="checkbox" name="formacao_doutor" {{ inscrito.doutor == 1 ? 'checked=""' : '' }}> 
+					<label> Doutor </label>
+				</div>
+			</div>
+
+			<h3> Estabelecimento de ensino em que trabalha </h3>
+			<div class="row">
+				<div class="col-sm-6">
+					<label> Nome: </label>
+					<input type="text" name="estabelecimento" class="form-control" placeholder="Nome Establecimento" value="{{ inscrito.estabelecimento }}"> 
+				</div>
+				<div class="col-sm-6">
+					<label> Tipo: </label>
+					<select name="tipo_estabelecimento" class="form-control">
+						<option value=""> Selecione uma opção... </option>
+						<option value="0" {{ inscrito.tipo_estabelecimento == 0 ? 'selected' : '' }}> Municipal </option>
+						<option value="1" {{ inscrito.tipo_estabelecimento == 1 ? 'selected' : '' }}> Estadual </option>
+						<option value="2" {{ inscrito.tipo_estabelecimento == 2 ? 'selected' : '' }}> Federal </option>
+						<option value="3" {{ inscrito.tipo_estabelecimento == 3 ? 'selected' : '' }}> Comunitário </option>
+						<option value="4" {{ inscrito.tipo_estabelecimento == 4 ? 'selected' : '' }}> Particular </option>
+					</select>
+				</div>
+				<div class="col-sm-6">
+					<label> Nível em que trabalha: </label><br/>
+					<input type="checkbox" name="nivel_especializacao" {{ inscrito.nivel_especializacao == 1 ? 'checked=""' : '' }}> 
+					<label> Especialização </label><br/>
+
+					<input type="checkbox" name="nivel_mestre" {{ inscrito.nivel_mestre == 1 ? 'checked=""' : '' }}> 
+					<label> Mestre </label><br/>
+
+					<input type="checkbox" name="nivel_doutor" {{ inscrito.nivel_doutor == 1 ? 'checked=""' : '' }}> 
+					<label> Doutor </label>
+				</div>
+				<div class="col-sm-6">
+					<label> Atua em sala de aula: </label>
+					<select name="atua_sala" class="form-control">
+						<option value=""> Selecione uma opção... </option>
+						<option value="0" {{ inscrito.atua_sala == 0 ? 'selected' : '' }}> Não </option>
+						<option value="1" {{ inscrito.atua_sala == 1 ? 'selected' : '' }}> Sim </option>
+					</select>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-sm-12">
+				<a href="{{ path.root }}/inscritos" class="btn btn-default"><i class="fa fa-chevron-left"></i> Voltar </a>
+				<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar </a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -20,8 +20,8 @@
 							<td> {{ inscrito.cpf }} </td>
 							<td> {{ inscrito.grupo == '' ? '-' : inscrito.grupo }} </td>
 							<td>
-								<a href="{{ path.root }}/inscritos/editar" class="btn btn-default"><i class="fa fa-edit"></i> Editar </a>
-								<a href="{{ path.root }}/inscritos/pagamento" class="btn btn-default"><i class="fa fa-dollar"></i> Pagamento </a>
+								<a href="{{ path.root }}/inscritos/editar/{{ inscrito.id }}" class="btn btn-default"><i class="fa fa-edit"></i> Editar </a>
+								<a href="{{ path.root }}/inscritos/pagamento/{{ inscrito.id }}" class="btn btn-default"><i class="fa fa-dollar"></i> Pagamento </a>
 							</td>
 						</tr>
 						{% endfor %}
